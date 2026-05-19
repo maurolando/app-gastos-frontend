@@ -4,6 +4,10 @@
       <mat-icon>menu</mat-icon>
     </button>
     <span class="app-title">Gastos Hogar</span>
+    <div class="status-indicator" [class.online]="isOnline" [class.offline]="!isOnline" [matTooltip]="isOnline ? 'Conexión con el servidor: En Línea' : 'Conexión con el servidor: Sin Conexión'">
+      <mat-icon>{{ isOnline ? 'wifi' : 'wifi_off' }}</mat-icon>
+      <span>{{ isOnline ? 'ONLINE' : 'OFFLINE' }}</span>
+    </div>
     <span class="spacer"></span>
 
     <!-- Usuario logueado -->

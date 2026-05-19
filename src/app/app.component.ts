@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { ExpenseService } from './services/expense/expense.service';
@@ -12,12 +12,15 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   currentUser$ = this.auth.currentUser$;
   isLoginPage$ = this.router.events.pipe(
     filter(e => e instanceof NavigationEnd),
     map(e => (e as NavigationEnd).urlAfterRedirects === '/login')
   );
+
+  isOnline = false;
+  private connectionIntervalId: any;
 
   constructor(
     private expenseService: ExpenseService,
@@ -26,6 +29,48 @@ export class AppComponent {
     private router: Router,
     private dialog: MatDialog
   ) {}
+
+  ngOnInit() {
+    this.checkConnection();
+    // Check connection every 5 seconds
+    this.connectionIntervalId = setInterval(() => {
+      this.checkConnection();
+    }, 5000);
+  }
+
+  ngOnDestroy() {
+    if (this.connectionIntervalId) {
+      clearInterval(this.connectionIntervalId);
+    }
+  }
+
+  async checkConnection() {
+    try {
+      const response = await fetch('http://localhost:8080/graphql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: '{ __typename }' })
+      });
+      
+      const previousState = this.isOnline;
+      this.isOnline = response.ok;
+
+      // Optional: notify when status changes
+      if (previousState !== this.isOnline) {
+        if (this.isOnline) {
+          this.notify.success('Conexión con el servidor restablecida');
+        } else {
+          this.notify.error('Se ha perdido la conexión con el servidor');
+        }
+      }
+    } catch (error) {
+      const previousState = this.isOnline;
+      this.isOnline = false;
+      if (previousState !== this.isOnline) {
+        this.notify.error('Se ha perdido la conexión con el servidor');
+      }
+    }
+  }
 
   logout() {
     this.auth.cerrarSesion();
