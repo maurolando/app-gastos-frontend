@@ -1,0 +1,115 @@
+<div class="ahorros-container">
+  <div class="header">
+    <div class="title-section">
+      <h1>Meta de Ahorro</h1>
+      <p>Establece tus objetivos y controla tu crecimiento financiero</p>
+    </div>
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Mes</mat-label>
+        <mat-select [formControl]="monthControl">
+          <mat-option *ngFor="let m of months" [value]="m.value">{{m.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Año</mat-label>
+        <mat-select [formControl]="yearControl">
+          <mat-option *ngFor="let y of years" [value]="y">{{y}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <!-- Panel Izquierdo: Visualización de Meta -->
+    <mat-card class="goal-card mat-elevation-z4">
+      <mat-card-header class="goal-header">
+        <mat-icon class="header-icon">stars</mat-icon>
+        <mat-card-title>Objetivo Mensual</mat-card-title>
+        <button mat-icon-button color="accent" (click)="toggleEditGoal()" *ngIf="!isEditingGoal" matTooltip="Editar Meta">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="goal-editor" *ngIf="isEditingGoal">
+          <mat-form-field appearance="fill" color="accent" class="full-width">
+            <mat-label>¿Cuánto deseas ahorrar este mes?</mat-label>
+            <input matInput type="number" [formControl]="goalControl" placeholder="Ej: 500000">
+            <span matTextSuffix>Gs.</span>
+            <mat-icon matPrefix>savings</mat-icon>
+          </mat-form-field>
+          <div class="editor-actions">
+            <button mat-button (click)="toggleEditGoal()">Cancelar</button>
+            <button mat-flat-button color="primary" (click)="saveGoal()">Guardar Meta</button>
+          </div>
+        </div>
+
+        <div class="goal-display" *ngIf="!isEditingGoal">
+          <h2 class="goal-amount">{{ goalControl.value | number:'1.0-0' }} <span class="currency">Gs.</span></h2>
+          <p class="goal-subtitle">Meta definida para este mes</p>
+
+          <div class="progress-circle-container">
+            <mat-progress-spinner
+              class="background-spinner"
+              mode="determinate"
+              [value]="100"
+              diameter="220"
+              strokeWidth="12">
+            </mat-progress-spinner>
+            <mat-progress-spinner
+              class="main-spinner"
+              mode="determinate"
+              [value]="ahorroPercent$ | async"
+              diameter="220"
+              strokeWidth="12"
+              [color]="(ahorroPercent$ | async)! >= 100 ? 'accent' : 'primary'">
+            </mat-progress-spinner>
+            
+            <div class="spinner-content">
+              <span class="percentage">{{ ahorroPercent$ | async | number:'1.0-0' }}%</span>
+              <span class="label">Alcanzado</span>
+            </div>
+          </div>
+
+          <div class="status-message">
+            <p *ngIf="(ahorroPercent$ | async)! < 100" class="pending-msg">
+              Te faltan <strong>{{ ahorroFaltante$ | async | number:'1.0-0' }} Gs.</strong> para alcanzar tu meta.
+            </p>
+            <p *ngIf="(ahorroPercent$ | async)! >= 100" class="success-msg">
+              <mat-icon>emoji_events</mat-icon>
+              ¡Felicidades! Has superado tu meta de ahorro.
+            </p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Panel Derecho: Resumen Financiero -->
+    <div class="summary-cards">
+      <mat-card class="stat-card income">
+        <mat-icon>arrow_upward</mat-icon>
+        <div class="stat-info">
+          <h3>Ingresos Totales</h3>
+          <p>{{ totalIngresos$ | async | number:'1.0-0' }} Gs.</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card expense">
+        <mat-icon>arrow_downward</mat-icon>
+        <div class="stat-info">
+          <h3>Gastos Pagados</h3>
+          <p>{{ totalGastosPagados$ | async | number:'1.0-0' }} Gs.</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card current-savings">
+        <mat-icon>account_balance</mat-icon>
+        <div class="stat-info">
+          <h3>Ahorro Actual</h3>
+          <p>{{ ahorroActual$ | async | number:'1.0-0' }} Gs.</p>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

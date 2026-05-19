@@ -1,0 +1,72 @@
+<ng-container *ngIf="(isLoginPage$ | async) === false; else loginOutlet">
+  <mat-toolbar color="primary" class="main-toolbar mat-elevation-z4">
+    <button mat-icon-button (click)="sidenav.toggle()" *ngIf="currentUser$ | async">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="app-title">Gastos Hogar</span>
+    <span class="spacer"></span>
+
+    <!-- Usuario logueado -->
+    <ng-container *ngIf="currentUser$ | async as user">
+      <div class="user-chip">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{user.nombre | uppercase}}</span>
+      </div>
+      <button mat-icon-button (click)="logout()" matTooltip="Cerrar Sesión" class="logout-btn">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </ng-container>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="side" opened class="mat-elevation-z4 sidenav-content">
+      <mat-nav-list style="padding-top: 16px;">
+        <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
+          <mat-icon style="margin-right: 8px;">savings</mat-icon>
+          <span>Balance</span>
+        </a>
+        <a mat-list-item routerLink="/ingresos" routerLinkActive="active-link">
+          <mat-icon style="margin-right: 8px;">arrow_upward</mat-icon>
+          <span>Ingresos</span>
+        </a>
+        <a mat-list-item routerLink="/gastos" routerLinkActive="active-link">
+          <mat-icon style="margin-right: 8px;">arrow_downward</mat-icon>
+          <span>Gastos</span>
+        </a>
+        <a mat-list-item routerLink="/categorias" routerLinkActive="active-link">
+          <mat-icon style="margin-right: 8px;">category</mat-icon>
+          <span>Categorías</span>
+        </a>
+        <a mat-list-item routerLink="/personas" routerLinkActive="active-link">
+          <mat-icon style="margin-right: 8px;">person</mat-icon>
+          <span>Personas</span>
+        </a>
+        <a mat-list-item routerLink="/ahorros" routerLinkActive="active-link">
+          <mat-icon style="margin-right: 8px;">trending_up</mat-icon>
+          <span>Meta de Ahorro</span>
+        </a>
+        <a mat-list-item routerLink="/compras" routerLinkActive="active-link">
+          <mat-icon style="margin-right: 8px;">shopping_cart</mat-icon>
+          <span>Lista de Compras</span>
+        </a>
+
+        <mat-divider style="margin: 16px 0;"></mat-divider>
+
+        <a mat-list-item (click)="resetData()" class="reset-link">
+          <mat-icon style="margin-right: 8px; color: #f43f5e;">delete_forever</mat-icon>
+          <span style="color: #f43f5e;">Reiniciar Datos</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="main-content">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>
+
+<!-- Login: sin toolbar ni sidenav -->
+<ng-template #loginOutlet>
+  <router-outlet></router-outlet>
+</ng-template>
+

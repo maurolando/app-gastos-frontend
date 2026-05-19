@@ -1,0 +1,132 @@
+.expense-summary {
+  background: rgba(99, 102, 241, 0.05);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .total-amount {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .paid-amount {
+      font-weight: 600;
+      color: #10b981;
+    }
+
+    .remaining-amount {
+      font-weight: 700;
+      color: #f59e0b;
+
+      &.zero {
+        color: #10b981;
+      }
+    }
+  }
+}
+
+.progress-section {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .progress-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-align: right;
+  }
+}
+
+.section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+
+.pagos-list {
+  margin-bottom: 24px;
+
+  .pago-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 8px;
+
+    .pago-persona {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.85rem;
+
+      mat-icon { color: #6366f1; font-size: 20px; }
+    }
+
+    .pago-detalles {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+
+      .pago-monto {
+        font-weight: 700;
+        color: #10b981;
+      }
+
+      .pago-forma, .pago-fecha {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        background: rgba(255,255,255,0.05);
+        padding: 2px 8px;
+        border-radius: 6px;
+      }
+    }
+  }
+}
+
+.aporte-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  mat-form-field { width: 100%; }
+}
+
+.completado-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  color: #10b981;
+  font-weight: 600;
+
+  mat-icon { font-size: 28px; }
+}

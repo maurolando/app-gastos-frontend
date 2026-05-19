@@ -1,0 +1,79 @@
+<div class="list-container mat-elevation-z3">
+  <div class="list-header">
+    <h2>Historial de Gastos</h2>
+    <span class="spacer"></span>
+    <button mat-flat-button color="accent" (click)="openAddExpense()">
+      <mat-icon>add</mat-icon> Nuevo Gasto
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="(gastos$ | async) || []" class="gastos-table">
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Fecha </th>
+      <td mat-cell *matCellDef="let element"> {{element.date | date}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="persona">
+      <th mat-header-cell *matHeaderCellDef> Persona </th>
+      <td mat-cell *matCellDef="let element"> 
+        <div class="user-avatar-row">
+          <mat-icon color="primary">account_circle</mat-icon>
+          <span class="username">{{element.persona?.nombre}}</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef> Categoría </th>
+      <td mat-cell *matCellDef="let element"> 
+        <div class="category-cell">
+          <mat-icon *ngIf="element.categoria?.icono" class="cat-icon">{{element.categoria.icono}}</mat-icon>
+          <span>{{element.categoria?.nombre || 'SIN CATEGORÍA' | uppercase }}</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Descripción </th>
+      <td mat-cell *matCellDef="let element"> {{element.description | uppercase}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Monto </th>
+      <td mat-cell *matCellDef="let element" class="amount"> {{ element.amount | number:'1.0-0'}} Gs. </td>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef> Estado </th>
+      <td mat-cell *matCellDef="let element" class="acciones-cell">
+
+        <!-- Gasto Compartido -->
+        <ng-container *ngIf="element.esCompartido">
+          <div class="shared-progress">
+            <mat-progress-bar
+              mode="determinate"
+              [value]="getPorcentaje(element)"
+              [color]="getPorcentaje(element) >= 100 ? 'accent' : 'primary'">
+            </mat-progress-bar>
+            <span class="progress-text">{{getPorcentaje(element) | number:'1.0-0'}}%</span>
+          </div>
+          <button mat-icon-button color="primary"
+                  (click)="openSharedPayment(element)"
+                  matTooltip="Ver aportes / Agregar pago">
+            <mat-icon>group_add</mat-icon>
+          </button>
+        </ng-container>
+
+        <!-- Gasto Normal -->
+        <ng-container *ngIf="!element.esCompartido">
+          <mat-icon *ngIf="element.pagado" class="paid-icon" matTooltip="Pagado">check_circle</mat-icon>
+          <mat-icon *ngIf="!element.pagado" class="pending-icon" matTooltip="Pendiente">schedule</mat-icon>
+        </ng-container>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

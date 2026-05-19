@@ -1,0 +1,14 @@
+.persona-form {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  
+  .form-hint {
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+}

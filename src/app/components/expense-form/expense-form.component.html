@@ -1,0 +1,79 @@
+<h2 mat-dialog-title>Registrar Gasto</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="expense-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Monto</mat-label>
+      <span matPrefix>Gs &nbsp;</span>
+      <input matInput type="number" formControlName="amount">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="categoriaId">
+        <mat-option *ngFor="let cat of (categorias$ | async)" [value]="cat.id" style="text-transform: uppercase;">
+          <mat-icon *ngIf="cat.icono">{{cat.icono}}</mat-icon> {{cat.nombre}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Persona Responsable</mat-label>
+      <mat-select formControlName="personaId">
+        <mat-option *ngFor="let p of (personas$ | async)" [value]="p.id">
+          {{p.nombre}}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>person</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Forma de Pago</mat-label>
+      <mat-select formControlName="formaPago">
+        <mat-option value="Efectivo">Efectivo</mat-option>
+        <mat-option value="Tarjeta de Débito">Tarjeta de Débito</mat-option>
+        <mat-option value="Tarjeta de Crédito">Tarjeta de Crédito</mat-option>
+        <mat-option value="Transferencia">Transferencia</mat-option>
+        <mat-option value="Convenio">Convenio</mat-option>
+
+      </mat-select>
+      <mat-icon matPrefix>credit_card</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de Registro</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Descripción</mat-label>
+      <input matInput formControlName="description" style="text-transform: uppercase;">
+    </mat-form-field>
+
+      <mat-checkbox formControlName="recurrent" color="primary" style="margin-bottom: 8px;">
+        Es fijo
+      </mat-checkbox>
+      
+      <div *ngIf="form.get('recurrent')?.value" class="vencimiento-field">
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de Vencimiento</mat-label>
+          <input matInput [matDatepicker]="pickerVenc" formControlName="fechaVencimiento">
+          <mat-datepicker-toggle matSuffix [for]="pickerVenc"></mat-datepicker-toggle>
+          <mat-datepicker #pickerVenc></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <mat-checkbox formControlName="esCompartido" color="accent" style="margin-top: 4px;">
+        Pago compartido
+      </mat-checkbox>
+      <div *ngIf="form.get('esCompartido')?.value" class="compartido-hint">
+        <mat-icon>info</mat-icon>
+        <span>Cada persona podrá registrar su aporte desde la lista de gastos.</span>
+      </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">Guardar</button>
+</mat-dialog-actions>

@@ -1,0 +1,175 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Definición de paletas oscuras basadas en Navy/Slate
+$slate-primary: mat.define-palette(mat.$indigo-palette, 400, 300, 700);
+$slate-accent: mat.define-palette(mat.$teal-palette, A200, A100, A400);
+$slate-warn: mat.define-palette(mat.$red-palette, 500);
+
+// Creamos un tema oscuro personalizado
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $slate-primary,
+    accent: $slate-accent,
+    warn: $slate-warn,
+  )
+));
+
+// Aplicar el tema globalmente
+@include mat.all-component-themes($dark-theme);
+
+// --- CSS Variables para nuestro propio uso ---
+:root {
+  --bg-dark-base: #0f172a;       // Slate 900
+  --bg-dark-surface: #1e293b;    // Slate 800
+  --bg-dark-card: rgba(30, 41, 59, 0.7);
+  
+  --text-primary: #f8fafc;       // Slate 50
+  --text-secondary: #94a3b8;     // Slate 400
+  
+  --accent-color: #6366f1;       // Indigo 500
+  --accent-light: #818cf8;       // Indigo 400
+  --accent-glow: rgba(99, 102, 241, 0.15);
+  
+  --success-color: #34d399;      // Emerald 400
+  --danger-color: #f87171;       // Red 400
+  
+  --border-subtle: #334155;      // Slate 700
+}
+
+// --- Global Resets ---
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', "Helvetica Neue", sans-serif;
+  background-color: var(--bg-dark-base);
+  color: var(--text-primary);
+}
+
+// Typography overrides
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif !important;
+  color: var(--text-primary);
+}
+
+// Estilizar barras de desplazamiento modernas
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark-base); 
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle); 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary); 
+}
+
+// Arreglos de Angular Material en Modo Oscuro Personalizado
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: var(--bg-dark-surface) !important;
+  border: 1px solid var(--border-subtle);
+}
+
+// Transparencia total para los Inputs y Form Fields
+.mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-color: transparent;
+}
+.mdc-text-field--filled {
+  --mdc-filled-text-field-container-color: transparent;
+}
+.mat-mdc-form-field-focus-overlay {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+// Tematizar el menú desplegable (Select Panel)
+.mat-mdc-select-panel {
+  background-color: var(--bg-dark-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
+}
+.mat-mdc-option {
+  color: var(--text-secondary) !important;
+}
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  color: var(--accent-light) !important;
+  background-color: rgba(99, 102, 241, 0.1) !important;
+}
+.mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-table {
+  background-color: transparent !important;
+}
+
+.mat-mdc-header-cell {
+  color: var(--text-secondary) !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-subtle) !important;
+}
+
+.mat-mdc-cell {
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+}
+
+.mat-mdc-row:hover {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+// Global Category Styles
+.category-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .cat-icon {
+    background: rgba(99, 102, 241, 0.15);
+    color: #6366f1;
+    padding: 6px;
+    border-radius: 8px;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Notificaciones (Snackbars) */
+.success-snackbar {
+    --mdc-snackbar-container-color: #10b981;
+    --mdc-snackbar-label-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
+}
+
+.error-snackbar {
+    --mdc-snackbar-container-color: #ef4444;
+    --mdc-snackbar-label-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
+}
+
+.warn-snackbar {
+    --mdc-snackbar-container-color: #f59e0b;
+    --mdc-snackbar-label-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
+}
+
+.category-badge {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+

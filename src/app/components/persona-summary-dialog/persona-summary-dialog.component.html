@@ -1,0 +1,70 @@
+<div class="summary-container">
+  <h2 mat-dialog-title>Resumen de Gastos: {{data.nombre}}</h2>
+  
+  <mat-dialog-content>
+    <div *ngIf="summary$ | async as s; else loading" class="summary-content">
+      
+      <div class="main-stat mat-elevation-z2">
+        <span class="label">Total Gastado (Histórico)</span>
+        <span class="value">{{ s.totalAmount | number:'1.0-0' }} Gs.</span>
+      </div>
+
+      <div class="stats-grid">
+        <mat-card class="stat-item mat-elevation-z1">
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary" style="align-content: center;">credit_card</mat-icon>
+            <div class="stat-header-text">
+                <mat-card-subtitle>Método Favorito</mat-card-subtitle>
+                <mat-card-title>{{ s.favoritePaymentMethod }}</mat-card-title>
+            </div>
+          </mat-card-header>
+        </mat-card>
+
+        <mat-card class="stat-item mat-elevation-z1">
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="accent" style="align-content: center;">category</mat-icon>
+            <div class="stat-header-text">
+                <mat-card-subtitle>Categoría Top</mat-card-subtitle>
+                <mat-card-title>{{ s.topCategory }}</mat-card-title>
+            </div>
+          </mat-card-header>
+        </mat-card>
+      </div>
+
+      <div class="section-title">Desglose por Categoría</div>
+      <div class="category-list">
+        <div *ngFor="let cat of s.categoryBreakdown" class="cat-row">
+          <div class="cat-info">
+            <mat-icon *ngIf="cat.icono">{{cat.icono}}</mat-icon>
+            <span>{{ cat.nombre }}</span>
+          </div>
+          <div class="cat-value">
+            <span class="cat-amount">{{ cat.total | number:'1.0-0' }} Gs.</span>
+            <span class="cat-count">({{ cat.count }} reg.)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">Últimos Movimientos</div>
+      <table class="recent-table">
+        <tr *ngFor="let g of s.recentExpenses">
+          <td class="date-cell">{{ g.date | date:'dd/MM/yy' }}</td>
+          <td class="desc">{{ g.description || g.categoria?.nombre | uppercase }}</td>
+          <td class="amount">{{ g.amount | number:'1.0-0' }} Gs.</td>
+        </tr>
+      </table>
+
+    </div>
+    
+    <ng-template #loading>
+      <div class="loading-state">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Calculando estadísticas...</p>
+      </div>
+    </ng-template>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" mat-dialog-close>Cerrar</button>
+  </mat-dialog-actions>
+</div>

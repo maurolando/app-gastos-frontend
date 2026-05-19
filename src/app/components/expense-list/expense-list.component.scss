@@ -1,0 +1,42 @@
+.list-container {
+  background: var(--bg-dark-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  h2 { margin: 0; font-weight: 500; color: var(--text-primary); }
+}
+.spacer { flex: 1 1 auto; }
+
+.gastos-table {
+  width: 100%;
+  box-shadow: none;
+  background: transparent;
+}
+
+.category-badge {
+  background-color: rgba(99, 102, 241, 0.2);
+  color: var(--accent-light);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.amount {
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+.user-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  .username { font-weight: 500; font-size: 0.9rem; color: var(--text-primary); }
+  mat-icon { font-size: 20px; width: 20px; height: 20px; }
+}

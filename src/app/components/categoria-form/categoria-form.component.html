@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>{{ data ? 'Editar' : 'Nueva' }} Categoría</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="cat-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" placeholder="Ej: Comida, Transporte..." style="text-transform: uppercase;">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo</mat-label>
+      <mat-select formControlName="tipo">
+        <mat-option value="GASTO">Gasto</mat-option>
+        <mat-option value="INGRESO">Ingreso</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="icon-selector">
+      <label>Selecciona un Icono:</label>
+      <div class="icons-grid">
+        <button type="button" mat-icon-button *ngFor="let icon of availableIcons" 
+                [class.selected]="form.get('icono')?.value === icon"
+                (click)="form.get('icono')?.setValue(icon)">
+          <mat-icon>{{icon}}</mat-icon>
+        </button>
+      </div>
+      <div class="selected-preview" *ngIf="form.get('icono')?.value">
+        Icono seleccionado: <mat-icon>{{form.get('icono')?.value}}</mat-icon>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="onSave()">Guardar</button>
+</mat-dialog-actions>

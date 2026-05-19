@@ -1,0 +1,55 @@
+.list-container {
+  background: var(--bg-dark-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  h2 { margin: 0; font-weight: 500; color: var(--text-primary); }
+}
+.spacer { flex: 1 1 auto; }
+
+.password-btn {
+  color: #f59e0b;
+  transition: color 0.2s, transform 0.2s;
+  &:hover {
+    color: #fbbf24;
+    transform: scale(1.1);
+  }
+}
+
+.personas-table {
+  width: 100%;
+  box-shadow: none;
+  background: transparent;
+}
+
+.user-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  .username { font-weight: 500; font-size: 1rem; color: var(--text-primary); }
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background-color: rgba(248, 113, 113, 0.2);
+  color: var(--danger-color);
+  
+  &.active {
+    background-color: rgba(52, 211, 153, 0.2);
+    color: var(--success-color);
+  }
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+}

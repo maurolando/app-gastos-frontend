@@ -1,0 +1,55 @@
+<div class="login-page">
+  <div class="login-card">
+    <!-- Logo / Header -->
+    <div class="login-header">
+      <div class="logo-icon">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </div>
+      <h1>App Gastos</h1>
+      <p>Ingresa tus credenciales para continuar</p>
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="form" (ngSubmit)="login()" class="login-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre de usuario</mat-label>
+        <input matInput formControlName="nombre" autocomplete="username" style="text-transform: uppercase;">
+        <mat-icon matPrefix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contraseña</mat-label>
+        <input matInput [type]="showPassword ? 'text' : 'password'"
+               formControlName="clave" autocomplete="current-password">
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix type="button"
+                (click)="showPassword = !showPassword">
+          <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <!-- Permanecer activo -->
+      <div class="permanecer-row">
+        <mat-slide-toggle formControlName="permanecer" color="primary">
+          Permanecer activo
+        </mat-slide-toggle>
+        <span class="permanecer-hint">
+          <mat-icon>info</mat-icon>
+          Mantén la sesión aunque cierres la app
+        </span>
+      </div>
+
+      <button mat-raised-button color="primary" type="submit"
+              [disabled]="form.invalid || loading" class="login-btn">
+        <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+        <mat-icon *ngIf="!loading">login</mat-icon>
+        <span>{{loading ? 'Verificando...' : 'Ingresar'}}</span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <mat-icon>security</mat-icon>
+      <span>Tus datos son privados y seguros</span>
+    </div>
+  </div>
+</div>

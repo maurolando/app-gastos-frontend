@@ -1,0 +1,117 @@
+.list-container {
+  padding: 32px;
+  background: var(--bg-dark-base);
+  min-height: 100vh;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.cat-card {
+  border-radius: 20px;
+  background: var(--bg-dark-surface);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+
+  &.selected {
+    border-color: var(--accent-color);
+    background: rgba(99, 102, 241, 0.05);
+    box-shadow: 0 0 0 2px var(--accent-color);
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px -5px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .action-btn {
+    animation: fadeIn 0.3s ease;
+  }
+
+  .divider {
+    width: 1px;
+    height: 32px;
+    background: var(--border-subtle);
+    margin: 0 4px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+mat-card-header {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.cat-icon-container {
+  background: rgba(99, 102, 241, 0.1);
+  padding: 12px;
+  border-radius: 16px;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+
+  .cat-icon {
+    color: var(--accent-light);
+    margin: 0;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+  }
+}
+
+.cat-header-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  mat-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+  }
+
+  mat-card-subtitle {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+}
+
+// Sobrescribir estilos de Material para que no colapsen los textos
+::ng-deep .mat-mdc-card-header-text {
+  display: none !important; // Lo ocultamos porque usamos nuestro propio .cat-header-text para total control
+}

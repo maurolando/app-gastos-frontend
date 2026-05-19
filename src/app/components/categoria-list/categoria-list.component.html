@@ -1,0 +1,38 @@
+<div class="list-container">
+  <div class="list-header">
+    <h1>Gestión de Categorías</h1>
+    <div class="header-actions">
+      <!-- Botones de Acción (Solo se ven si hay selección) -->
+      <ng-container *ngIf="selectedCategoria">
+        <button mat-mini-fab color="primary" (click)="editCat(selectedCategoria, $event)" matTooltip="Editar categoría" class="action-btn">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-mini-fab color="warn" (click)="deleteCat(selectedCategoria.id, $event)" matTooltip="Eliminar categoría" class="action-btn">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <div class="divider"></div>
+      </ng-container>
+
+      <button mat-fab color="primary" (click)="openForm()" matTooltip="Nueva Categoría">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="categories-grid">
+    <mat-card *ngFor="let cat of (categorias$ | async)" 
+              class="cat-card mat-elevation-z3" 
+              [class.selected]="selectedCategoria?.id === cat.id"
+              (click)="selectCategoria(cat)">
+      <mat-card-header>
+        <div class="cat-icon-container">
+            <mat-icon mat-card-avatar class="cat-icon">{{cat.icono || 'category'}}</mat-icon>
+        </div>
+        <div class="cat-header-text">
+            <mat-card-title>{{cat.nombre | uppercase}}</mat-card-title>
+            <mat-card-subtitle>{{cat.tipo | uppercase}}</mat-card-subtitle>
+        </div>
+      </mat-card-header>
+    </mat-card>
+  </div>
+</div>

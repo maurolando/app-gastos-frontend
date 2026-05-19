@@ -1,0 +1,103 @@
+<h2 mat-dialog-title>
+  <mat-icon style="vertical-align: middle; margin-right: 8px; color: #6366f1;">group</mat-icon>
+  Pago Compartido: {{data.description || data.categoria?.nombre}}
+</h2>
+
+<mat-dialog-content>
+  <!-- Resumen del Gasto -->
+  <div class="expense-summary">
+    <div class="summary-row">
+      <span class="label">Total del gasto</span>
+      <span class="total-amount">Gs {{data.amount | number}}</span>
+    </div>
+    <div class="summary-row">
+      <span class="label">Ya pagado</span>
+      <span class="paid-amount">Gs {{totalPagado | number}}</span>
+    </div>
+    <div class="summary-row">
+      <span class="label">Falta pagar</span>
+      <span class="remaining-amount" [class.zero]="faltante === 0">Gs {{faltante | number}}</span>
+    </div>
+  </div>
+
+  <!-- Barra de Progreso -->
+  <div class="progress-section">
+    <mat-progress-bar
+      mode="determinate"
+      [value]="porcentajePagado"
+      [color]="porcentajePagado >= 100 ? 'accent' : 'primary'">
+    </mat-progress-bar>
+    <span class="progress-label">{{porcentajePagado | number:'1.0-0'}}% pagado</span>
+  </div>
+
+  <!-- Aportes existentes -->
+  <div class="pagos-list" *ngIf="data.pagosCompartidos?.length">
+    <h3 class="section-title">Aportes registrados</h3>
+    <div class="pago-item" *ngFor="let pago of data.pagosCompartidos">
+      <div class="pago-persona">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{pago.persona.nombre | uppercase}}</span>
+      </div>
+      <div class="pago-detalles">
+        <span class="pago-monto">Gs {{pago.monto | number}}</span>
+        <span class="pago-forma">{{pago.formaPago}}</span>
+        <span class="pago-fecha">{{pago.fecha | date:'dd/MM/yy'}}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario nuevo aporte -->
+  <div *ngIf="faltante > 0; else completado">
+    <h3 class="section-title">Registrar aporte</h3>
+    <form [formGroup]="form" class="aporte-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Persona que aporta</mat-label>
+        <mat-select formControlName="personaId">
+          <mat-option *ngFor="let p of (personas$ | async)" [value]="p.id">
+            {{p.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Monto del aporte</mat-label>
+        <span matPrefix>Gs &nbsp;</span>
+        <input matInput type="number" formControlName="monto">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Forma de Pago</mat-label>
+        <mat-select formControlName="formaPago">
+          <mat-option value="Efectivo">Efectivo</mat-option>
+          <mat-option value="Tarjeta de Débito">Tarjeta de Débito</mat-option>
+          <mat-option value="Tarjeta de Crédito">Tarjeta de Crédito</mat-option>
+          <mat-option value="Transferencia">Transferencia</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha del aporte</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="fecha">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <ng-template #completado>
+    <div class="completado-badge">
+      <mat-icon>check_circle</mat-icon>
+      <span>¡Este gasto está completamente pagado!</span>
+    </div>
+  </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cerrar</button>
+  <button mat-raised-button color="primary"
+          *ngIf="faltante > 0"
+          [disabled]="form.invalid"
+          (click)="registrarAporte()">
+    <mat-icon>add_circle</mat-icon> Registrar Aporte
+  </button>
+</mat-dialog-actions>
