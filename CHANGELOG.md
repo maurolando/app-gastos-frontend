@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.0.0...v1.1.0) (2026-05-20)
+
+
+### Features
+
+* add savings UI, dynamic filters, and pagination ([1d22b60](https://github.com/maurolando/app-gastos-frontend/commit/1d22b60245bb802ecf7d41bf56993ce60184c703))
+
 ## 1.0.0 (2026-05-19)
 
 
