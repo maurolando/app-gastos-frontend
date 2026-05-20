@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ExpenseService, Gasto } from 'src/app/services/expense/expense.service';
 import { IngresoService } from 'src/app/services/ingreso/ingreso.service';
+import { AhorroService } from 'src/app/services/ahorro/ahorro.service';
 import { Observable, combineLatest, map, startWith, switchMap, Subject, takeUntil } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
@@ -31,6 +32,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   totalExpenses$!: Observable<number>;
   totalIncome$!: Observable<number>;
+  totalSavings$!: Observable<number>;
   balance$!: Observable<number>;
   count$!: Observable<number>;
   pendingExpenses$!: Observable<Gasto[]>;
@@ -59,6 +61,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private expenseService: ExpenseService,
     private ingresoService: IngresoService,
+    private ahorroService: AhorroService,
     private dialog: MatDialog,
     private notify: NotificationService
   ) {}
@@ -84,7 +87,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return combineLatest([
           this.expenseService.getGastos(m, y),
           this.ingresoService.getIngresos(m, y),
-          this.expenseService.getGlobalBalance(m, y)
+          this.expenseService.getGlobalBalance(m, y),
+          this.ahorroService.getAhorros(m, y)
         ]);
       })
     );
@@ -94,7 +98,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .filter(g => g.pagado) // Solo sumamos lo pagado al total visual
         .reduce((acc, g) => acc + g.amount, 0))
     );
-    this.totalIncome$ = data$.pipe(map(([_, ingresos]) => ingresos.reduce((acc, i) => acc + i.monto, 0)));
+    this.totalIncome$ = data$.pipe(
+      map(([_, ingresos, __, ahorros]) => {
+        const gross = ingresos.reduce((acc, i) => acc + i.monto, 0);
+        const ahorro = ahorros.reduce((acc, a) => acc + a.monto, 0);
+        return Math.max(0, gross - ahorro);
+      })
+    );
+    this.totalSavings$ = data$.pipe(
+      map(([_, __, ___, ahorros]) => ahorros.reduce((acc, a) => acc + a.monto, 0))
+    );
     this.balance$ = data$.pipe(map(([_, __, balance]) => balance));
     this.count$ = data$.pipe(map(([gastos]) => gastos.length));
     
@@ -127,6 +140,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
     );
   }
+
 
   ngOnDestroy(): void {
     this.destroy$.next();

@@ -272,7 +272,113 @@
       }
 
       &.current-savings {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+      }
+    }
+  }
+
+  .ahorros-action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 24px;
+    margin-top: 24px;
+
+    @media (max-width: 1000px) {
+      grid-template-columns: 1fr;
+    }
+
+    .action-card, .list-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+
+      mat-card-header {
+        margin-bottom: 20px;
+        
+        ::ng-deep .mat-mdc-card-header-text {
+          display: flex;
+          align-items: center;
+        }
+
+        mat-card-title {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+      }
+    }
+
+    .saving-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .form-row {
+        width: 100%;
+      }
+
+      .full-width {
+        width: 100%;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 600;
+      }
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+
+      .no-ahorros {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-secondary);
+
+        mat-icon {
+          font-size: 48px;
+          width: 48px;
+          height: 48px;
+          margin-bottom: 12px;
+          opacity: 0.5;
+          color: var(--text-secondary);
+        }
+        p {
+          margin: 0;
+        }
+      }
+
+      .ahorros-table {
+        width: 100%;
+        background: transparent;
+        border-collapse: collapse;
+
+        th.mat-mdc-header-cell {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 600;
+          color: var(--text-secondary);
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        td.mat-mdc-cell {
+          color: var(--text-primary);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .monto-cell {
+          font-weight: 700;
+          color: #8b5cf6;
+        }
+
+        tr:hover {
+          background: rgba(255, 255, 255, 0.02);
+        }
       }
     }
   }
