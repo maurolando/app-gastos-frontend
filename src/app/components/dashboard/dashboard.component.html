@@ -49,7 +49,7 @@
     <mat-card class="stat-card limit mat-elevation-z3">
       <mat-card-header>
         <mat-icon mat-card-avatar>trending_up</mat-icon>
-        <mat-card-title>Ingreso Total</mat-card-title>
+        <mat-card-title>Ingreso Disponible</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <h2>{{ totalIncome$ | async | number:'1.0-0' }} Gs.</h2>
@@ -58,7 +58,21 @@
         </p>
       </mat-card-content>
     </mat-card>
+
+    <mat-card class="stat-card savings mat-elevation-z3">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>savings</mat-icon>
+        <mat-card-title>Ahorro Total</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <h2>{{ totalSavings$ | async | number:'1.0-0' }} Gs.</h2>
+        <p class="last-record">
+          Acumulado en contenedor
+        </p>
+      </mat-card-content>
+    </mat-card>
   </div>
+
 
   <div class="main-content-grid">
     <div class="left-column">

@@ -7,10 +7,43 @@
     </button>
   </div>
 
-  <table mat-table [dataSource]="(gastos$ | async) || []" class="gastos-table">
+  <!-- Barra de Filtros -->
+  <div class="filter-bar">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Persona</mat-label>
+      <mat-select [formControl]="personaFilter">
+        <mat-option value="">Todas</mat-option>
+        <mat-option *ngFor="let p of personas$ | async" [value]="p.id">{{p.nombre}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Categoría</mat-label>
+      <mat-select [formControl]="categoriaFilter">
+        <mat-option value="">Todas</mat-option>
+        <mat-option *ngFor="let c of categorias$ | async" [value]="c.id">{{c.nombre}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field date-range-field">
+      <mat-label>Rango de Fechas</mat-label>
+      <mat-date-range-input [rangePicker]="rangePicker">
+        <input matStartDate [formControl]="fechaInicioFilter" placeholder="Desde">
+        <input matEndDate [formControl]="fechaFinFilter" placeholder="Hasta">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #rangePicker></mat-date-range-picker>
+    </mat-form-field>
+
+    <button mat-button color="warn" *ngIf="hasActiveFilters$ | async" (click)="clearFilters()" class="clear-filters-btn">
+      <mat-icon>filter_list_off</mat-icon> Limpiar
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="gastos-table">
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef> Fecha </th>
-      <td mat-cell *matCellDef="let element"> {{element.date | date}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.date | date:'dd/MM/yyyy'}} </td>
     </ng-container>
 
     <ng-container matColumnDef="persona">
@@ -76,4 +109,17 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+
+  <!-- Paginación -->
+  <mat-paginator [pageSizeOptions]="[15, 25, 50, 100]"
+                 [pageSize]="15"
+                 showFirstLastButtons
+                 aria-label="Seleccionar página de gastos"
+                 class="custom-paginator">
+  </mat-paginator>
+
+  <div *ngIf="dataSource.data.length === 0" class="empty-state" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+    <mat-icon style="font-size: 48px; width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.5;">inbox</mat-icon>
+    <p>No se encontraron gastos que coincidan con la búsqueda.</p>
+  </div>
 </div>

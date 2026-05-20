@@ -1,42 +1,215 @@
 .list-container {
-  background: var(--bg-dark-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  background: var(--bg-card, #1e293b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.05));
+  border-radius: 20px;
   padding: 24px;
+  animation: fadeIn 0.4s ease-out;
 }
 
 .list-header {
   display: flex;
   align-items: center;
   margin-bottom: 24px;
-  h2 { margin: 0; font-weight: 500; color: var(--text-primary); }
+  
+  h2 {
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--text-primary);
+  }
+
+  button {
+    border-radius: 12px;
+    padding: 8px 16px;
+    font-weight: 600;
+  }
 }
-.spacer { flex: 1 1 auto; }
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-field {
+    flex: 1;
+    min-width: 160px;
+
+    &.date-range-field {
+      flex: 1.5;
+      min-width: 240px;
+    }
+
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+      display: none; /* Hide bottom spacer for a tighter layout */
+    }
+  }
+
+  .clear-filters-btn {
+    height: 56px; /* Match Material outline field height */
+    border-radius: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
 
 .gastos-table {
   width: 100%;
   box-shadow: none;
   background: transparent;
+
+  th.mat-mdc-header-cell {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.05));
+    font-size: 0.95rem;
+  }
+
+  td.mat-mdc-cell {
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 12px 16px;
+  }
+
+  tr:hover {
+    background: rgba(255, 255, 255, 0.01);
+  }
 }
 
-.category-badge {
-  background-color: rgba(99, 102, 241, 0.2);
-  color: var(--accent-light);
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 500;
+.category-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .cat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: #3b82f6;
+  }
+
+  span {
+    font-weight: 500;
+    font-size: 0.85rem;
+  }
 }
 
 .amount {
-  font-weight: 600;
-  color: var(--danger-color);
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  color: #f43f5e;
 }
 
 .user-avatar-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  .username { font-weight: 500; font-size: 0.9rem; color: var(--text-primary); }
-  mat-icon { font-size: 20px; width: 20px; height: 20px; }
+
+  .username {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+
+  mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    color: #10b981;
+  }
+}
+
+.acciones-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .paid-icon {
+    color: #10b981;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .pending-icon {
+    color: #f59e0b;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .shared-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100px;
+
+    mat-progress-bar {
+      height: 6px;
+      border-radius: 3px;
+    }
+
+    .progress-text {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-align: right;
+    }
+  }
+}
+
+.custom-paginator {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  margin-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+
+  ::ng-deep {
+    .mat-mdc-paginator-range-label,
+    .mat-mdc-paginator-page-size-label {
+      color: var(--text-secondary);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .mat-mdc-icon-button[disabled] {
+      opacity: 0.35;
+    }
+
+    .mat-mdc-select-value {
+      color: var(--text-primary) !important;
+    }
+
+    .mat-mdc-select-arrow {
+      color: var(--text-secondary);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
