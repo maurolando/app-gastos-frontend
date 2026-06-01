@@ -7,6 +7,39 @@
     </button>
   </div>
 
+  <!-- Barra de Filtros -->
+  <div class="filter-bar">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Persona</mat-label>
+      <mat-select [formControl]="personaFilter">
+        <mat-option value="">Todas</mat-option>
+        <mat-option *ngFor="let p of personas$ | async" [value]="p.id">{{p.nombre}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Categoría</mat-label>
+      <mat-select [formControl]="categoriaFilter">
+        <mat-option value="">Todas</mat-option>
+        <mat-option *ngFor="let c of categorias$ | async" [value]="c.id">{{c.nombre}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field date-range-field">
+      <mat-label>Rango de Fechas</mat-label>
+      <mat-date-range-input [rangePicker]="rangePicker">
+        <input matStartDate [formControl]="fechaInicioFilter" placeholder="Desde">
+        <input matEndDate [formControl]="fechaFinFilter" placeholder="Hasta">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #rangePicker></mat-date-range-picker>
+    </mat-form-field>
+
+    <button mat-button color="warn" *ngIf="hasActiveFilters$ | async" (click)="clearFilters()" class="clear-filters-btn">
+      <mat-icon>filter_list_off</mat-icon> Limpiar
+    </button>
+  </div>
+
   <table mat-table [dataSource]="(ingresos$ | async) || []" class="ingresos-table">
 
     <ng-container matColumnDef="fecha">
