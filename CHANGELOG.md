@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.1.0...v1.2.0) (2026-06-20)
+
+
+### Features
+
+* add filters for person, category and date range to income list ([0d72066](https://github.com/maurolando/app-gastos-frontend/commit/0d72066c3f0f8e286e793e97ce8daee512763624))
+* agregar boton y logica para descargar reporte PDF mensual ([a5691e3](https://github.com/maurolando/app-gastos-frontend/commit/a5691e3593c55cda018cdefda2968055ffeaf1e3))
+
 ## [1.1.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.0.0...v1.1.0) (2026-05-20)
 
 
