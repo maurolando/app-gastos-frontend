@@ -180,6 +180,12 @@ const FINALIZE_MONTH = gql`
   }
 `;
 
+const GENERAR_REPORTE = gql`
+  query GenerarReporte($mes: Int!, $anio: Int!) {
+    generarReporteMensual(mes: $mes, anio: $anio)
+  }
+`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -336,6 +342,16 @@ export class ExpenseService {
       refetchQueries: ['GetAllGastos', 'GetAllIngresos', 'GetGlobalBalance', 'GetLastDates']
     }).pipe(
       map(result => result.data.finalizarMes)
+    );
+  }
+
+  generarReporteMensual(mes: number, anio: number): Observable<string> {
+    return this.apollo.query<any>({
+      query: GENERAR_REPORTE,
+      variables: { mes, anio },
+      fetchPolicy: 'network-only'
+    }).pipe(
+      map(result => result.data.generarReporteMensual)
     );
   }
 }
