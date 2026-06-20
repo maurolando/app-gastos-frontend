@@ -198,6 +198,49 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  descargarReporte() {
+    const m = this.monthControl.value;
+    const y = this.yearControl.value;
+
+    if (!m || !y) {
+      this.notify.error('Por favor selecciona un mes y año.');
+      return;
+    }
+
+    const monthLabel = this.months.find(x => x.value === Number(m))?.label || 'mes';
+
+    this.expenseService.generarReporteMensual(Number(m), Number(y)).subscribe({
+      next: (base64) => {
+        try {
+          const byteCharacters = atob(base64);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+          // Descargar archivo
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `Resumen_Mensual_${monthLabel}_${y}.pdf`;
+          link.click();
+          window.URL.revokeObjectURL(url);
+
+          this.notify.success('Reporte descargado correctamente.');
+        } catch (e) {
+          console.error('Error al procesar el archivo PDF:', e);
+          this.notify.error('Error al procesar el archivo PDF.');
+        }
+      },
+      error: (err) => {
+        console.error('Error al generar el reporte:', err);
+        this.notify.error('Error al conectar con el servidor para generar el reporte.');
+      }
+    });
+  }
+
   openSharedPayment(gasto: Gasto) {
     this.dialog.open(SharedPaymentDialogComponent, {
       width: '520px',
