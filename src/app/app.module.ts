@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ExpenseListComponent } from './components/expense-list/expense-list.component';
@@ -52,6 +52,7 @@ import { IngresoListComponent } from './components/ingreso-list/ingreso-list.com
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { AhorrosComponent } from './components/ahorros/ahorros.component';
 import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
+import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.component';
 
 export function createApollo(httpLink: HttpLink) {
   return {
@@ -79,7 +80,8 @@ export function createApollo(httpLink: HttpLink) {
     ChangePasswordDialogComponent,
     ConfirmDialogComponent,
     AhorrosComponent,
-    ShoppingListComponent
+    ShoppingListComponent,
+    BudgetDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -88,6 +90,7 @@ export function createApollo(httpLink: HttpLink) {
     HttpClientModule,
     ApolloModule,
     ReactiveFormsModule,
+    FormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,

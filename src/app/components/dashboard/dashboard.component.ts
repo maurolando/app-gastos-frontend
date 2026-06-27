@@ -10,6 +10,7 @@ import { PaymentDialogComponent } from '../payment-dialog/payment-dialog.compone
 import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-payment-dialog.component';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { BudgetDialogComponent } from '../budget-dialog/budget-dialog.component';
 
 const STORAGE_MONTH_KEY = 'dashboard_selectedMonth';
 const STORAGE_YEAR_KEY = 'dashboard_selectedYear';
@@ -37,6 +38,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   count$!: Observable<number>;
   pendingExpenses$!: Observable<Gasto[]>;
   lastDates$!: Observable<any>;
+  budgetProgress$!: Observable<{ catId: string, catName: string, catIcon: string, amountSpent: number, budgetAmount: number, percentage: number, color: string }[]>;
 
 
 
@@ -88,7 +90,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.expenseService.getGastos(m, y),
           this.ingresoService.getIngresos(m, y),
           this.expenseService.getGlobalBalance(m, y),
-          this.ahorroService.getAhorros(m, y)
+          this.ahorroService.getAhorros(m, y),
+          this.expenseService.getPresupuestos(m, y)
         ]);
       })
     );
@@ -116,6 +119,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Gastos pendientes: recurrentes no pagados + compartidos no completamente pagados
     this.pendingExpenses$ = data$.pipe(
       map(([gastos]) => gastos.filter(g => !g.pagado))
+    );
+
+    this.budgetProgress$ = data$.pipe(
+      map(([gastos, _, __, ___, presupuestos]) => {
+        if (!presupuestos || presupuestos.length === 0) return [];
+
+        const categorySpent: { [id: string]: number } = {};
+        gastos.filter(g => g.pagado).forEach(g => {
+          if (g.categoria) {
+            categorySpent[g.categoria.id] = (categorySpent[g.categoria.id] || 0) + g.amount;
+          }
+        });
+
+        return presupuestos.filter(p => p.monto > 0).map(p => {
+          const spent = categorySpent[p.categoria.id] || 0;
+          let pct = (spent / p.monto) * 100;
+          let color = 'primary'; // < 80% (greenish/primary)
+          if (pct >= 80 && pct < 100) color = 'accent'; // near limit
+          if (pct >= 100) color = 'warn'; // exceeded
+
+          return {
+            catId: p.categoria.id,
+            catName: p.categoria.nombre,
+            catIcon: p.categoria.icono || 'category',
+            amountSpent: spent,
+            budgetAmount: p.monto,
+            percentage: Math.min(pct, 100),
+            color: color
+          };
+        });
+      })
     );
 
 
@@ -271,6 +305,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.notify.error('Error al procesar el pago');
           }
         });
+      }
+    });
+  }
+
+  openBudgetDialog() {
+    const dialogRef = this.dialog.open(BudgetDialogComponent, {
+      width: '500px',
+      data: {
+        mes: this.monthControl.value,
+        anio: this.yearControl.value
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(changed => {
+      if (changed) {
+        // We trigger a reload by momentarily changing and restoring a filter
+        // Actually, refetchQueries in the mutate of budget handles this usually, 
+        // but here we can just update the subject or rely on apollo watchQuery
       }
     });
   }

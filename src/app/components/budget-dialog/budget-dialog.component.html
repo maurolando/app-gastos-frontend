@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Presupuestos de Gasto (Mes: {{ mes }}/{{ anio }})</h2>
+<mat-dialog-content>
+  <p>Establece un límite de gasto mensual para cada categoría. Deja en 0 para no tener límite.</p>
+  
+  <mat-list>
+    <mat-list-item *ngFor="let cat of categorias">
+      <div class="list-item-content" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <mat-icon>{{ cat.icono }}</mat-icon>
+          <span>{{ cat.nombre }}</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <mat-form-field appearance="outline" style="width: 120px; margin-bottom: -1.25em;">
+            <mat-label>Presupuesto</mat-label>
+            <input matInput type="number" [ngModel]="budgetMap[cat.id]" (ngModelChange)="budgetMap[cat.id]=$any($event)" min="0">
+            <span matPrefix>$&nbsp;</span>
+          </mat-form-field>
+          <button mat-icon-button color="primary" (click)="guardar(cat.id)" matTooltip="Guardar presupuesto para {{cat.nombre}}">
+            <mat-icon>save</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cerrar</button>
+</mat-dialog-actions>
