@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.2.0...v1.3.0) (2026-06-29)
+
+
+### Features
+
+* due date alerts ([e9d9c0a](https://github.com/maurolando/app-gastos-frontend/commit/e9d9c0a4de854785fa11e8ea10566c9fd9491481))
+
 ## [1.2.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.1.0...v1.2.0) (2026-06-20)
 
 
