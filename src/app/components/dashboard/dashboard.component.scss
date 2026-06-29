@@ -1,5 +1,56 @@
 .dashboard-container {
-  padding: 0 24px 24px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  /* Alertas de Vencimiento */
+  .alerts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .alert-banner {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 8px;
+    gap: 16px;
+    font-size: 14px;
+    
+    .mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+    
+    .alert-content {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    button {
+      font-weight: bold;
+      border: 1px solid currentColor;
+    }
+
+    &.overdue {
+      background-color: #fee2e2; /* light red */
+      color: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+    
+    &.due-soon {
+      background-color: #fef3c7; /* light amber/orange */
+      color: #92400e;
+      border-left: 4px solid #f59e0b;
+    }
+  }
 
   .header {
     margin-bottom: 24px;

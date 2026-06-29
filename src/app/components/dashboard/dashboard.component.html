@@ -25,6 +25,33 @@
     </div>
   </div>
 
+  <!-- BANNERS DE ALERTA -->
+  <div class="alerts-container" *ngIf="(alerts$ | async) as alerts">
+    <div *ngFor="let alert of alerts" 
+         class="alert-banner mat-elevation-z2" 
+         [ngClass]="{'overdue': alert.type === 'OVERDUE', 'due-soon': alert.type === 'DUE_SOON'}">
+      
+      <mat-icon *ngIf="alert.type === 'OVERDUE'">error</mat-icon>
+      <mat-icon *ngIf="alert.type === 'DUE_SOON'">warning</mat-icon>
+      
+      <div class="alert-content">
+        <strong>{{ alert.gasto.categoria?.nombre || 'Gasto' }} 
+        <span *ngIf="alert.gasto.description">- {{ alert.gasto.description }}</span>:</strong> 
+        
+        <span *ngIf="alert.type === 'OVERDUE'">
+          ¡Venció hace {{ alert.days }} día(s)! ({{ alert.gasto.amount | number:'1.0-0' }} Gs.)
+        </span>
+        <span *ngIf="alert.type === 'DUE_SOON'">
+          Vence en {{ alert.days === 0 ? 'hoy' : alert.days + ' día(s)' }}. ({{ alert.gasto.amount | number:'1.0-0' }} Gs.)
+        </span>
+      </div>
+      
+      <button mat-button (click)="alert.gasto.esCompartido ? openSharedPayment(alert.gasto) : payGasto(alert.gasto)">
+        PAGAR AHORA
+      </button>
+    </div>
+  </div>
+
   <div class="cards-grid">
     <mat-card class="stat-card balance mat-elevation-z3">
       <mat-card-header>
