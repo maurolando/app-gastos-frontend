@@ -10,6 +10,13 @@ import { PaymentDialogComponent } from '../payment-dialog/payment-dialog.compone
 import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-payment-dialog.component';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { BudgetDialogComponent } from '../budget-dialog/budget-dialog.component';
+
+export interface DueAlert {
+  type: 'OVERDUE' | 'DUE_SOON';
+  gasto: Gasto;
+  days: number;
+}
 
 const STORAGE_MONTH_KEY = 'dashboard_selectedMonth';
 const STORAGE_YEAR_KEY = 'dashboard_selectedYear';
@@ -37,6 +44,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   count$!: Observable<number>;
   pendingExpenses$!: Observable<Gasto[]>;
   lastDates$!: Observable<any>;
+  alerts$!: Observable<DueAlert[]>;
+  budgetProgress$!: Observable<{ catId: string, catName: string, catIcon: string, amountSpent: number, budgetAmount: number, percentage: number, color: string }[]>;
 
 
 
@@ -88,7 +97,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.expenseService.getGastos(m, y),
           this.ingresoService.getIngresos(m, y),
           this.expenseService.getGlobalBalance(m, y),
-          this.ahorroService.getAhorros(m, y)
+          this.ahorroService.getAhorros(m, y),
+          this.expenseService.getPresupuestos(m, y)
         ]);
       })
     );
@@ -116,6 +126,73 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Gastos pendientes: recurrentes no pagados + compartidos no completamente pagados
     this.pendingExpenses$ = data$.pipe(
       map(([gastos]) => gastos.filter(g => !g.pagado))
+    );
+
+    this.alerts$ = this.pendingExpenses$.pipe(
+      map(gastos => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const alerts: DueAlert[] = [];
+
+        gastos.forEach(g => {
+          if (g.fechaVencimiento && !g.pagado) {
+            // fechaVencimiento is 'YYYY-MM-DD'
+            const parts = g.fechaVencimiento.split('-');
+            const due = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+            due.setHours(0, 0, 0, 0);
+
+            const diffTime = due.getTime() - today.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays < 0) {
+              alerts.push({ type: 'OVERDUE', gasto: g, days: Math.abs(diffDays) });
+            } else if (diffDays <= 3) {
+              alerts.push({ type: 'DUE_SOON', gasto: g, days: diffDays });
+            }
+          }
+        });
+
+        // Sort alerts: OVERDUE first (most overdue first), then DUE_SOON (closest to today first)
+        alerts.sort((a, b) => {
+          if (a.type === 'OVERDUE' && b.type !== 'OVERDUE') return -1;
+          if (b.type === 'OVERDUE' && a.type !== 'OVERDUE') return 1;
+          if (a.type === 'OVERDUE' && b.type === 'OVERDUE') return b.days - a.days;
+          return a.days - b.days;
+        });
+
+        return alerts;
+      })
+    );
+
+    this.budgetProgress$ = data$.pipe(
+      map(([gastos, _, __, ___, presupuestos]) => {
+        if (!presupuestos || presupuestos.length === 0) return [];
+
+        const categorySpent: { [id: string]: number } = {};
+        gastos.filter(g => g.pagado).forEach(g => {
+          if (g.categoria) {
+            categorySpent[g.categoria.id] = (categorySpent[g.categoria.id] || 0) + g.amount;
+          }
+        });
+
+        return presupuestos.filter(p => p.monto > 0).map(p => {
+          const spent = categorySpent[p.categoria.id] || 0;
+          let pct = (spent / p.monto) * 100;
+          let color = 'primary'; // < 80% (greenish/primary)
+          if (pct >= 80 && pct < 100) color = 'accent'; // near limit
+          if (pct >= 100) color = 'warn'; // exceeded
+
+          return {
+            catId: p.categoria.id,
+            catName: p.categoria.nombre,
+            catIcon: p.categoria.icono || 'category',
+            amountSpent: spent,
+            budgetAmount: p.monto,
+            percentage: Math.min(pct, 100),
+            color: color
+          };
+        });
+      })
     );
 
 
@@ -271,6 +348,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.notify.error('Error al procesar el pago');
           }
         });
+      }
+    });
+  }
+
+  openBudgetDialog() {
+    const dialogRef = this.dialog.open(BudgetDialogComponent, {
+      width: '500px',
+      data: {
+        mes: this.monthControl.value,
+        anio: this.yearControl.value
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(changed => {
+      if (changed) {
+        // We trigger a reload by momentarily changing and restoring a filter
+        // Actually, refetchQueries in the mutate of budget handles this usually, 
+        // but here we can just update the subject or rely on apollo watchQuery
       }
     });
   }

@@ -9,6 +9,14 @@ export interface Categoria {
   tipo: 'GASTO' | 'INGRESO';
 }
 
+export interface Presupuesto {
+  id: string;
+  categoria: Categoria;
+  monto: number;
+  mes: number;
+  anio: number;
+}
+
 export interface PagoCompartido {
   id: string;
   persona: { id: string; nombre: string };
@@ -186,6 +194,40 @@ const GENERAR_REPORTE = gql`
   }
 `;
 
+const GET_PRESUPUESTOS = gql`
+  query GetPresupuestos($mes: Int!, $anio: Int!) {
+    getPresupuestos(mes: $mes, anio: $anio) {
+      id
+      monto
+      mes
+      anio
+      categoria {
+        id
+        nombre
+        icono
+        tipo
+      }
+    }
+  }
+`;
+
+const SET_PRESUPUESTO = gql`
+  mutation SetPresupuesto($categoriaId: ID!, $monto: Float!, $mes: Int!, $anio: Int!) {
+    setPresupuesto(categoriaId: $categoriaId, monto: $monto, mes: $mes, anio: $anio) {
+      id
+      monto
+      mes
+      anio
+      categoria {
+        id
+        nombre
+        icono
+        tipo
+      }
+    }
+  }
+`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -352,6 +394,26 @@ export class ExpenseService {
       fetchPolicy: 'network-only'
     }).pipe(
       map(result => result.data.generarReporteMensual)
+    );
+  }
+
+  getPresupuestos(mes?: number, anio?: number): Observable<Presupuesto[]> {
+    return this.apollo.watchQuery<any>({
+      query: GET_PRESUPUESTOS,
+      variables: { mes, anio },
+      fetchPolicy: 'network-only'
+    }).valueChanges.pipe(
+      map(result => result.data.getPresupuestos)
+    );
+  }
+
+  setPresupuesto(categoriaId: string, monto: number, mes: number, anio: number): Observable<Presupuesto> {
+    return this.apollo.mutate<any>({
+      mutation: SET_PRESUPUESTO,
+      variables: { categoriaId, monto, mes, anio },
+      refetchQueries: [{ query: GET_PRESUPUESTOS, variables: { mes, anio } }]
+    }).pipe(
+      map(result => result.data.setPresupuesto)
     );
   }
 }

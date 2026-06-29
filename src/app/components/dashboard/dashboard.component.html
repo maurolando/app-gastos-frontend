@@ -19,6 +19,36 @@
       <button mat-flat-button color="primary" (click)="descargarReporte()" style="margin-left: 8px;">
         <mat-icon>picture_as_pdf</mat-icon> Reporte PDF
       </button>
+      <button mat-flat-button color="accent" (click)="openBudgetDialog()" style="margin-left: 8px;">
+        <mat-icon>account_balance</mat-icon> Presupuestos
+      </button>
+    </div>
+  </div>
+
+  <!-- BANNERS DE ALERTA -->
+  <div class="alerts-container" *ngIf="(alerts$ | async) as alerts">
+    <div *ngFor="let alert of alerts" 
+         class="alert-banner mat-elevation-z2" 
+         [ngClass]="{'overdue': alert.type === 'OVERDUE', 'due-soon': alert.type === 'DUE_SOON'}">
+      
+      <mat-icon *ngIf="alert.type === 'OVERDUE'">error</mat-icon>
+      <mat-icon *ngIf="alert.type === 'DUE_SOON'">warning</mat-icon>
+      
+      <div class="alert-content">
+        <strong>{{ alert.gasto.categoria?.nombre || 'Gasto' }} 
+        <span *ngIf="alert.gasto.description">- {{ alert.gasto.description }}</span>:</strong> 
+        
+        <span *ngIf="alert.type === 'OVERDUE'">
+          ¡Venció hace {{ alert.days }} día(s)! ({{ alert.gasto.amount | number:'1.0-0' }} Gs.)
+        </span>
+        <span *ngIf="alert.type === 'DUE_SOON'">
+          Vence en {{ alert.days === 0 ? 'hoy' : alert.days + ' día(s)' }}. ({{ alert.gasto.amount | number:'1.0-0' }} Gs.)
+        </span>
+      </div>
+      
+      <button mat-button (click)="alert.gasto.esCompartido ? openSharedPayment(alert.gasto) : payGasto(alert.gasto)">
+        PAGAR AHORA
+      </button>
     </div>
   </div>
 
@@ -124,7 +154,7 @@
     </div>
 
     <div class="right-column">
-      <mat-card class="chart-card mat-elevation-z3">
+      <mat-card class="chart-card mat-elevation-z3" style="margin-bottom: 24px;">
         <mat-card-header>
           <mat-card-title>Gastos por Método de Pago</mat-card-title>
         </mat-card-header>
@@ -138,6 +168,36 @@
           </div>
         </mat-card-content>
       </mat-card>
+
+      <!-- SECCIÓN DE PRESUPUESTOS -->
+      <mat-card class="budget-card mat-elevation-z3" *ngIf="(budgetProgress$ | async) as budgets">
+        <mat-card-header>
+          <mat-card-title>Progreso de Presupuestos</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="budgets.length === 0" style="text-align: center; color: #94a3b8; padding: 16px;">
+            <p>No tienes presupuestos configurados para este mes.</p>
+            <button mat-button color="primary" (click)="openBudgetDialog()">Configurar</button>
+          </div>
+          
+          <div class="budget-list">
+            <div class="budget-item" *ngFor="let b of budgets" style="margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-weight: 500;">
+                <span style="display: flex; align-items: center; gap: 4px;">
+                  <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ b.catIcon }}</mat-icon>
+                  {{ b.catName | uppercase }}
+                </span>
+                <span>{{ b.amountSpent | number:'1.0-0' }} / {{ b.budgetAmount | number:'1.0-0' }} Gs.</span>
+              </div>
+              <mat-progress-bar mode="determinate" [value]="b.percentage" [color]="b.color"></mat-progress-bar>
+              <div style="text-align: right; font-size: 12px; margin-top: 4px;" [ngStyle]="{'color': b.color === 'warn' ? '#f44336' : '#64748b'}">
+                {{ b.percentage | number:'1.0-0' }}% utilizado
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
     </div>
   </div>
 </div>
