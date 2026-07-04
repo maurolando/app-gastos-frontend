@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.3.0...v1.4.0) (2026-07-04)
+
+
+### Features
+
+* implementar interfaz y visualizacion de cuotas de pagos fijos ([d6ed04e](https://github.com/maurolando/app-gastos-frontend/commit/d6ed04e6a2d522ce13d007221743b2fef9ad03ed))
+
 ## [1.3.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.2.0...v1.3.0) (2026-06-29)
 
 
