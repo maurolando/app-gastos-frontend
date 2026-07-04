@@ -32,18 +32,56 @@ export class ExpenseFormComponent implements OnInit {
       formaPago: ['Efectivo', Validators.required],
       recurrent: [false],
       fechaVencimiento: [null],
-      esCompartido: [false]
+      esCompartido: [false],
+      tieneCuotas: [false],
+      cuotaActual: [null, [Validators.min(1)]],
+      cuotasTotales: [null, [Validators.min(1)]]
     });
   }
 
   ngOnInit() {
     this.personas$ = this.personaService.getPersonas();
     this.categorias$ = this.service.getCategorias('GASTO');
+
+    // Manejar cambios dinámicos para los campos de cuotas
+    this.form.get('recurrent')?.valueChanges.subscribe(isRecurrent => {
+      if (!isRecurrent) {
+        this.form.get('tieneCuotas')?.setValue(false);
+        this.form.get('fechaVencimiento')?.setValue(null);
+      }
+    });
+
+    this.form.get('tieneCuotas')?.valueChanges.subscribe(hasQuotas => {
+      const cuotaActualCtrl = this.form.get('cuotaActual');
+      const cuotasTotalesCtrl = this.form.get('cuotasTotales');
+      if (hasQuotas) {
+        cuotaActualCtrl?.setValidators([Validators.required, Validators.min(1)]);
+        cuotasTotalesCtrl?.setValidators([Validators.required, Validators.min(1)]);
+        if (cuotaActualCtrl?.value == null) {
+          cuotaActualCtrl?.setValue(1);
+        }
+      } else {
+        cuotaActualCtrl?.clearValidators();
+        cuotasTotalesCtrl?.clearValidators();
+        cuotaActualCtrl?.setValue(null);
+        cuotasTotalesCtrl?.setValue(null);
+      }
+      cuotaActualCtrl?.updateValueAndValidity();
+      cuotasTotalesCtrl?.updateValueAndValidity();
+    });
   }
 
   save() {
     if (this.form.valid) {
       const val = this.form.value;
+      
+      if (val.recurrent && val.tieneCuotas) {
+        if (val.cuotaActual > val.cuotasTotales) {
+          this.notify.error('La cuota actual no puede ser mayor que el total de cuotas');
+          return;
+        }
+      }
+
       const formattedDate = val.date.toISOString().split('T')[0];
       
       this.service.createGasto({
@@ -55,7 +93,9 @@ export class ExpenseFormComponent implements OnInit {
         formaPago: val.formaPago,
         recurrent: val.recurrent,
         fechaVencimiento: val.fechaVencimiento ? val.fechaVencimiento.toISOString().split('T')[0] : null,
-        esCompartido: val.esCompartido || false
+        esCompartido: val.esCompartido || false,
+        cuotaActual: val.recurrent && val.tieneCuotas ? val.cuotaActual : null,
+        cuotasTotales: val.recurrent && val.tieneCuotas ? val.cuotasTotales : null
       }).subscribe({
         next: () => {
           this.notify.success('Gasto registrado con éxito');

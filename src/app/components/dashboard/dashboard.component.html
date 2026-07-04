@@ -127,6 +127,10 @@
                   <mat-icon *ngIf="item.categoria?.icono" class="cat-icon">{{ item.categoria?.icono }}</mat-icon>
                   {{ item.categoria?.nombre | uppercase }}
                   <span *ngIf="item.description">- {{ item.description | uppercase }}</span>
+                  <!-- Badge cuota -->
+                  <span *ngIf="item.cuotaActual && item.cuotasTotales" class="quota-badge">
+                    CUOTA {{ item.cuotaActual }}/{{ item.cuotasTotales }}
+                  </span>
                   <!-- Badge compartido -->
                   <span *ngIf="item.esCompartido" class="shared-badge">
                     <mat-icon>group</mat-icon> Compartido

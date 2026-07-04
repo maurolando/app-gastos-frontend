@@ -39,6 +39,8 @@ export interface Gasto {
   persona: any;
   esCompartido?: boolean;
   pagosCompartidos?: PagoCompartido[];
+  cuotaActual?: number;
+  cuotasTotales?: number;
 }
 
 const GET_GASTOS = gql`
@@ -58,6 +60,8 @@ const GET_GASTOS = gql`
       pagado
       fechaVencimiento
       esCompartido
+      cuotaActual
+      cuotasTotales
       pagosCompartidos {
         id
         persona { id nombre }
@@ -101,8 +105,8 @@ const GET_GLOBAL_BALANCE = gql`
 `;
 
 const CREATE_GASTO = gql`
-  mutation CreateGasto($amount: Float!, $categoriaId: ID!, $date: String!, $description: String, $personaId: ID!, $formaPago: String, $recurrent: Boolean, $pagado: Boolean, $fechaVencimiento: String, $esCompartido: Boolean) {
-    createGasto(amount: $amount, categoriaId: $categoriaId, date: $date, description: $description, personaId: $personaId, formaPago: $formaPago, recurrent: $recurrent, pagado: $pagado, fechaVencimiento: $fechaVencimiento, esCompartido: $esCompartido) {
+  mutation CreateGasto($amount: Float!, $categoriaId: ID!, $date: String!, $description: String, $personaId: ID!, $formaPago: String, $recurrent: Boolean, $pagado: Boolean, $fechaVencimiento: String, $esCompartido: Boolean, $cuotaActual: Int, $cuotasTotales: Int) {
+    createGasto(amount: $amount, categoriaId: $categoriaId, date: $date, description: $description, personaId: $personaId, formaPago: $formaPago, recurrent: $recurrent, pagado: $pagado, fechaVencimiento: $fechaVencimiento, esCompartido: $esCompartido, cuotaActual: $cuotaActual, cuotasTotales: $cuotasTotales) {
       id
       amount
       categoria {
@@ -117,6 +121,8 @@ const CREATE_GASTO = gql`
       pagado
       fechaVencimiento
       esCompartido
+      cuotaActual
+      cuotasTotales
       persona {
         id
         nombre
@@ -287,7 +293,9 @@ export class ExpenseService {
         recurrent: gasto.recurrent,
         pagado: gasto.pagado || false,
         fechaVencimiento: gasto.fechaVencimiento,
-        esCompartido: gasto.esCompartido || false
+        esCompartido: gasto.esCompartido || false,
+        cuotaActual: gasto.cuotaActual,
+        cuotasTotales: gasto.cuotasTotales
       },
       refetchQueries: [{ query: GET_GASTOS }, { query: GET_GLOBAL_BALANCE }, { query: GET_LAST_DATES }]
     }).pipe(

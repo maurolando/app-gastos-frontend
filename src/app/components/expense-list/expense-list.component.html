@@ -68,7 +68,12 @@
 
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef> Descripción </th>
-      <td mat-cell *matCellDef="let element"> {{element.description | uppercase}} </td>
+      <td mat-cell *matCellDef="let element">
+        <span>{{element.description | uppercase}}</span>
+        <span *ngIf="element.cuotaActual && element.cuotasTotales" class="quota-badge">
+          CUOTA {{element.cuotaActual}}/{{element.cuotasTotales}}
+        </span>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="amount">
