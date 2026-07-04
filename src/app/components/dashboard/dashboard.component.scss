@@ -272,6 +272,19 @@
             }
           }
 
+          .quota-badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            padding: 2px 8px;
+            margin-left: 5px;
+          }
+
           span {
             font-weight: 400;
             font-size: 0.85rem;

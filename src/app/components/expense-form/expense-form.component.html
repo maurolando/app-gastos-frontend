@@ -51,7 +51,8 @@
       <input matInput formControlName="description" style="text-transform: uppercase;">
     </mat-form-field>
 
-      <mat-checkbox formControlName="recurrent" color="primary" style="margin-bottom: 8px;">
+    <div class="checkbox-container">
+      <mat-checkbox formControlName="recurrent" color="primary">
         Es fijo
       </mat-checkbox>
       
@@ -62,7 +63,26 @@
           <mat-datepicker-toggle matSuffix [for]="pickerVenc"></mat-datepicker-toggle>
           <mat-datepicker #pickerVenc></mat-datepicker>
         </mat-form-field>
+
+        <div style="margin: 8px 0 12px 0;">
+          <mat-checkbox formControlName="tieneCuotas" color="primary">
+            Tiene cuotas / Pago a plazos
+          </mat-checkbox>
+        </div>
+
+        <div *ngIf="form.get('tieneCuotas')?.value" style="display: flex; gap: 16px; margin-top: 10px;">
+          <mat-form-field appearance="outline" style="flex: 1; margin-bottom: 0;">
+            <mat-label>Cuota Actual</mat-label>
+            <input matInput type="number" formControlName="cuotaActual" min="1">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" style="flex: 1; margin-bottom: 0;">
+            <mat-label>Total Cuotas</mat-label>
+            <input matInput type="number" formControlName="cuotasTotales" min="1">
+          </mat-form-field>
+        </div>
       </div>
+    </div>
 
       <mat-checkbox formControlName="esCompartido" color="accent" style="margin-top: 4px;">
         Pago compartido

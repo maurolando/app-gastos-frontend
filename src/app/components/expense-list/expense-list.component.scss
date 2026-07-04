@@ -213,3 +213,17 @@
     transform: translateY(0);
   }
 }
+
+.quota-badge {
+  display: inline-block;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-left: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+}
