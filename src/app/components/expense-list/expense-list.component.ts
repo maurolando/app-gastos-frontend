@@ -9,6 +9,8 @@ import { ExpenseService, Gasto, Categoria } from 'src/app/services/expense/expen
 import { PersonaService, Persona } from 'src/app/services/persona/persona.service';
 import { ExpenseFormComponent } from '../expense-form/expense-form.component';
 import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-payment-dialog.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { NotificationService } from 'src/app/services/notification/notification.service';
 
 @Component({
   selector: 'app-expense-list',
@@ -37,7 +39,8 @@ export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private service: ExpenseService, 
     private personaService: PersonaService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notify: NotificationService
   ) {}
 
   ngOnInit() {
@@ -130,6 +133,30 @@ export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dialog.open(ExpenseFormComponent, {
       width: '450px',
       data: gasto
+    });
+  }
+
+  undoPayment(gasto: Gasto) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Deshacer Pago',
+        message: `¿Estás seguro de que deseas deshacer el pago de "${gasto.description || gasto.categoria?.nombre}"?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.service.deshacerPago(gasto.id!).subscribe({
+          next: () => {
+            this.notify.success('El pago se ha deshecho con éxito');
+          },
+          error: (err) => {
+            console.error('Error deshaciendo pago:', err);
+            this.notify.error('Error al deshacer el pago');
+          }
+        });
+      }
     });
   }
 

@@ -123,6 +123,10 @@
             <mat-icon>edit</mat-icon>
             <span>Editar</span>
           </button>
+          <button mat-menu-item *ngIf="element.pagado" (click)="undoPayment(element)">
+            <mat-icon>undo</mat-icon>
+            <span>Deshacer pago</span>
+          </button>
         </mat-menu>
       </td>
     </ng-container>

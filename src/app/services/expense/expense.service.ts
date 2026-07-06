@@ -157,6 +157,16 @@ const UPDATE_GASTO = gql`
     }
   }
 `;
+const DESHACER_PAGO = gql`
+  mutation DeshacerPago($id: ID!) {
+    deshacerPago(id: $id) {
+      id
+      pagado
+      fechaPago
+      formaPago
+    }
+  }
+`;
 
 const CREATE_CATEGORIA = gql`
   mutation CreateCategoria($nombre: String!, $icono: String, $tipo: String!) {
@@ -327,6 +337,16 @@ export class ExpenseService {
       refetchQueries: [{ query: GET_GASTOS }, { query: GET_GLOBAL_BALANCE }, { query: GET_LAST_DATES }]
     }).pipe(
       map(result => result.data.createGasto)
+    );
+  }
+
+  deshacerPago(id: string): Observable<Gasto> {
+    return this.apollo.mutate<any>({
+      mutation: DESHACER_PAGO,
+      variables: { id },
+      refetchQueries: [{ query: GET_GASTOS }, { query: GET_GLOBAL_BALANCE }, { query: GET_LAST_DATES }]
+    }).pipe(
+      map(result => result.data.deshacerPago)
     );
   }
 
