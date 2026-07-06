@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Registrar Gasto</h2>
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Gasto' : 'Registrar Gasto' }}</h2>
 <mat-dialog-content>
   <form [formGroup]="form" class="expense-form">
     <mat-form-field appearance="outline">

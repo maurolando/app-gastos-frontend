@@ -27,6 +27,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { PersonaListComponent } from './components/persona-list/persona-list.component';
 import { PersonaFormComponent } from './components/persona-form/persona-form.component';
@@ -111,7 +112,8 @@ export function createApollo(httpLink: HttpLink) {
     MatSlideToggleModule,
     NgChartsModule,
     MatCheckboxModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatMenuModule
   ],
   providers: [
     {

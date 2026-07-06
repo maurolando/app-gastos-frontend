@@ -18,7 +18,7 @@ import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-pa
 export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  displayedColumns: string[] = ['date', 'persona', 'category', 'description', 'amount', 'acciones'];
+  displayedColumns: string[] = ['date', 'persona', 'category', 'description', 'amount', 'acciones', 'more'];
   
   dataSource = new MatTableDataSource<Gasto>([]);
   personas$!: Observable<Persona[]>;
@@ -122,6 +122,13 @@ export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
   openSharedPayment(gasto: Gasto) {
     this.dialog.open(SharedPaymentDialogComponent, {
       width: '520px',
+      data: gasto
+    });
+  }
+
+  editExpense(gasto: Gasto) {
+    this.dialog.open(ExpenseFormComponent, {
+      width: '450px',
       data: gasto
     });
   }

@@ -131,6 +131,33 @@ const CREATE_GASTO = gql`
   }
 `;
 
+const UPDATE_GASTO = gql`
+  mutation UpdateGasto($id: ID!, $amount: Float!, $categoriaId: ID!, $date: String!, $description: String, $personaId: ID!, $formaPago: String, $recurrent: Boolean, $pagado: Boolean, $fechaVencimiento: String, $esCompartido: Boolean, $cuotaActual: Int, $cuotasTotales: Int) {
+    updateGasto(id: $id, amount: $amount, categoriaId: $categoriaId, date: $date, description: $description, personaId: $personaId, formaPago: $formaPago, recurrent: $recurrent, pagado: $pagado, fechaVencimiento: $fechaVencimiento, esCompartido: $esCompartido, cuotaActual: $cuotaActual, cuotasTotales: $cuotasTotales) {
+      id
+      amount
+      categoria {
+        id
+        nombre
+        icono
+      }
+      date
+      description
+      formaPago
+      recurrent
+      pagado
+      fechaVencimiento
+      esCompartido
+      cuotaActual
+      cuotasTotales
+      persona {
+        id
+        nombre
+      }
+    }
+  }
+`;
+
 const CREATE_CATEGORIA = gql`
   mutation CreateCategoria($nombre: String!, $icono: String, $tipo: String!) {
     createCategoria(nombre: $nombre, icono: $icono, tipo: $tipo) {
@@ -300,6 +327,30 @@ export class ExpenseService {
       refetchQueries: [{ query: GET_GASTOS }, { query: GET_GLOBAL_BALANCE }, { query: GET_LAST_DATES }]
     }).pipe(
       map(result => result.data.createGasto)
+    );
+  }
+
+  updateGasto(id: string, gasto: any): Observable<Gasto> {
+    return this.apollo.mutate<any>({
+      mutation: UPDATE_GASTO,
+      variables: {
+        id,
+        amount: gasto.amount,
+        categoriaId: gasto.categoriaId,
+        date: gasto.date,
+        description: gasto.description,
+        personaId: gasto.personaId,
+        formaPago: gasto.formaPago,
+        recurrent: gasto.recurrent,
+        pagado: gasto.pagado || false,
+        fechaVencimiento: gasto.fechaVencimiento,
+        esCompartido: gasto.esCompartido || false,
+        cuotaActual: gasto.cuotaActual,
+        cuotasTotales: gasto.cuotasTotales
+      },
+      refetchQueries: [{ query: GET_GASTOS }, { query: GET_GLOBAL_BALANCE }, { query: GET_LAST_DATES }]
+    }).pipe(
+      map(result => result.data.updateGasto)
     );
   }
 
