@@ -8,6 +8,36 @@
     margin-bottom: 8px;
   }
 
+  .pagado-toggle {
+    margin: 10px 0;
+    padding: 12px;
+    background: #1e293b;
+    border-radius: 8px;
+    border-left: 3px solid #10b981;
+    border-top: 1px solid #334155;
+    border-right: 1px solid #334155;
+    border-bottom: 1px solid #334155;
+
+    &.pendiente {
+      border-left-color: #f59e0b;
+    }
+
+    .pagado-hint {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: #94a3b8;
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
   .checkbox-container {
     margin: 10px 0;
     padding: 10px;

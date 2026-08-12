@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { Persona, PersonaService } from 'src/app/services/persona/persona.service';
 import { Gasto } from 'src/app/services/expense/expense.service';
+import { toLocalISODate } from 'src/app/utils/date.util';
 
 @Component({
   selector: 'app-payment-dialog',
@@ -44,7 +45,7 @@ export class PaymentDialogComponent implements OnInit {
         amount: val.amount,
         personaId: val.personaId,
         formaPago: val.formaPago,
-        fechaPago: val.fechaPago.toISOString().split('T')[0]
+        fechaPago: toLocalISODate(val.fechaPago)
       });
     }
   }

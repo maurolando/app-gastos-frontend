@@ -291,13 +291,13 @@ export class ExpenseService {
         personaId: gasto.personaId,
         formaPago: gasto.formaPago,
         recurrent: gasto.recurrent,
-        pagado: gasto.pagado || false,
+        pagado: gasto.pagado ?? false,
         fechaVencimiento: gasto.fechaVencimiento,
         esCompartido: gasto.esCompartido || false,
         cuotaActual: gasto.cuotaActual,
         cuotasTotales: gasto.cuotasTotales
       },
-      refetchQueries: [{ query: GET_GASTOS }, { query: GET_GLOBAL_BALANCE }, { query: GET_LAST_DATES }]
+      refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates']
     }).pipe(
       map(result => result.data.createGasto)
     );
@@ -311,7 +311,7 @@ export class ExpenseService {
         icono: cat.icono,
         tipo: cat.tipo
       },
-      refetchQueries: [{ query: GET_CATEGORIAS }]
+      refetchQueries: ['GetCategorias']
     }).pipe(
       map(result => result.data.createCategoria)
     );
@@ -322,7 +322,7 @@ export class ExpenseService {
     return this.apollo.mutate<any>({
       mutation: DELETE_CATEGORIA,
       variables: { id },
-      refetchQueries: [{ query: GET_CATEGORIAS }]
+      refetchQueries: ['GetCategorias']
     }).pipe(
       map(result => {
         console.log('>>> ExpenseService: Resultado DELETE:', result.data.deleteCategoria);
@@ -341,7 +341,7 @@ export class ExpenseService {
         icono: cat.icono,
         tipo: cat.tipo
       },
-      refetchQueries: [{ query: GET_CATEGORIAS }]
+      refetchQueries: ['GetCategorias']
     }).pipe(
       map(result => {
         console.log('>>> ExpenseService: Resultado UPDATE:', result.data.updateCategoria);
@@ -354,7 +354,7 @@ export class ExpenseService {
     return this.apollo.mutate<any>({
       mutation: AGREGAR_PAGO_COMPARTIDO,
       variables: { gastoId, personaId, monto, formaPago, fecha },
-      refetchQueries: [{ query: GET_GASTOS }, { query: GET_GLOBAL_BALANCE }, { query: GET_LAST_DATES }]
+      refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates']
     }).pipe(
       map(result => result.data.agregarPagoCompartido)
     );
@@ -419,7 +419,7 @@ export class ExpenseService {
     return this.apollo.mutate<any>({
       mutation: SET_PRESUPUESTO,
       variables: { categoriaId, monto, mes, anio },
-      refetchQueries: [{ query: GET_PRESUPUESTOS, variables: { mes, anio } }]
+      refetchQueries: ['GetPresupuestos']
     }).pipe(
       map(result => result.data.setPresupuesto)
     );

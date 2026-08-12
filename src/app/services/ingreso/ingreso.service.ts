@@ -74,7 +74,7 @@ export class IngresoService {
     return this.apollo.mutate<any>({
       mutation: CREATE_INGRESO,
       variables: { monto, fecha, categoriaId, personaId, recurrent },
-      refetchQueries: [{ query: GET_INGRESOS }, { query: gql`query GetLastDates { getLastRecordsDates { lastGasto lastIngreso lastBalance } }` }]
+      refetchQueries: ['GetAllIngresos', 'GetGlobalBalance', 'GetLastDates']
     }).pipe(
       map(result => result.data.createIngreso)
     );

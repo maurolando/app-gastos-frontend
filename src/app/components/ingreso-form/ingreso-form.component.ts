@@ -6,6 +6,7 @@ import { PersonaService, Persona } from 'src/app/services/persona/persona.servic
 import { Categoria, ExpenseService } from 'src/app/services/expense/expense.service';
 import { Observable } from 'rxjs';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { toLocalISODate } from 'src/app/utils/date.util';
 
 @Component({
   selector: 'app-ingreso-form',
@@ -42,7 +43,7 @@ export class IngresoFormComponent implements OnInit {
   save() {
     if (this.form.valid) {
       const v = this.form.value;
-      const formattedDate = v.fecha.toISOString().split('T')[0];
+      const formattedDate = toLocalISODate(v.fecha);
       this.service.createIngreso(v.monto, formattedDate, v.categoriaId, v.personaId, v.recurrent)
         .subscribe({
           next: () => {
