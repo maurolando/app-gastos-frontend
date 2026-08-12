@@ -374,3 +374,57 @@
     height: 15px;
   }
 }
+
+// --- Móvil ---
+@media (max-width: 900px) {
+  .dashboard-container {
+    padding: 12px 4px;
+    gap: 16px;
+
+    // La botonera es un flex de una sola línea: en pantalla chica los selects
+    // de mes y año empujaban los cuatro botones fuera de la vista.
+    .header {
+      margin-bottom: 12px;
+
+      .filters {
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+
+        mat-form-field {
+          width: calc(50% - 4px);
+        }
+
+        button {
+          flex: 1 1 calc(50% - 4px);
+        }
+      }
+    }
+
+    .cards-grid {
+      // minmax(280px, 1fr) no baja de 280px, así que en un teléfono de 390px
+      // las tarjetas se salían del contenedor.
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .alert-banner {
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 13px;
+    }
+  }
+}
+
+@media (max-width: 599px) {
+  .dashboard-container {
+    .cards-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-card h2 {
+      font-size: 1.15rem;
+    }
+  }
+}

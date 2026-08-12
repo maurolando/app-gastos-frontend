@@ -173,3 +173,21 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--border-subtle);
 }
 
+
+// --- Diálogos en pantalla chica ---
+// Material limita el ancho al 80vw, que en un teléfono de 390px deja los
+// formularios en 312px: los campos de monto y fecha quedan apretadísimos.
+// Y el alto por defecto (65vh) corta el formulario de gasto, que es largo.
+@media (max-width: 599px) {
+  .cdk-overlay-pane {
+    max-width: 96vw !important;
+  }
+
+  .mat-mdc-dialog-content {
+    max-height: 70vh !important;
+  }
+
+  .mat-mdc-dialog-actions {
+    padding: 8px 16px 16px 16px;
+  }
+}

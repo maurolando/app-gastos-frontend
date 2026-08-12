@@ -394,3 +394,14 @@
     transform: translateY(0);
   }
 }
+
+// --- Móvil ---
+// Esta tabla tiene pocas columnas y se lee bien tal cual; solo hace falta que
+// pueda desplazarse en lugar de desbordar el contenedor en pantalla angosta.
+@media (max-width: 900px) {
+  table.mat-mdc-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
