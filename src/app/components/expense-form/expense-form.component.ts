@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Categoria, ExpenseService } from 'src/app/services/expense/expense.service';
 import { Persona, PersonaService } from 'src/app/services/persona/persona.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { toLocalISODate } from 'src/app/utils/date.util';
 
 @Component({
   selector: 'app-expense-form',
@@ -30,6 +31,9 @@ export class ExpenseFormComponent implements OnInit {
       description: [''],
       personaId: ['', Validators.required],
       formaPago: ['Efectivo', Validators.required],
+      // Un gasto variable normalmente ya se pagó al momento de registrarlo:
+      // arranca en true para que impacte el balance sin un segundo paso.
+      pagado: [true],
       recurrent: [false],
       fechaVencimiento: [null],
       esCompartido: [false],
@@ -48,6 +52,26 @@ export class ExpenseFormComponent implements OnInit {
       if (!isRecurrent) {
         this.form.get('tieneCuotas')?.setValue(false);
         this.form.get('fechaVencimiento')?.setValue(null);
+      }
+      // Un gasto fijo es un compromiso a vencer: por defecto queda pendiente.
+      // El usuario puede sobreescribirlo con el toggle "Ya está pagado".
+      // En gastos compartidos el toggle está deshabilitado y manda esCompartido.
+      const pagadoCtrl = this.form.get('pagado');
+      if (pagadoCtrl?.enabled) {
+        pagadoCtrl.setValue(!isRecurrent);
+      }
+    });
+
+    // Un gasto compartido se salda con los aportes de cada persona,
+    // no con el toggle: lo forzamos a pendiente mientras esté marcado.
+    this.form.get('esCompartido')?.valueChanges.subscribe(esCompartido => {
+      const pagadoCtrl = this.form.get('pagado');
+      if (esCompartido) {
+        pagadoCtrl?.setValue(false);
+        pagadoCtrl?.disable();
+      } else {
+        pagadoCtrl?.enable();
+        pagadoCtrl?.setValue(!this.form.get('recurrent')?.value);
       }
     });
 
@@ -73,8 +97,9 @@ export class ExpenseFormComponent implements OnInit {
 
   save() {
     if (this.form.valid) {
-      const val = this.form.value;
-      
+      // getRawValue: 'pagado' se deshabilita en gastos compartidos y form.value lo omitiría.
+      const val = this.form.getRawValue();
+
       if (val.recurrent && val.tieneCuotas) {
         if (val.cuotaActual > val.cuotasTotales) {
           this.notify.error('La cuota actual no puede ser mayor que el total de cuotas');
@@ -82,23 +107,27 @@ export class ExpenseFormComponent implements OnInit {
         }
       }
 
-      const formattedDate = val.date.toISOString().split('T')[0];
-      
+      const esCompartido = val.esCompartido || false;
+      const pagado = esCompartido ? false : !!val.pagado;
+
       this.service.createGasto({
         amount: val.amount,
         categoriaId: val.categoriaId,
-        date: formattedDate,
+        date: toLocalISODate(val.date),
         description: val.description,
         personaId: val.personaId,
         formaPago: val.formaPago,
         recurrent: val.recurrent,
-        fechaVencimiento: val.fechaVencimiento ? val.fechaVencimiento.toISOString().split('T')[0] : null,
-        esCompartido: val.esCompartido || false,
+        pagado,
+        fechaVencimiento: toLocalISODate(val.fechaVencimiento),
+        esCompartido,
         cuotaActual: val.recurrent && val.tieneCuotas ? val.cuotaActual : null,
         cuotasTotales: val.recurrent && val.tieneCuotas ? val.cuotasTotales : null
       }).subscribe({
         next: () => {
-          this.notify.success('Gasto registrado con éxito');
+          this.notify.success(pagado
+            ? 'Gasto registrado y descontado del balance'
+            : 'Gasto registrado como pendiente de pago');
           this.dialogRef.close(true);
         },
         error: () => this.notify.error('Error al registrar el gasto')

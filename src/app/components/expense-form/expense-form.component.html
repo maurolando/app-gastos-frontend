@@ -51,6 +51,24 @@
       <input matInput formControlName="description" style="text-transform: uppercase;">
     </mat-form-field>
 
+    <div class="pagado-toggle" [class.pendiente]="!form.get('pagado')?.value">
+      <mat-slide-toggle formControlName="pagado" color="primary">
+        Ya está pagado
+      </mat-slide-toggle>
+      <div class="pagado-hint">
+        <mat-icon>{{ form.get('pagado')?.value ? 'check_circle' : 'schedule' }}</mat-icon>
+        <span *ngIf="form.get('esCompartido')?.value">
+          Se salda automáticamente cuando los aportes cubran el monto total.
+        </span>
+        <span *ngIf="!form.get('esCompartido')?.value && form.get('pagado')?.value">
+          Se descuenta del balance al guardar.
+        </span>
+        <span *ngIf="!form.get('esCompartido')?.value && !form.get('pagado')?.value">
+          Queda en «Pendientes de Pago». No afecta el balance hasta que lo marques pagado.
+        </span>
+      </div>
+    </div>
+
     <div class="checkbox-container">
       <mat-checkbox formControlName="recurrent" color="primary">
         Es fijo

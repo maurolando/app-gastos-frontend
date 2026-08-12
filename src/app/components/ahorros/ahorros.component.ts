@@ -7,6 +7,7 @@ import { IngresoService } from 'src/app/services/ingreso/ingreso.service';
 import { AhorroService, Ahorro } from 'src/app/services/ahorro/ahorro.service';
 import { PersonaService, Persona } from 'src/app/services/persona/persona.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { toLocalISODate } from 'src/app/utils/date.util';
 
 const SAVINGS_GOAL_KEY = 'app_gastos_savings_goal';
 
@@ -110,7 +111,7 @@ export class AhorrosComponent implements OnInit, OnDestroy {
   cargarAhorro() {
     if (this.savingForm.valid) {
       const v = this.savingForm.value;
-      const formattedDate = v.fecha instanceof Date ? v.fecha.toISOString().split('T')[0] : new Date(v.fecha).toISOString().split('T')[0];
+      const formattedDate = toLocalISODate(v.fecha);
       
       this.ahorroService.createAhorro(v.monto, formattedDate, v.personaId || null, v.descripcion || '')
         .subscribe({

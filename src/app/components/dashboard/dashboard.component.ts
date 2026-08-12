@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ExpenseService, Gasto } from 'src/app/services/expense/expense.service';
 import { IngresoService } from 'src/app/services/ingreso/ingreso.service';
 import { AhorroService } from 'src/app/services/ahorro/ahorro.service';
-import { Observable, combineLatest, map, startWith, switchMap, Subject, takeUntil } from 'rxjs';
+import { Observable, combineLatest, map, startWith, switchMap, Subject, takeUntil, shareReplay } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { MatDialog } from '@angular/material/dialog';
@@ -100,7 +100,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.ahorroService.getAhorros(m, y),
           this.expenseService.getPresupuestos(m, y)
         ]);
-      })
+      }),
+      takeUntil(this.destroy$),
+      // Sin esto cada observable derivado (totalExpenses$, balance$, pieChartData$...)
+      // abre su propia cadena de 5 watchQuery: ~40 requests por carga, y otros tantos
+      // cada vez que una mutación dispara refetchQueries por nombre de operación.
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
     this.totalExpenses$ = data$.pipe(

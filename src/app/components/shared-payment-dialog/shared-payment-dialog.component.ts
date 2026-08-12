@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Persona, PersonaService } from 'src/app/services/persona/persona.service';
 import { ExpenseService, Gasto } from 'src/app/services/expense/expense.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { toLocalISODate } from 'src/app/utils/date.util';
 
 @Component({
   selector: 'app-shared-payment-dialog',
@@ -50,7 +51,7 @@ export class SharedPaymentDialogComponent implements OnInit {
   registrarAporte() {
     if (this.form.valid) {
       const v = this.form.value;
-      const fecha = v.fecha.toISOString().split('T')[0];
+      const fecha = toLocalISODate(v.fecha);
       this.expenseService.agregarPagoCompartido(
         this.data.id!,
         v.personaId,

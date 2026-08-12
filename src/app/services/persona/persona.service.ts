@@ -84,7 +84,7 @@ export class PersonaService {
     return this.apollo.mutate<any>({
       mutation: CREATE_PERSONA,
       variables: { nombre },
-      refetchQueries: [{ query: GET_PERSONAS }]
+      refetchQueries: ['GetAllPersonas']
     }).pipe(
       map(result => result.data.createPersona)
     );
@@ -94,7 +94,7 @@ export class PersonaService {
     return this.apollo.mutate<any>({
       mutation: UPDATE_PERSONA,
       variables: { id, nombre, activo },
-      refetchQueries: [{ query: GET_PERSONAS }]
+      refetchQueries: ['GetAllPersonas']
     }).pipe(
       map(result => result.data.updatePersona)
     );
