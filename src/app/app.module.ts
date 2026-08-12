@@ -46,6 +46,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatMenuModule } from '@angular/material/menu';
 import { LoginComponent } from './components/login/login.component';
 import { ChangePasswordDialogComponent } from './components/change-password-dialog/change-password-dialog.component';
 import { IngresoListComponent } from './components/ingreso-list/ingreso-list.component';
@@ -109,6 +110,7 @@ export function createApollo(httpLink: HttpLink) {
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatSlideToggleModule,
+    MatMenuModule,
     NgChartsModule,
     MatCheckboxModule,
     MatPaginatorModule
