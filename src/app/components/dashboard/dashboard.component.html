@@ -13,6 +13,9 @@
           <mat-option *ngFor="let y of years" [value]="y">{{y}}</mat-option>
         </mat-select>
       </mat-form-field>
+      <button mat-flat-button color="primary" (click)="openAddExpense()" class="nuevo-gasto-btn">
+        <mat-icon>add</mat-icon> Nuevo Gasto
+      </button>
       <button mat-flat-button color="accent" (click)="finalizeMonth()">
         <mat-icon>task_alt</mat-icon> Finalizar Mes
       </button>
@@ -73,6 +76,10 @@
       </mat-card-header>
       <mat-card-content>
         <h2>{{ totalExpenses$ | async | number:'1.0-0' }} Gs.</h2>
+        <p class="pendiente-line" *ngIf="(totalPending$ | async) as pendiente">
+          <mat-icon>schedule</mat-icon>
+          + {{ pendiente | number:'1.0-0' }} Gs. pendientes de pago
+        </p>
         <p class="last-record" *ngIf="(lastDates$ | async) as dates">
           Último registro: {{ dates.lastGasto !== 'N/A' ? (dates.lastGasto | date:'dd/MM/yyyy') : 'N/A' }}
         </p>
@@ -161,6 +168,7 @@
       <mat-card class="chart-card mat-elevation-z3" style="margin-bottom: 24px;">
         <mat-card-header>
           <mat-card-title>Gastos por Método de Pago</mat-card-title>
+          <mat-card-subtitle>Solo gastos pagados</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="chart-wrapper">

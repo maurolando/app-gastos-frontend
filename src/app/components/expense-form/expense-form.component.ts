@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { Categoria, ExpenseService } from 'src/app/services/expense/expense.service';
+import { Categoria, ExpenseService, Gasto } from 'src/app/services/expense/expense.service';
 import { Persona, PersonaService } from 'src/app/services/persona/persona.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
-import { toLocalISODate } from 'src/app/utils/date.util';
+import { fromLocalISODate, toLocalISODate } from 'src/app/utils/date.util';
 
 @Component({
   selector: 'app-expense-form',
@@ -17,12 +17,18 @@ export class ExpenseFormComponent implements OnInit {
   personas$!: Observable<Persona[]>;
   categorias$!: Observable<Categoria[]>;
 
+  /** El diálogo se abre sin data para registrar y con un gasto para editarlo. */
+  get esEdicion(): boolean {
+    return !!this.gastoAEditar?.id;
+  }
+
   constructor(
     private fb: FormBuilder,
     private service: ExpenseService,
     private personaService: PersonaService,
     private notify: NotificationService,
-    public dialogRef: MatDialogRef<ExpenseFormComponent>
+    public dialogRef: MatDialogRef<ExpenseFormComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private gastoAEditar: Gasto | null
   ) {
     this.form = this.fb.group({
       amount: ['', [Validators.required, Validators.min(0.01)]],
@@ -46,6 +52,12 @@ export class ExpenseFormComponent implements OnInit {
   ngOnInit() {
     this.personas$ = this.personaService.getPersonas();
     this.categorias$ = this.service.getCategorias('GASTO');
+
+    // Se carga antes de suscribir a valueChanges: si no, los defaults por tipo
+    // pisarían los valores del gasto que se está editando.
+    if (this.esEdicion) {
+      this.cargarGastoAEditar();
+    }
 
     // Manejar cambios dinámicos para los campos de cuotas
     this.form.get('recurrent')?.valueChanges.subscribe(isRecurrent => {
@@ -95,6 +107,40 @@ export class ExpenseFormComponent implements OnInit {
     });
   }
 
+  private cargarGastoAEditar() {
+    const g = this.gastoAEditar!;
+    const tieneCuotas = !!g.cuotasTotales;
+
+    this.form.patchValue({
+      amount: g.amount,
+      categoriaId: g.categoria?.id || '',
+      date: fromLocalISODate(g.date),
+      description: g.description || '',
+      personaId: g.persona?.id || '',
+      formaPago: g.formaPago || 'Efectivo',
+      pagado: !!g.pagado,
+      recurrent: !!g.recurrent,
+      fechaVencimiento: fromLocalISODate(g.fechaVencimiento),
+      esCompartido: !!g.esCompartido,
+      tieneCuotas,
+      cuotaActual: g.cuotaActual ?? null,
+      cuotasTotales: g.cuotasTotales ?? null
+    });
+
+    // Los validadores de cuotas los aplica la suscripción a tieneCuotas, que
+    // todavía no existe cuando se carga el gasto.
+    if (tieneCuotas) {
+      this.form.get('cuotaActual')?.setValidators([Validators.required, Validators.min(1)]);
+      this.form.get('cuotasTotales')?.setValidators([Validators.required, Validators.min(1)]);
+      this.form.get('cuotaActual')?.updateValueAndValidity();
+      this.form.get('cuotasTotales')?.updateValueAndValidity();
+    }
+
+    if (g.esCompartido) {
+      this.form.get('pagado')?.disable();
+    }
+  }
+
   save() {
     if (this.form.valid) {
       // getRawValue: 'pagado' se deshabilita en gastos compartidos y form.value lo omitiría.
@@ -108,9 +154,13 @@ export class ExpenseFormComponent implements OnInit {
       }
 
       const esCompartido = val.esCompartido || false;
-      const pagado = esCompartido ? false : !!val.pagado;
+      // En un gasto compartido manda la suma de aportes, no el toggle. Al editar
+      // se conserva el estado actual: forzarlo a false reabriría uno ya saldado.
+      const pagado = esCompartido
+        ? (this.esEdicion ? !!this.gastoAEditar!.pagado : false)
+        : !!val.pagado;
 
-      this.service.createGasto({
+      const payload = {
         amount: val.amount,
         categoriaId: val.categoriaId,
         date: toLocalISODate(val.date),
@@ -123,7 +173,20 @@ export class ExpenseFormComponent implements OnInit {
         esCompartido,
         cuotaActual: val.recurrent && val.tieneCuotas ? val.cuotaActual : null,
         cuotasTotales: val.recurrent && val.tieneCuotas ? val.cuotasTotales : null
-      }).subscribe({
+      };
+
+      if (this.esEdicion) {
+        this.service.updateGasto(this.gastoAEditar!.id!, payload).subscribe({
+          next: () => {
+            this.notify.success('Gasto actualizado');
+            this.dialogRef.close(true);
+          },
+          error: () => this.notify.error('Error al actualizar el gasto')
+        });
+        return;
+      }
+
+      this.service.createGasto(payload).subscribe({
         next: () => {
           this.notify.success(pagado
             ? 'Gasto registrado y descontado del balance'

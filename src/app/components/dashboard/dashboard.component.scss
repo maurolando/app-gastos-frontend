@@ -352,3 +352,25 @@
   display: flex;
   align-items: center;
 }
+.nuevo-gasto-btn {
+  margin-right: 8px;
+}
+
+// El pendiente vive pegado al Gasto Total: son el mismo dato partido en dos
+// estados, y separarlos en tarjetas distintas invitaba a leerlos como totales
+// independientes.
+.pendiente-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 0 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #f59e0b;
+
+  mat-icon {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+  }
+}
