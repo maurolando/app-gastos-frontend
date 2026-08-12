@@ -25,6 +25,13 @@ export interface PagoCompartido {
   fecha?: string;
 }
 
+export interface CierreResult {
+  gastosCopiados: number;
+  ingresosCopiados: number;
+  gastosOmitidos: number;
+  ingresosOmitidos: number;
+}
+
 export interface Gasto {
   id?: string;
   amount: number;
@@ -131,6 +138,40 @@ const CREATE_GASTO = gql`
   }
 `;
 
+const UPDATE_GASTO = gql`
+  mutation UpdateGasto($id: ID!, $amount: Float, $categoriaId: ID, $date: String, $description: String, $personaId: ID, $formaPago: String, $recurrent: Boolean, $pagado: Boolean, $fechaVencimiento: String, $esCompartido: Boolean, $cuotaActual: Int, $cuotasTotales: Int) {
+    updateGasto(id: $id, amount: $amount, categoriaId: $categoriaId, date: $date, description: $description, personaId: $personaId, formaPago: $formaPago, recurrent: $recurrent, pagado: $pagado, fechaVencimiento: $fechaVencimiento, esCompartido: $esCompartido, cuotaActual: $cuotaActual, cuotasTotales: $cuotasTotales) {
+      id
+      amount
+      categoria {
+        id
+        nombre
+        icono
+      }
+      date
+      description
+      formaPago
+      recurrent
+      pagado
+      fechaVencimiento
+      fechaPago
+      esCompartido
+      cuotaActual
+      cuotasTotales
+      persona {
+        id
+        nombre
+      }
+    }
+  }
+`;
+
+const DELETE_GASTO = gql`
+  mutation DeleteGasto($id: ID!) {
+    deleteGasto(id: $id)
+  }
+`;
+
 const CREATE_CATEGORIA = gql`
   mutation CreateCategoria($nombre: String!, $icono: String, $tipo: String!) {
     createCategoria(nombre: $nombre, icono: $icono, tipo: $tipo) {
@@ -190,7 +231,12 @@ const REINICIAR_DATOS = gql`
 
 const FINALIZE_MONTH = gql`
   mutation FinalizeMonth($mesActual: Int!, $anioActual: Int!) {
-    finalizarMes(mesActual: $mesActual, anioActual: $anioActual)
+    finalizarMes(mesActual: $mesActual, anioActual: $anioActual) {
+      gastosCopiados
+      ingresosCopiados
+      gastosOmitidos
+      ingresosOmitidos
+    }
   }
 `;
 
@@ -303,6 +349,40 @@ export class ExpenseService {
     );
   }
 
+  updateGasto(id: string, gasto: any): Observable<Gasto> {
+    return this.apollo.mutate<any>({
+      mutation: UPDATE_GASTO,
+      variables: {
+        id,
+        amount: gasto.amount,
+        categoriaId: gasto.categoriaId,
+        date: gasto.date,
+        description: gasto.description,
+        personaId: gasto.personaId,
+        formaPago: gasto.formaPago,
+        recurrent: gasto.recurrent,
+        pagado: gasto.pagado ?? false,
+        fechaVencimiento: gasto.fechaVencimiento,
+        esCompartido: gasto.esCompartido || false,
+        cuotaActual: gasto.cuotaActual,
+        cuotasTotales: gasto.cuotasTotales
+      },
+      refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates']
+    }).pipe(
+      map(result => result.data.updateGasto)
+    );
+  }
+
+  deleteGasto(id: string): Observable<boolean> {
+    return this.apollo.mutate<any>({
+      mutation: DELETE_GASTO,
+      variables: { id },
+      refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates']
+    }).pipe(
+      map(result => result.data.deleteGasto)
+    );
+  }
+
   createCategoria(cat: any): Observable<Categoria> {
     return this.apollo.mutate<any>({
       mutation: CREATE_CATEGORIA,
@@ -385,7 +465,7 @@ export class ExpenseService {
     );
   }
 
-  finalizeMonth(mesActual: number, anioActual: number): Observable<boolean> {
+  finalizeMonth(mesActual: number, anioActual: number): Observable<CierreResult> {
     return this.apollo.mutate<any>({
       mutation: FINALIZE_MONTH,
       variables: { mesActual, anioActual },

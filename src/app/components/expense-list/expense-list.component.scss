@@ -227,3 +227,23 @@
   vertical-align: middle;
   letter-spacing: 0.5px;
 }
+
+.gestion-cell {
+  white-space: nowrap;
+  text-align: right;
+
+  button {
+    color: #94a3b8;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: #e2e8f0;
+    }
+
+    // El borrado es irreversible: se tine solo al apuntarlo, para que no
+    // compita visualmente con el resto de la fila.
+    &.delete-btn:hover {
+      color: #f43f5e;
+    }
+  }
+}

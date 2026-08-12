@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ExpenseService, Gasto } from 'src/app/services/expense/expense.service';
+import { CierreResult, ExpenseService, Gasto } from 'src/app/services/expense/expense.service';
 import { IngresoService } from 'src/app/services/ingreso/ingreso.service';
 import { AhorroService } from 'src/app/services/ahorro/ahorro.service';
 import { Observable, combineLatest, map, startWith, switchMap, Subject, takeUntil, shareReplay } from 'rxjs';
@@ -11,6 +11,7 @@ import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-pa
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { BudgetDialogComponent } from '../budget-dialog/budget-dialog.component';
+import { ExpenseFormComponent } from '../expense-form/expense-form.component';
 
 export interface DueAlert {
   type: 'OVERDUE' | 'DUE_SOON';
@@ -38,6 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   );
 
   totalExpenses$!: Observable<number>;
+  totalPending$!: Observable<number>;
   totalIncome$!: Observable<number>;
   totalSavings$!: Observable<number>;
   balance$!: Observable<number>;
@@ -111,6 +113,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.totalExpenses$ = data$.pipe(
       map(([gastos]) => gastos
         .filter(g => g.pagado) // Solo sumamos lo pagado al total visual
+        .reduce((acc, g) => acc + g.amount, 0))
+    );
+    // Lo que falta pagar se muestra al lado del total en vez de quedar invisible:
+    // antes la diferencia entre la tarjeta y el gráfico no se explicaba en ningún lado.
+    this.totalPending$ = data$.pipe(
+      map(([gastos]) => gastos
+        .filter(g => !g.pagado)
         .reduce((acc, g) => acc + g.amount, 0))
     );
     this.totalIncome$ = data$.pipe(
@@ -205,7 +214,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.pieChartData$ = data$.pipe(
       map(([gastos]) => {
         const groups: { [key: string]: number } = {};
-        gastos.forEach(g => {
+        // Mismo criterio que la tarjeta "Gasto Total" y que los presupuestos: sin
+        // este filtro el gráfico sumaba más que el número de al lado.
+        gastos.filter(g => g.pagado).forEach(g => {
           const method = g.formaPago || 'Otros';
           groups[method] = (groups[method] || 0) + g.amount;
         });
@@ -251,12 +262,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.expenseService.finalizeMonth(Number(m), Number(y)).subscribe({
-          next: (success) => {
-            if (!success) {
-              this.notify.error('Hubo un problema al cerrar el mes. Revisa los logs del servidor.');
-              return;
-            }
-
+          next: (resultado) => {
             let nextM = Number(m) + 1;
             let nextY = Number(y);
             if (nextM > 12) {
@@ -269,7 +275,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.monthControl.setValue(nextM);
             this.yearControl.setValue(nextY);
 
-            this.notify.success(`✅ Mes de ${monthLabel} finalizado correctamente.`);
+            this.notify.success(this.resumirCierre(resultado, monthLabel));
           },
           error: (err) => {
             console.error('Error al finalizar mes:', err);
@@ -278,6 +284,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  /**
+   * El cierre ahora es idempotente y omite lo que ya existe en el mes destino.
+   * Si se aprieta dos veces hay que decir que no se copió nada, y no repetir el
+   * mismo "listo" de la primera vez.
+   */
+  private resumirCierre(r: CierreResult, monthLabel: string): string {
+    const copiados = r.gastosCopiados + r.ingresosCopiados;
+    const omitidos = r.gastosOmitidos + r.ingresosOmitidos;
+
+    if (copiados === 0) {
+      return omitidos > 0
+        ? `${monthLabel} ya estaba cerrado: los ${omitidos} registros fijos ya existen en el mes siguiente.`
+        : `Mes de ${monthLabel} finalizado. No había gastos ni ingresos fijos para copiar.`;
+    }
+
+    const partes: string[] = [];
+    if (r.gastosCopiados > 0) {
+      partes.push(`${r.gastosCopiados} gasto${r.gastosCopiados > 1 ? 's' : ''}`);
+    }
+    if (r.ingresosCopiados > 0) {
+      partes.push(`${r.ingresosCopiados} ingreso${r.ingresosCopiados > 1 ? 's' : ''}`);
+    }
+
+    const base = `✅ ${monthLabel} finalizado. Se copiaron ${partes.join(' y ')} al mes siguiente`;
+    return omitidos > 0 ? `${base} (${omitidos} ya existían).` : `${base}.`;
+  }
+
+  openAddExpense() {
+    this.dialog.open(ExpenseFormComponent, { width: '450px' });
   }
 
   descargarReporte() {

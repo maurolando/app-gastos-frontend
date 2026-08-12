@@ -9,6 +9,8 @@ import { ExpenseService, Gasto, Categoria } from 'src/app/services/expense/expen
 import { PersonaService, Persona } from 'src/app/services/persona/persona.service';
 import { ExpenseFormComponent } from '../expense-form/expense-form.component';
 import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-payment-dialog.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { NotificationService } from 'src/app/services/notification/notification.service';
 
 @Component({
   selector: 'app-expense-list',
@@ -18,7 +20,7 @@ import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-pa
 export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  displayedColumns: string[] = ['date', 'persona', 'category', 'description', 'amount', 'acciones'];
+  displayedColumns: string[] = ['date', 'persona', 'category', 'description', 'amount', 'acciones', 'gestion'];
   
   dataSource = new MatTableDataSource<Gasto>([]);
   personas$!: Observable<Persona[]>;
@@ -37,7 +39,8 @@ export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private service: ExpenseService, 
     private personaService: PersonaService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notify: NotificationService
   ) {}
 
   ngOnInit() {
@@ -117,6 +120,37 @@ export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openAddExpense() {
     this.dialog.open(ExpenseFormComponent, { width: '450px' });
+  }
+
+  editExpense(gasto: Gasto) {
+    this.dialog.open(ExpenseFormComponent, { width: '450px', data: gasto });
+  }
+
+  deleteExpense(gasto: Gasto) {
+    const detalle = [gasto.categoria?.nombre, gasto.description]
+      .filter(Boolean)
+      .join(' · ');
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: '¿Borrar este gasto?',
+        message: `${detalle || 'Gasto'}\n${gasto.amount.toLocaleString('es-PY')} Gs.\n\n`
+          + (gasto.pagado ? 'Se va a devolver al balance. ' : '')
+          + 'Esta acción no se puede deshacer.'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmado => {
+      if (!confirmado || !gasto.id) return;
+
+      this.service.deleteGasto(gasto.id).subscribe({
+        next: (ok) => ok
+          ? this.notify.success('Gasto borrado')
+          : this.notify.error('No se pudo borrar el gasto'),
+        error: () => this.notify.error('Error al borrar el gasto')
+      });
+    });
   }
 
   openSharedPayment(gasto: Gasto) {
