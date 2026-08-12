@@ -8,6 +8,7 @@ import { AuthService } from './services/auth/auth.service';
 import { NotificationService } from './services/notification/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -65,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async checkConnection() {
     try {
-      const response = await fetch('http://localhost:8080/graphql', {
+      const response = await fetch(environment.apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: '{ __typename }' })
