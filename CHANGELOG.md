@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.4.0...v1.4.1) (2026-08-12)
+
+
+### Bug Fixes
+
+* registrar el gasto ya pagado y refrescar el balance al instante ([1da704c](https://github.com/maurolando/app-gastos-frontend/commit/1da704c5148e640493833284d5f1e7600c47f49f))
+
 ## [1.4.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.3.0...v1.4.0) (2026-07-04)
 
 
