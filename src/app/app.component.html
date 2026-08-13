@@ -1,6 +1,6 @@
 <ng-container *ngIf="(isLoginPage$ | async) === false; else loginOutlet">
   <mat-toolbar color="primary" class="main-toolbar mat-elevation-z4">
-    <button mat-icon-button (click)="sidenav.toggle()" *ngIf="currentUser$ | async">
+    <button mat-icon-button (click)="sidenav.toggle()" *ngIf="currentUser$ | async" aria-label="Abrir menú">
       <mat-icon>menu</mat-icon>
     </button>
     <span class="app-title">Gastos Hogar</span>
@@ -35,8 +35,11 @@
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sidenav mode="side" opened class="mat-elevation-z4 sidenav-content">
-      <mat-nav-list style="padding-top: 16px;">
+    <mat-sidenav #sidenav
+                 [mode]="(esMovil$ | async) ? 'over' : 'side'"
+                 [opened]="(esMovil$ | async) === false"
+                 class="mat-elevation-z4 sidenav-content">
+      <mat-nav-list style="padding-top: 16px;" (click)="cerrarSiEsMovil(sidenav)">
         <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
           <mat-icon style="margin-right: 8px;">savings</mat-icon>
           <span>Balance</span>

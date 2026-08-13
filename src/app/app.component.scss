@@ -154,3 +154,44 @@ a.mat-list-item {
   50% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 3px #f43f5e); }
   100% { transform: scale(1); opacity: 0.8; }
 }
+
+// --- Móvil ---
+// El sidenav pasa a mode="over" desde el TS; acá solo se ajusta lo que en
+// pantalla chica no entra en la barra superior ni respira en el contenido.
+@media (max-width: 900px) {
+  .main-content {
+    padding: 16px 12px;
+  }
+}
+
+@media (max-width: 599px) {
+  .app-title {
+    font-size: 1.1rem;
+  }
+
+  .main-content {
+    padding: 12px 8px;
+  }
+
+  // El indicador queda como punto de color: la palabra ONLINE/OFFLINE empujaba
+  // el nombre de usuario y los botones fuera de la barra.
+  .status-indicator {
+    margin-left: 8px;
+    padding: 6px;
+    gap: 0;
+
+    span {
+      display: none;
+    }
+  }
+
+  .user-chip {
+    padding: 6px;
+    margin-right: 0;
+    border-radius: 50%;
+
+    span {
+      display: none;
+    }
+  }
+}

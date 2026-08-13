@@ -1,11 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
+import { MatSidenav } from '@angular/material/sidenav';
+import { LayoutService } from './services/layout/layout.service';
 import { ExpenseService } from './services/expense/expense.service';
 import { AuthService } from './services/auth/auth.service';
 import { NotificationService } from './services/notification/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +22,12 @@ export class AppComponent implements OnInit, OnDestroy {
     map(e => (e as NavigationEnd).urlAfterRedirects === '/login')
   );
 
+  /**
+   * Por debajo del corte el sidenav fijo tapaba la pantalla entera: pasa a
+   * superponerse al contenido y arranca cerrado.
+   */
+  esMovil$ = this.layout.esMovil$;
+
   isOnline = false;
   private connectionIntervalId: any;
 
@@ -27,8 +36,19 @@ export class AppComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private notify: NotificationService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private layout: LayoutService
   ) {}
+
+  /**
+   * En móvil el sidenav se superpone al contenido, así que hay que cerrarlo
+   * después de navegar o queda tapando la pantalla a la que acabás de entrar.
+   */
+  cerrarSiEsMovil(sidenav: MatSidenav) {
+    if (this.layout.esMovil) {
+      sidenav.close();
+    }
+  }
 
   ngOnInit() {
     this.checkConnection();
@@ -46,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async checkConnection() {
     try {
-      const response = await fetch('http://localhost:8080/graphql', {
+      const response = await fetch(environment.apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: '{ __typename }' })

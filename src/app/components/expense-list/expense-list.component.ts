@@ -11,6 +11,7 @@ import { ExpenseFormComponent } from '../expense-form/expense-form.component';
 import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-payment-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { LayoutService } from 'src/app/services/layout/layout.service';
 
 @Component({
   selector: 'app-expense-list',
@@ -40,8 +41,17 @@ export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
     private service: ExpenseService, 
     private personaService: PersonaService,
     private dialog: MatDialog,
-    private notify: NotificationService
+    private notify: NotificationService,
+    private layout: LayoutService
   ) {}
+
+  esMovil$ = this.layout.esMovil$;
+
+  /**
+   * Filas ya filtradas y paginadas. En móvil la tabla de 7 columnas no entra,
+   * así que las mismas filas se pintan como tarjetas desde acá.
+   */
+  filas$ = this.dataSource.connect();
 
   ngOnInit() {
     this.personas$ = this.personaService.getPersonas();
@@ -167,6 +177,7 @@ export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.dataSource.disconnect();
     this.destroy$.next();
     this.destroy$.complete();
   }

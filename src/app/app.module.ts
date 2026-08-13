@@ -54,10 +54,11 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { AhorrosComponent } from './components/ahorros/ahorros.component';
 import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
 import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.component';
+import { environment } from 'src/environments/environment';
 
 export function createApollo(httpLink: HttpLink) {
   return {
-    link: httpLink.create({ uri: 'http://localhost:8080/graphql' }),
+    link: httpLink.create({ uri: environment.apiUrl }),
     cache: new InMemoryCache(),
   };
 }
