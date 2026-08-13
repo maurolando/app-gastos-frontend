@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.4.1...v1.5.0) (2026-08-13)
+
+
+### Features
+
+* hacer la app usable en telefono ([a97cde7](https://github.com/maurolando/app-gastos-frontend/commit/a97cde76fbada81ff1022b4064ac9e3af48970a4))
+* sacar la URL del backend del codigo a environments ([3e6f611](https://github.com/maurolando/app-gastos-frontend/commit/3e6f6112071da55096f0f55581928831d8eae8d1))
+
 ## [1.4.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.4.0...v1.4.1) (2026-08-12)
 
 
