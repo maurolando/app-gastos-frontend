@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.5.0...v1.5.1) (2026-08-14)
+
+
+### Bug Fixes
+
+* apuntar a la URL real del backend en Render ([3925641](https://github.com/maurolando/app-gastos-frontend/commit/3925641fb097f6f4581659000988917505e0a486))
+
 ## [1.5.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.4.1...v1.5.0) (2026-08-13)
 
 
