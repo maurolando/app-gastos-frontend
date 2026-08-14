@@ -44,13 +44,22 @@ const UPDATE_PERSONA = gql`
   }
 `;
 
+/** Lo que devuelve la mutation login: el token de sesion y la persona. */
+export interface LoginResult {
+  token: string;
+  persona: Persona;
+}
+
 const LOGIN_PERSONA = gql`
   mutation Login($nombre: String!, $clave: String!) {
     login(nombre: $nombre, clave: $clave) {
-      id
-      nombre
-      activo
-      tieneClave
+      token
+      persona {
+        id
+        nombre
+        activo
+        tieneClave
+      }
     }
   }
 `;
@@ -100,7 +109,7 @@ export class PersonaService {
     );
   }
 
-  loginPersona(nombre: string, clave: string): Observable<Persona | null> {
+  loginPersona(nombre: string, clave: string): Observable<LoginResult | null> {
     return this.apollo.mutate<any>({
       mutation: LOGIN_PERSONA,
       variables: { nombre, clave }
