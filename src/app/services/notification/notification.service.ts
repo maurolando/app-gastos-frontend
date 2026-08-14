@@ -26,6 +26,19 @@ export class NotificationService {
     });
   }
 
+  /**
+   * Aviso persistente con una acción. Sin duration: se queda hasta que el
+   * usuario decide, que es lo que corresponde cuando hay algo que hacer y no
+   * solo algo que leer.
+   */
+  action(message: string, actionLabel: string) {
+    return this.snackBar.open(message, actionLabel, {
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: ['success-snackbar']
+    });
+  }
+
   warn(message: string) {
     this.snackBar.open(message, 'Cerrar', {
       duration: 4000,

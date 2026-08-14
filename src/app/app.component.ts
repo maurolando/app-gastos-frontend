@@ -9,6 +9,7 @@ import { NotificationService } from './services/notification/notification.servic
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { environment } from 'src/environments/environment';
+import { ActualizacionService } from './services/pwa/actualizacion.service';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +38,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private notify: NotificationService,
     private router: Router,
     private dialog: MatDialog,
-    private layout: LayoutService
+    private layout: LayoutService,
+    private actualizacion: ActualizacionService
   ) {}
 
   /**
@@ -51,6 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.actualizacion.iniciar();
     this.checkConnection();
     // Check connection every 5 seconds
     this.connectionIntervalId = setInterval(() => {

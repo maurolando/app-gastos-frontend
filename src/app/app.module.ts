@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -61,6 +61,7 @@ import { PresupuestosSugeridosDialogComponent } from './components/presupuestos-
 import { environment } from 'src/environments/environment';
 import { setContext } from '@apollo/client/link/context';
 import { AuthService } from './services/auth/auth.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 export function createApollo(httpLink: HttpLink, auth: AuthService) {
   // El backend protege todo el schema con @PreAuthorize y espera el JWT en la
@@ -132,7 +133,12 @@ export function createApollo(httpLink: HttpLink, auth: AuthService) {
     NgChartsModule,
     MatCheckboxModule,
     MatPaginatorModule,
-    MatTabsModule
+    MatTabsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Se registra cuando la app queda estable, o a los 30 s si nunca lo hace.
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [
     {

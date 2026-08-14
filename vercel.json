@@ -21,7 +21,16 @@
       ]
     },
     {
-      "source": "/(.*)\\.(js|css)",
+      "source": "/(ngsw-worker.js|ngsw.json|safety-worker.js|worker-basic.min.js|manifest.webmanifest)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.([0-9a-f]{16})\\.(js|css)",
       "headers": [
         {
           "key": "Cache-Control",
