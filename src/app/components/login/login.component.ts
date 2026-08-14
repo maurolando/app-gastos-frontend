@@ -35,11 +35,11 @@ export class LoginComponent {
     const { nombre, clave, permanecer } = this.form.value;
 
     this.personaService.loginPersona(nombre, clave).subscribe({
-      next: (persona) => {
+      next: (resultado) => {
         this.loading = false;
-        if (persona) {
-          this.authService.iniciarSesion(persona, permanecer);
-          this.notify.success(`¡Bienvenido, ${persona.nombre}!`);
+        if (resultado?.token) {
+          this.authService.iniciarSesion(resultado.persona, resultado.token, permanecer);
+          this.notify.success(`¡Bienvenido, ${resultado.persona.nombre}!`);
           this.router.navigate(['/']);
         } else {
           this.notify.error('Usuario o contraseña incorrectos');

@@ -55,10 +55,20 @@ import { AhorrosComponent } from './components/ahorros/ahorros.component';
 import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
 import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.component';
 import { environment } from 'src/environments/environment';
+import { setContext } from '@apollo/client/link/context';
+import { AuthService } from './services/auth/auth.service';
 
-export function createApollo(httpLink: HttpLink) {
+export function createApollo(httpLink: HttpLink, auth: AuthService) {
+  // El backend protege todo el schema con @PreAuthorize y espera el JWT en la
+  // cabecera. Sin este enlace, despues de loguearse toda consulta responde
+  // "No autenticado" y la app queda vacia sin explicar por que.
+  const authLink = setContext(() => {
+    const token = auth.getToken();
+    return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+  });
+
   return {
-    link: httpLink.create({ uri: environment.apiUrl }),
+    link: authLink.concat(httpLink.create({ uri: environment.apiUrl })),
     cache: new InMemoryCache(),
   };
 }
@@ -120,7 +130,7 @@ export function createApollo(httpLink: HttpLink) {
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
-      deps: [HttpLink],
+      deps: [HttpLink, AuthService],
     }
   ],
   bootstrap: [AppComponent]
