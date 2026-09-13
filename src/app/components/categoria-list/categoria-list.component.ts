@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Categoria, ExpenseService } from 'src/app/services/expense/expense.service';
 import { CategoriaFormComponent } from '../categoria-form/categoria-form.component';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { nombreGrupo } from 'src/app/utils/distribucion.util';
 
 @Component({
   selector: 'app-categoria-list',
@@ -13,6 +14,7 @@ import { NotificationService } from 'src/app/services/notification/notification.
 export class CategoriaListComponent implements OnInit {
   categorias$!: Observable<Categoria[]>;
   selectedCategoria: Categoria | null = null;
+  nombreGrupo = nombreGrupo;
 
   constructor(
     private expenseService: ExpenseService, 

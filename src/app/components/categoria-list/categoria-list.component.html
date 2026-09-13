@@ -30,7 +30,9 @@
         </div>
         <div class="cat-header-text">
             <mat-card-title>{{cat.nombre | uppercase}}</mat-card-title>
-            <mat-card-subtitle>{{cat.tipo | uppercase}}</mat-card-subtitle>
+            <mat-card-subtitle>
+              {{cat.tipo | uppercase}}<ng-container *ngIf="cat.tipo === 'GASTO'"> · {{ nombreGrupo(cat.grupo) }}</ng-container>
+            </mat-card-subtitle>
         </div>
       </mat-card-header>
     </mat-card>

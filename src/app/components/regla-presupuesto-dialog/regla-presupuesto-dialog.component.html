@@ -1,0 +1,89 @@
+<h2 mat-dialog-title>Guía de distribución del ingreso</h2>
+<mat-dialog-content>
+  <mat-tab-group [(selectedIndex)]="pestania" animationDuration="0ms">
+    <mat-tab label="Regla">
+      <p class="ayuda">
+        Elegí cómo repartir el ingreso del hogar. La app compara esa regla con lo que gastan y ahorran
+        cada mes. Es solo una guía: no bloquea gastos ni cambia tus presupuestos por su cuenta.
+      </p>
+
+      <div class="plantillas">
+        <button type="button" class="plantilla" *ngFor="let p of plantillas"
+                [class.seleccionada]="seleccionada === p.valor"
+                (click)="seleccionada = p.valor">
+          <span class="cabecera">
+            <span class="nombre">{{ p.nombre }}</span>
+            <span class="insignia" *ngIf="p.valor === data.sugerida">Recomendada para tu ingreso</span>
+            <span class="insignia actual" *ngIf="data.activa && p.valor === data.plantillaActual">Actual</span>
+          </span>
+          <span class="resumen">{{ p.resumen }}</span>
+          <span class="descripcion">{{ p.descripcion }}</span>
+        </button>
+      </div>
+
+      <div class="personalizada" *ngIf="seleccionada === 'PERSONALIZADA'">
+        <div class="campos">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" *ngFor="let g of grupos">
+            <mat-label>{{ g.nombre }}</mat-label>
+            <input matInput type="number" min="0" max="100" [(ngModel)]="porcentajes[g.valor]">
+            <span matSuffix>%</span>
+          </mat-form-field>
+        </div>
+        <p class="suma" [class.invalida]="!sumaValida">
+          Suma: {{ suma | number:'1.0-2' }}%
+          <span *ngIf="!sumaValida">· tiene que dar 100%</span>
+        </p>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Clasificar categorías
+        <span class="contador" *ngIf="sinClasificar > 0">{{ sinClasificar }}</span>
+      </ng-template>
+
+      <p class="ayuda">
+        Indicá para qué se usa cada categoría de gasto, así la guía sabe dónde contarla.
+        Los cambios se guardan al momento.
+      </p>
+
+      <details class="leyenda">
+        <summary>¿Qué va en cada grupo?</summary>
+        <div class="grupo" *ngFor="let g of grupos">
+          <mat-icon>{{ g.icono }}</mat-icon>
+          <div>
+            <strong>{{ g.nombre }}</strong>
+            <span>{{ g.descripcion }}</span>
+          </div>
+        </div>
+      </details>
+
+      <p class="vacio" *ngIf="categorias.length === 0">Todavía no hay categorías de gasto.</p>
+
+      <div class="categoria" *ngFor="let c of categorias">
+        <span class="nombre">
+          <mat-icon>{{ c.icono || 'category' }}</mat-icon>
+          {{ c.nombre | uppercase }}
+        </span>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="selector">
+          <mat-select [value]="c.grupo ?? null" (selectionChange)="cambiarGrupo(c, $event.value)"
+                      [class.sin-clasificar]="!c.grupo">
+            <mat-option [value]="null">Sin clasificar</mat-option>
+            <mat-option *ngFor="let g of grupos" [value]="g.valor">{{ g.nombre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" class="desactivar" *ngIf="data.activa" (click)="desactivar()">
+    Desactivar guía
+  </button>
+  <button mat-button mat-dialog-close>Cerrar</button>
+  <button mat-flat-button color="primary" *ngIf="pestania === 0"
+          [disabled]="!puedeGuardar || guardando" (click)="guardar()">
+    {{ data.activa ? 'Guardar regla' : 'Activar guía' }}
+  </button>
+</mat-dialog-actions>

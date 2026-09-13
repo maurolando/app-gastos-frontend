@@ -1,0 +1,81 @@
+<mat-card class="regla-card mat-elevation-z3" *ngIf="distribucion$ | async as d">
+  <mat-card-header>
+    <mat-icon mat-card-avatar class="avatar">pie_chart</mat-icon>
+    <mat-card-title>Guía de distribución</mat-card-title>
+    <mat-card-subtitle *ngIf="d.activa">
+      Regla {{ nombrePlantilla(d.plantilla) }} · ingreso del mes {{ d.ingresoMensual | number:'1.0-0' }} Gs.
+    </mat-card-subtitle>
+    <mat-card-subtitle *ngIf="!d.activa">Opcional · cuánto destinar a cada cosa</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Sin ingresos no hay sobre qué calcular -->
+    <div class="vacio" *ngIf="d.ingresoMensual <= 0">
+      <mat-icon>info</mat-icon>
+      <p>Registrá los ingresos de este mes para ver cuánto destinar a necesidades, deseos y ahorro.</p>
+    </div>
+
+    <!-- Todavía no eligió regla: se muestra la sugerida como invitación -->
+    <ng-container *ngIf="!d.activa && d.ingresoMensual > 0">
+      <p class="intro">
+        Con un ingreso de <strong>{{ d.ingresoMensual | number:'1.0-0' }} Gs.</strong>
+        te recomendamos la regla <strong>{{ nombrePlantilla(d.plantilla) }}</strong>:
+      </p>
+      <div class="vista-previa">
+        <div class="fila-previa" *ngFor="let p of partidasVisibles(d)">
+          <span>{{ p.nombre }} <span class="pct">{{ p.porcentaje }}%</span></span>
+          <strong>{{ p.montoRecomendado | number:'1.0-0' }} Gs.</strong>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Seguimiento de la regla activa -->
+    <div class="partidas" *ngIf="d.activa && d.ingresoMensual > 0">
+      <div class="partida" *ngFor="let p of partidasVisibles(d)">
+        <div class="linea">
+          <span class="nombre">
+            <mat-icon *ngIf="p.esAhorro">savings</mat-icon>
+            {{ p.nombre }}
+          </span>
+          <span class="pct">
+            {{ p.porcentajeReal | number:'1.0-0' }}% <span class="meta">de {{ p.porcentaje }}%</span>
+          </span>
+        </div>
+        <mat-progress-bar mode="determinate" [value]="avance(p)" [color]="color(p)"></mat-progress-bar>
+        <div class="linea detalle">
+          <span>{{ p.montoReal | number:'1.0-0' }} / {{ p.montoRecomendado | number:'1.0-0' }} Gs.</span>
+          <span class="estado" [ngClass]="claseEstado(p)">{{ textoEstado(p) }}</span>
+        </div>
+      </div>
+      <p class="nota">Cuenta los gastos del mes aunque estén pendientes de pago, y los ahorros registrados.</p>
+    </div>
+
+    <div class="aviso" *ngIf="d.ingresoMensual > 0 && (d.categoriasSinClasificar > 0 || d.montoSinClasificar > 0)">
+      <mat-icon>label_off</mat-icon>
+      <span>
+        <ng-container *ngIf="d.categoriasSinClasificar > 0">
+          {{ d.categoriasSinClasificar }} {{ d.categoriasSinClasificar === 1 ? 'categoría sin clasificar' : 'categorías sin clasificar' }}.
+        </ng-container>
+        <ng-container *ngIf="d.montoSinClasificar > 0">
+          {{ d.montoSinClasificar | number:'1.0-0' }} Gs. de gastos no cuentan en la guía.
+        </ng-container>
+      </span>
+      <button mat-button color="primary" (click)="abrirRegla(d, 1)">Clasificar</button>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <ng-container *ngIf="!d.activa">
+      <button mat-button (click)="abrirRegla(d)">Ver opciones</button>
+      <button mat-flat-button color="primary" *ngIf="d.ingresoMensual > 0" (click)="activar(d)">
+        Usar {{ nombrePlantilla(d.plantilla) }}
+      </button>
+    </ng-container>
+    <ng-container *ngIf="d.activa">
+      <button mat-button (click)="abrirRegla(d)">Cambiar regla</button>
+      <button mat-flat-button color="primary" [disabled]="d.ingresoMensual <= 0" (click)="abrirSugeridos(d)">
+        <mat-icon>auto_fix_high</mat-icon> Sugerir presupuestos
+      </button>
+    </ng-container>
+  </mat-card-actions>
+</mat-card>
