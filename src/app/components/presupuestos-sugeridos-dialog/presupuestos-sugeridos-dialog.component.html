@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>Presupuestos sugeridos</h2>
+<mat-dialog-content>
+  <div class="cargando" *ngIf="cargando">
+    <mat-spinner diameter="36"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!cargando">
+    <p class="ayuda" *ngIf="grupos.length > 0">
+      Calculados con la regla <strong>{{ nombrePlantilla(data.plantilla) }}</strong> sobre un ingreso de
+      <strong>{{ data.ingreso | number:'1.0-0' }} Gs.</strong> Cada categoría parte de lo que gastaste en ella.
+      Si una partida supera lo que recomienda la regla, se recorta en proporción; si alcanza, lo que sobra
+      queda como margen libre. Revisá, destildá lo que no quieras y confirmá: nada se guarda hasta que apliques.
+    </p>
+
+    <div class="vacio" *ngIf="grupos.length === 0">
+      <mat-icon>label_off</mat-icon>
+      <p>
+        {{ error || 'No hay categorías de gasto clasificadas en necesidades, deseos, educación o donaciones. Clasificalas desde "Cambiar regla" para recibir sugerencias.' }}
+      </p>
+    </div>
+
+    <section class="partida" *ngFor="let g of grupos">
+      <h3>
+        {{ g.partida }}
+        <span class="total" [class.excede]="totalPartida(g) > g.recomendado">
+          {{ totalPartida(g) | number:'1.0-0' }} de {{ g.recomendado | number:'1.0-0' }} Gs.
+        </span>
+      </h3>
+      <p class="margen" *ngIf="margen(g) > 0">
+        Margen libre: {{ margen(g) | number:'1.0-0' }} Gs. que la regla permite y no está asignado a ninguna categoría.
+      </p>
+      <p class="margen excede" *ngIf="totalPartida(g) > g.recomendado">
+        Con estos montos la partida supera lo que recomienda la regla.
+      </p>
+
+      <div class="fila" *ngFor="let f of g.filas" [class.excluida]="!f.incluir">
+        <mat-checkbox color="primary" [(ngModel)]="f.incluir">
+          <span class="categoria">
+            <mat-icon>{{ f.sugerido.categoria.icono || 'category' }}</mat-icon>
+            {{ f.sugerido.categoria.nombre | uppercase }}
+          </span>
+        </mat-checkbox>
+
+        <span class="info">
+          <span *ngIf="f.sugerido.montoReferencia > 0">Gastado: {{ f.sugerido.montoReferencia | number:'1.0-0' }} Gs.</span>
+          <span *ngIf="f.sugerido.montoReferencia <= 0">Sin gastos registrados</span>
+          <span *ngIf="f.sugerido.montoActual != null">Presupuesto actual: {{ f.sugerido.montoActual | number:'1.0-0' }} Gs.</span>
+          <span class="recorte" *ngIf="fueRecortado(f)">Recortado para cumplir la regla</span>
+        </span>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="monto">
+          <input matInput type="number" min="0" step="1000" [(ngModel)]="f.monto" [disabled]="!f.incluir">
+          <span matSuffix>Gs.</span>
+        </mat-form-field>
+      </div>
+    </section>
+
+    <p class="nota" *ngIf="grupos.length > 0">
+      El ahorro no lleva presupuesto: es una meta, no un límite. Lo seguís en la tarjeta de la guía.
+    </p>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button color="primary"
+          [disabled]="seleccionadas.length === 0 || !montosValidos || aplicando"
+          (click)="aplicar()">
+    Aplicar {{ seleccionadas.length }} {{ seleccionadas.length === 1 ? 'presupuesto' : 'presupuestos' }}
+  </button>
+</mat-dialog-actions>

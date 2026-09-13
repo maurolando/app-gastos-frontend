@@ -72,7 +72,8 @@ export class AhorroService {
         'GetAllAhorros',
         'GetGlobalBalance',
         'GetLastDates',
-        'GetAllIngresos'
+        'GetAllIngresos',
+        'GetDistribucionRegla'
       ]
     }).pipe(
       map(result => result.data.createAhorro)
@@ -87,7 +88,8 @@ export class AhorroService {
         'GetAllAhorros',
         'GetGlobalBalance',
         'GetLastDates',
-        'GetAllIngresos'
+        'GetAllIngresos',
+        'GetDistribucionRegla'
       ]
     }).pipe(
       map(result => result.data.deleteAhorro)

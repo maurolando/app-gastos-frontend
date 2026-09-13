@@ -27,6 +27,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { PersonaListComponent } from './components/persona-list/persona-list.component';
 import { PersonaFormComponent } from './components/persona-form/persona-form.component';
@@ -54,6 +55,9 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { AhorrosComponent } from './components/ahorros/ahorros.component';
 import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
 import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.component';
+import { ReglaPresupuestoCardComponent } from './components/regla-presupuesto-card/regla-presupuesto-card.component';
+import { ReglaPresupuestoDialogComponent } from './components/regla-presupuesto-dialog/regla-presupuesto-dialog.component';
+import { PresupuestosSugeridosDialogComponent } from './components/presupuestos-sugeridos-dialog/presupuestos-sugeridos-dialog.component';
 import { environment } from 'src/environments/environment';
 import { setContext } from '@apollo/client/link/context';
 import { AuthService } from './services/auth/auth.service';
@@ -93,7 +97,10 @@ export function createApollo(httpLink: HttpLink, auth: AuthService) {
     ConfirmDialogComponent,
     AhorrosComponent,
     ShoppingListComponent,
-    BudgetDialogComponent
+    BudgetDialogComponent,
+    ReglaPresupuestoCardComponent,
+    ReglaPresupuestoDialogComponent,
+    PresupuestosSugeridosDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -124,7 +131,8 @@ export function createApollo(httpLink: HttpLink, auth: AuthService) {
     MatMenuModule,
     NgChartsModule,
     MatCheckboxModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTabsModule
   ],
   providers: [
     {

@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { map, Observable } from 'rxjs';
+import { GrupoGasto } from 'src/app/utils/distribucion.util';
 
 export interface Categoria {
   id: string;
   nombre: string;
   icono?: string;
   tipo: 'GASTO' | 'INGRESO';
+  /** Solo en categorías de gasto: dónde cuenta en la guía de distribución. */
+  grupo?: GrupoGasto | null;
 }
 
 export interface Presupuesto {
@@ -91,6 +94,7 @@ const GET_CATEGORIAS = gql`
       nombre
       icono
       tipo
+      grupo
     }
   }
 `;
@@ -173,12 +177,13 @@ const DELETE_GASTO = gql`
 `;
 
 const CREATE_CATEGORIA = gql`
-  mutation CreateCategoria($nombre: String!, $icono: String, $tipo: String!) {
-    createCategoria(nombre: $nombre, icono: $icono, tipo: $tipo) {
+  mutation CreateCategoria($nombre: String!, $icono: String, $tipo: String!, $grupo: GrupoGasto) {
+    createCategoria(nombre: $nombre, icono: $icono, tipo: $tipo, grupo: $grupo) {
       id
       nombre
       icono
       tipo
+      grupo
     }
   }
 `;
@@ -202,12 +207,13 @@ const AGREGAR_PAGO_COMPARTIDO = gql`
 `;
 
 const UPDATE_CATEGORIA = gql`
-  mutation UpdateCategoria($id: ID!, $nombre: String, $icono: String, $tipo: String) {
-    updateCategoria(id: $id, nombre: $nombre, icono: $icono, tipo: $tipo) {
+  mutation UpdateCategoria($id: ID!, $nombre: String, $icono: String, $tipo: String, $grupo: GrupoGasto) {
+    updateCategoria(id: $id, nombre: $nombre, icono: $icono, tipo: $tipo, grupo: $grupo) {
       id
       nombre
       icono
       tipo
+      grupo
     }
   }
 `;
@@ -343,7 +349,7 @@ export class ExpenseService {
         cuotaActual: gasto.cuotaActual,
         cuotasTotales: gasto.cuotasTotales
       },
-      refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates']
+      refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates', 'GetDistribucionRegla']
     }).pipe(
       map(result => result.data.createGasto)
     );
@@ -367,7 +373,7 @@ export class ExpenseService {
         cuotaActual: gasto.cuotaActual,
         cuotasTotales: gasto.cuotasTotales
       },
-      refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates']
+      refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates', 'GetDistribucionRegla']
     }).pipe(
       map(result => result.data.updateGasto)
     );
@@ -377,7 +383,7 @@ export class ExpenseService {
     return this.apollo.mutate<any>({
       mutation: DELETE_GASTO,
       variables: { id },
-      refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates']
+      refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates', 'GetDistribucionRegla']
     }).pipe(
       map(result => result.data.deleteGasto)
     );
@@ -389,9 +395,10 @@ export class ExpenseService {
       variables: {
         nombre: cat.nombre,
         icono: cat.icono,
-        tipo: cat.tipo
+        tipo: cat.tipo,
+        grupo: cat.grupo ?? null
       },
-      refetchQueries: ['GetCategorias']
+      refetchQueries: ['GetCategorias', 'GetDistribucionRegla']
     }).pipe(
       map(result => result.data.createCategoria)
     );
@@ -402,7 +409,7 @@ export class ExpenseService {
     return this.apollo.mutate<any>({
       mutation: DELETE_CATEGORIA,
       variables: { id },
-      refetchQueries: ['GetCategorias']
+      refetchQueries: ['GetCategorias', 'GetDistribucionRegla']
     }).pipe(
       map(result => {
         console.log('>>> ExpenseService: Resultado DELETE:', result.data.deleteCategoria);
@@ -411,6 +418,10 @@ export class ExpenseService {
     );
   }
 
+  /**
+   * El backend reemplaza el grupo tal cual llega (null = sin clasificar), así que
+   * hay que mandar siempre el de la categoría aunque solo se edite el nombre.
+   */
   updateCategoria(id: string, cat: any): Observable<Categoria> {
     console.log('>>> ExpenseService: Enviando mutación UPDATE para ID:', id, cat);
     return this.apollo.mutate<any>({
@@ -419,9 +430,10 @@ export class ExpenseService {
         id,
         nombre: cat.nombre,
         icono: cat.icono,
-        tipo: cat.tipo
+        tipo: cat.tipo,
+        grupo: cat.grupo ?? null
       },
-      refetchQueries: ['GetCategorias']
+      refetchQueries: ['GetCategorias', 'GetDistribucionRegla']
     }).pipe(
       map(result => {
         console.log('>>> ExpenseService: Resultado UPDATE:', result.data.updateCategoria);
@@ -459,7 +471,7 @@ export class ExpenseService {
   resetData(): Observable<boolean> {
     return this.apollo.mutate<any>({
       mutation: REINICIAR_DATOS,
-      refetchQueries: ['GetAllGastos', 'GetAllIngresos', 'GetGlobalBalance', 'GetLastDates']
+      refetchQueries: ['GetAllGastos', 'GetAllIngresos', 'GetGlobalBalance', 'GetLastDates', 'GetDistribucionRegla']
     }).pipe(
       map(result => result.data.reiniciarDatos)
     );
@@ -469,7 +481,7 @@ export class ExpenseService {
     return this.apollo.mutate<any>({
       mutation: FINALIZE_MONTH,
       variables: { mesActual, anioActual },
-      refetchQueries: ['GetAllGastos', 'GetAllIngresos', 'GetGlobalBalance', 'GetLastDates']
+      refetchQueries: ['GetAllGastos', 'GetAllIngresos', 'GetGlobalBalance', 'GetLastDates', 'GetDistribucionRegla']
     }).pipe(
       map(result => result.data.finalizarMes)
     );

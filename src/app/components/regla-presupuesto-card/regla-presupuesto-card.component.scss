@@ -1,0 +1,167 @@
+:host {
+  display: block;
+}
+
+.regla-card {
+  background: var(--bg-dark-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 12px;
+
+  mat-card-title {
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+  }
+
+  mat-card-subtitle {
+    color: var(--text-secondary);
+  }
+
+  .avatar {
+    color: var(--accent-light);
+    background: var(--accent-glow);
+    border-radius: 12px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.vacio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 4px 4px;
+  color: var(--text-secondary);
+
+  p {
+    margin: 0;
+  }
+}
+
+.intro {
+  margin: 16px 0 8px;
+  color: var(--text-secondary);
+
+  strong {
+    color: var(--text-primary);
+  }
+}
+
+.vista-previa {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .fila-previa {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-primary);
+
+    .pct {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-left: 4px;
+    }
+  }
+}
+
+.partidas {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .partida mat-progress-bar {
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  .linea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+    font-weight: 500;
+
+    .nombre {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        color: var(--accent-light);
+      }
+    }
+
+    .meta {
+      color: var(--text-secondary);
+      font-weight: 400;
+      font-size: 0.85rem;
+    }
+
+    &.detalle {
+      margin: 4px 0 0;
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+      flex-wrap: wrap;
+    }
+  }
+
+  .estado {
+    &.ok {
+      color: var(--success-color);
+    }
+
+    &.alerta {
+      color: #f59e0b;
+    }
+
+    &.exceso {
+      color: var(--danger-color);
+      font-weight: 600;
+    }
+  }
+
+  .nota {
+    margin: 0;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: var(--text-secondary);
+  }
+}
+
+.aviso {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #f59e0b;
+
+  span {
+    flex: 1;
+    min-width: 180px;
+  }
+}
+
+mat-card-actions {
+  flex-wrap: wrap;
+  gap: 8px;
+}

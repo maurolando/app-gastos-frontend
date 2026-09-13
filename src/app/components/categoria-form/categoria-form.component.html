@@ -14,6 +14,15 @@
       </mat-select>
     </mat-form-field>
 
+    <mat-form-field appearance="outline" *ngIf="form.get('tipo')?.value === 'GASTO'">
+      <mat-label>Grupo en la guía de distribución</mat-label>
+      <mat-select formControlName="grupo">
+        <mat-option [value]="null">Sin clasificar</mat-option>
+        <mat-option *ngFor="let g of grupos" [value]="g.valor">{{ g.nombre }}</mat-option>
+      </mat-select>
+      <mat-hint>{{ descripcionGrupo || 'Opcional: indica para qué se usa el gasto (necesidad, deseo, ahorro...)' }}</mat-hint>
+    </mat-form-field>
+
     <div class="icon-selector">
       <label>Selecciona un Icono:</label>
       <div class="icons-grid">
