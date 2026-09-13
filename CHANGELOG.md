@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.5.1...v1.6.0) (2026-09-13)
+
+
+### Features
+
+* guia de distribucion del ingreso en el dashboard ([88cfd1a](https://github.com/maurolando/app-gastos-frontend/commit/88cfd1a9cec1f2a9d1dc9bd724140f366f8cd237))
+
 ## [1.5.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.5.0...v1.5.1) (2026-08-14)
 
 
