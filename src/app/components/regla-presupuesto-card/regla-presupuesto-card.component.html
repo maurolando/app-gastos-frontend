@@ -1,12 +1,16 @@
 <mat-card class="regla-card mat-elevation-z3" *ngIf="distribucion$ | async as d">
-  <mat-card-header>
-    <mat-icon mat-card-avatar class="avatar">pie_chart</mat-icon>
-    <mat-card-title>Guía de distribución</mat-card-title>
-    <mat-card-subtitle *ngIf="d.activa">
-      Regla {{ nombrePlantilla(d.plantilla) }} · ingreso del mes {{ d.ingresoMensual | number:'1.0-0' }} Gs.
-    </mat-card-subtitle>
-    <mat-card-subtitle *ngIf="!d.activa">Opcional · cuánto destinar a cada cosa</mat-card-subtitle>
-  </mat-card-header>
+  <!-- Encabezado propio: el dashboard pone en fila título y subtítulo de mat-card-header
+       con un ::ng-deep global, y en móvil el subtítulo quedaba en una columna angosta. -->
+  <div class="encabezado">
+    <mat-icon class="avatar">pie_chart</mat-icon>
+    <div>
+      <h3>Guía de distribución</h3>
+      <p *ngIf="d.activa">
+        Regla {{ nombrePlantilla(d.plantilla) }} · ingreso del mes {{ d.ingresoMensual | number:'1.0-0' }} Gs.
+      </p>
+      <p *ngIf="!d.activa">Opcional · cuánto destinar a cada cosa</p>
+    </div>
+  </div>
 
   <mat-card-content>
     <!-- Sin ingresos no hay sobre qué calcular -->

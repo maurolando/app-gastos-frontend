@@ -59,8 +59,12 @@ export class ReglaPresupuestoDialogComponent implements OnInit {
 
     // take(1): la lista se edita en el lugar al clasificar, y el refetch de
     // GetCategorias no debe reemplazarla mientras el diálogo está abierto.
+    // Se copian los objetos porque Apollo congela los de su caché: asignarles el
+    // grupo tira "Cannot assign to read only property" y la mutación nunca sale.
     this.expenseService.getCategorias('GASTO').pipe(take(1)).subscribe({
-      next: cats => this.categorias = [...cats].sort((a, b) => a.nombre.localeCompare(b.nombre)),
+      next: cats => this.categorias = cats
+        .map(c => ({ ...c }))
+        .sort((a, b) => a.nombre.localeCompare(b.nombre)),
       error: () => this.notify.error('Error al cargar las categorías')
     });
   }

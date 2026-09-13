@@ -84,10 +84,13 @@ export class PresupuestosSugeridosDialogComponent implements OnInit {
     return grupo.filas.filter(f => f.incluir).reduce((acc, f) => acc + (Number(f.monto) || 0), 0);
   }
 
-  /** Por el redondeo a miles siempre sobran unos guaraníes: menos de 1.000 no es margen. */
+  /**
+   * Cada sugerencia se redondea hacia abajo a miles, así que siempre sobran hasta
+   * 1.000 Gs. por categoría. Eso es ruido del redondeo, no margen.
+   */
   margen(grupo: GrupoFilas): number {
     const margen = grupo.recomendado - this.totalPartida(grupo);
-    return margen >= 1000 ? margen : 0;
+    return margen > 1000 * grupo.filas.length ? margen : 0;
   }
 
   /** La sugerencia quedó por debajo de lo gastado porque la partida no alcanzaba. */

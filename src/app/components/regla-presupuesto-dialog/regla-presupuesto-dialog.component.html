@@ -66,8 +66,9 @@
           {{ c.nombre | uppercase }}
         </span>
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="selector">
+          <!-- El placeholder hace falta: mat-select no muestra la opción de valor null. -->
           <mat-select [value]="c.grupo ?? null" (selectionChange)="cambiarGrupo(c, $event.value)"
-                      [class.sin-clasificar]="!c.grupo">
+                      placeholder="Sin clasificar">
             <mat-option [value]="null">Sin clasificar</mat-option>
             <mat-option *ngFor="let g of grupos" [value]="g.valor">{{ g.nombre }}</mat-option>
           </mat-select>
