@@ -136,8 +136,13 @@ export function createApollo(httpLink: HttpLink, auth: AuthService) {
     MatTabsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
-      // Se registra cuando la app queda estable, o a los 30 s si nunca lo hace.
-      registrationStrategy: 'registerWhenStable:30000'
+      // No usamos 'registerWhenStable': AppComponent mantiene un setInterval de
+      // 5 s para el indicador de conexion, asi que la app nunca queda estable y
+      // esa estrategia agota siempre el timeout completo. Medido: el service
+      // worker tardaba 30,2 s en activarse, y hasta entonces no hay nada
+      // cacheado. Con un retraso fijo no compite con el primer render y queda
+      // listo enseguida.
+      registrationStrategy: 'registerWithDelay:3000'
     })
   ],
   providers: [
