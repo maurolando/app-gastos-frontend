@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -61,6 +61,7 @@ import { PresupuestosSugeridosDialogComponent } from './components/presupuestos-
 import { environment } from 'src/environments/environment';
 import { setContext } from '@apollo/client/link/context';
 import { AuthService } from './services/auth/auth.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 export function createApollo(httpLink: HttpLink, auth: AuthService) {
   // El backend protege todo el schema con @PreAuthorize y espera el JWT en la
@@ -132,7 +133,17 @@ export function createApollo(httpLink: HttpLink, auth: AuthService) {
     NgChartsModule,
     MatCheckboxModule,
     MatPaginatorModule,
-    MatTabsModule
+    MatTabsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // No usamos 'registerWhenStable': AppComponent mantiene un setInterval de
+      // 5 s para el indicador de conexion, asi que la app nunca queda estable y
+      // esa estrategia agota siempre el timeout completo. Medido: el service
+      // worker tardaba 30,2 s en activarse, y hasta entonces no hay nada
+      // cacheado. Con un retraso fijo no compite con el primer render y queda
+      // listo enseguida.
+      registrationStrategy: 'registerWithDelay:3000'
+    })
   ],
   providers: [
     {
