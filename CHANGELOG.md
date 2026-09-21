@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.6.0...v1.7.0) (2026-09-21)
+
+
+### Features
+
+* convertir la app en PWA instalable ([b6ee3e0](https://github.com/maurolando/app-gastos-frontend/commit/b6ee3e03a94688605f084ddc0ac5d21324d79693))
+
+
+### Bug Fixes
+
+* registrar el service worker a los 3 s en vez de esperar 30 ([15d04fd](https://github.com/maurolando/app-gastos-frontend/commit/15d04fd811077f4e634793718f29f911c04371ca))
+
 ## [1.6.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.5.1...v1.6.0) (2026-09-13)
 
 
