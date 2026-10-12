@@ -53,6 +53,33 @@ const CREATE_INGRESO = gql`
   }
 `;
 
+
+const UPDATE_INGRESO = gql`
+  mutation UpdateIngreso($id: ID!, $monto: Float, $fecha: String, $categoriaId: ID, $personaId: ID, $recurrent: Boolean) {
+    updateIngreso(id: $id, monto: $monto, fecha: $fecha, categoriaId: $categoriaId, personaId: $personaId, recurrent: $recurrent) {
+      id
+      monto
+      fecha
+      categoria {
+        id
+        nombre
+        icono
+      }
+      recurrent
+      persona {
+        id
+        nombre
+      }
+    }
+  }
+`;
+
+const DELETE_INGRESO = gql`
+  mutation DeleteIngreso($id: ID!) {
+    deleteIngreso(id: $id)
+  }
+`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -77,6 +104,31 @@ export class IngresoService {
       refetchQueries: ['GetAllIngresos', 'GetGlobalBalance', 'GetLastDates', 'GetDistribucionRegla']
     }).pipe(
       map(result => result.data.createIngreso)
+    );
+  }
+
+  /**
+   * Edicion parcial: el backend deja como estaba lo que no se manda. Aca se
+   * mandan todos los campos del formulario porque el formulario los muestra
+   * todos, pero la fecha en null significa "no la cambies", no "hoy".
+   */
+  updateIngreso(id: string, monto: number, fecha: string, categoriaId: string, personaId: string, recurrent: boolean): Observable<Ingreso> {
+    return this.apollo.mutate<any>({
+      mutation: UPDATE_INGRESO,
+      variables: { id, monto, fecha, categoriaId, personaId, recurrent },
+      refetchQueries: ['GetAllIngresos', 'GetGlobalBalance', 'GetLastDates', 'GetDistribucionRegla']
+    }).pipe(
+      map(result => result.data.updateIngreso)
+    );
+  }
+
+  deleteIngreso(id: string): Observable<boolean> {
+    return this.apollo.mutate<any>({
+      mutation: DELETE_INGRESO,
+      variables: { id },
+      refetchQueries: ['GetAllIngresos', 'GetGlobalBalance', 'GetLastDates', 'GetDistribucionRegla']
+    }).pipe(
+      map(result => result.data.deleteIngreso)
     );
   }
 }

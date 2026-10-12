@@ -286,6 +286,38 @@ const SET_PRESUPUESTO = gql`
   }
 `;
 
+
+export interface ResumenCuotas {
+  cuotaActual: number;
+  cuotasTotales: number;
+  montoCuota: number;
+  totalAPagar: number;
+  totalPagado: number;
+  saldoPendiente: number;
+  cuotas: Gasto[];
+}
+
+const GET_RESUMEN_CUOTAS = gql`
+  query GetResumenCuotas($gastoId: ID!) {
+    getResumenCuotas(gastoId: $gastoId) {
+      cuotaActual
+      cuotasTotales
+      montoCuota
+      totalAPagar
+      totalPagado
+      saldoPendiente
+      cuotas {
+        id
+        amount
+        date
+        pagado
+        fechaPago
+        cuotaActual
+      }
+    }
+  }
+`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -514,6 +546,20 @@ export class ExpenseService {
       refetchQueries: ['GetPresupuestos']
     }).pipe(
       map(result => result.data.setPresupuesto)
+    );
+  }
+
+  /**
+   * Resumen de la compra en cuotas a la que pertenece este gasto. El backend
+   * junta las cuotas hermanas: aca alcanza con el gasto que el usuario toco.
+   */
+  getResumenCuotas(gastoId: string): Observable<ResumenCuotas> {
+    return this.apollo.watchQuery<any>({
+      query: GET_RESUMEN_CUOTAS,
+      variables: { gastoId },
+      fetchPolicy: 'network-only'
+    }).valueChanges.pipe(
+      map(result => result.data.getResumenCuotas)
     );
   }
 }

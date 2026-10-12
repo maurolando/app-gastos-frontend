@@ -10,6 +10,7 @@ import { PersonaService, Persona } from 'src/app/services/persona/persona.servic
 import { ExpenseFormComponent } from '../expense-form/expense-form.component';
 import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-payment-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { CuotasDialogComponent } from '../cuotas-dialog/cuotas-dialog.component';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { LayoutService } from 'src/app/services/layout/layout.service';
 
@@ -180,5 +181,12 @@ export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.disconnect();
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /** Estado de la compra en cuotas a la que pertenece este gasto. */
+  verCuotas(gasto: Gasto, event: Event) {
+    // La insignia vive dentro de la fila; sin esto el clic tambien la activa.
+    event.stopPropagation();
+    this.dialog.open(CuotasDialogComponent, { width: '480px', data: gasto });
   }
 }

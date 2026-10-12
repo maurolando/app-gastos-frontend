@@ -1,0 +1,118 @@
+.titulo-icono {
+  vertical-align: middle;
+  margin-right: 8px;
+  color: #6366f1;
+}
+
+.encabezado {
+  margin: 0 0 16px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.resumen {
+  background: rgba(148, 163, 184, 0.06);
+  border-radius: 8px;
+  padding: 12px 16px;
+
+  .fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+  }
+
+  .etiqueta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .monto {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .total    { color: var(--text-primary); }
+  .pagado   { color: #10b981; }
+  .pendiente { color: #f59e0b; }
+  .pendiente.cero { color: #10b981; }
+}
+
+.progreso {
+  margin: 16px 0 4px;
+
+  mat-progress-bar {
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  .progreso-texto {
+    display: block;
+    margin-top: 6px;
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+}
+
+.subtitulo {
+  margin: 20px 0 8px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.cuotas {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cuota {
+  display: grid;
+  // Numero y fecha fluyen; el importe queda a la derecha en su propia columna
+  // para que todos los montos se lean alineados.
+  grid-template-columns: 24px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+
+  &.es-esta {
+    background: rgba(99, 102, 241, 0.12);
+    box-shadow: inset 3px 0 0 0 var(--accent-color);
+  }
+
+  .estado {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: #f59e0b;
+
+    &.pagada { color: #10b981; }
+  }
+
+  .numero { font-size: 0.9rem; }
+
+  .fecha {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .importe {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.nota {
+  margin: 12px 0 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.cargando {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}

@@ -1,0 +1,68 @@
+<h2 mat-dialog-title>
+  <mat-icon class="titulo-icono">credit_card</mat-icon>
+  {{ gasto.description || gasto.categoria?.nombre }}
+</h2>
+
+<mat-dialog-content>
+  <ng-container *ngIf="resumen$ | async as r; else cargando">
+
+    <p class="encabezado">
+      Vas por la cuota <strong>{{ r.cuotaActual }}</strong> de <strong>{{ r.cuotasTotales }}</strong>,
+      de {{ r.montoCuota | number }} Gs. cada una.
+    </p>
+
+    <div class="resumen">
+      <div class="fila">
+        <span class="etiqueta">Total a pagar</span>
+        <span class="monto total">Gs {{ r.totalAPagar | number }}</span>
+      </div>
+      <div class="fila">
+        <span class="etiqueta">Ya pagaste</span>
+        <span class="monto pagado">Gs {{ r.totalPagado | number }}</span>
+      </div>
+      <div class="fila">
+        <span class="etiqueta">Te falta</span>
+        <span class="monto pendiente" [class.cero]="r.saldoPendiente === 0">
+          Gs {{ r.saldoPendiente | number }}
+        </span>
+      </div>
+    </div>
+
+    <div class="progreso" *ngIf="porcentaje$ | async as pct">
+      <mat-progress-bar mode="determinate" [value]="pct"
+                        [color]="pct >= 100 ? 'accent' : 'primary'"></mat-progress-bar>
+      <span class="progreso-texto">{{ pct | number:'1.0-0' }}% pagado</span>
+    </div>
+
+    <h3 class="subtitulo">Cuota por cuota</h3>
+
+    <!-- Solo las cuotas cargadas: las que todavia no llegaron no existen como
+         gasto, porque el cierre de mes las va creando una por una. -->
+    <div class="cuotas">
+      <div class="cuota" *ngFor="let c of r.cuotas" [class.es-esta]="c.id === gasto.id">
+        <mat-icon class="estado" [class.pagada]="c.pagado">
+          {{ c.pagado ? 'check_circle' : 'schedule' }}
+        </mat-icon>
+        <span class="numero">Cuota {{ c.cuotaActual }}/{{ r.cuotasTotales }}</span>
+        <!-- Mismo formato que el historial de gastos: la app no tiene el locale
+             en español y mediumDate salía "Aug 5, 2026". -->
+        <span class="fecha">{{ c.date | date:'dd/MM/yyyy' }}</span>
+        <span class="importe">Gs {{ c.amount | number }}</span>
+      </div>
+    </div>
+
+    <p class="nota" *ngIf="r.cuotas.length < r.cuotasTotales">
+      Se listan las {{ r.cuotas.length }} cuotas ya registradas. Las siguientes
+      aparecen a medida que cerrás cada mes.
+    </p>
+
+  </ng-container>
+
+  <ng-template #cargando>
+    <div class="cargando"><mat-spinner diameter="32"></mat-spinner></div>
+  </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>
