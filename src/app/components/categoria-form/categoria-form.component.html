@@ -14,7 +14,11 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" *ngIf="form.get('tipo')?.value === 'GASTO'">
+    <!-- subscriptSizing dinamico: la descripcion del grupo ocupa varios renglones y
+         el alto fijo que Material reserva para el hint la dejaba encimada sobre el
+         selector de iconos. -->
+    <mat-form-field appearance="outline" subscriptSizing="dynamic"
+                    *ngIf="form.get('tipo')?.value === 'GASTO'">
       <mat-label>Grupo en la guía de distribución</mat-label>
       <mat-select formControlName="grupo">
         <mat-option [value]="null">Sin clasificar</mat-option>

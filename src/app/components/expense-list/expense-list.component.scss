@@ -138,9 +138,15 @@
 }
 
 .acciones-cell {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  // La celda se queda como celda de tabla. Ponerle display:flex anulaba el
+  // vertical-align:middle que Material le da a mat-cell, y el contenido
+  // quedaba pegado arriba en vez de alineado con el resto de la fila: se
+  // notaba sobre todo en las filas de dos renglones (las que llevan cuota).
+  .estado-contenido {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
   .paid-icon {
     color: #10b981;

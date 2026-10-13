@@ -11,7 +11,7 @@
       <mat-label>Categoría</mat-label>
       <mat-select formControlName="categoriaId">
         <mat-option *ngFor="let cat of (categorias$ | async)" [value]="cat.id">
-          <mat-icon *ngIf="cat.icono">{{cat.icono}}</mat-icon> {{cat.nombre}}
+          <mat-icon *ngIf="cat.icono">{{cat.icono}}</mat-icon> {{cat.nombre | uppercase}}
         </mat-option>
       </mat-select>
     </mat-form-field>
