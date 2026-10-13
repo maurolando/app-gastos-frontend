@@ -221,6 +221,18 @@
 }
 
 .quota-badge {
+  // Es un <button>: hay que apagarle el aspecto de boton y dejarlo como la
+  // insignia que ya era, pero con el cursor delatando que se puede tocar.
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover, &:focus-visible {
+    background: rgba(59, 130, 246, 0.25);
+    color: #93c5fd;
+  }
+
   display: inline-block;
   background: rgba(59, 130, 246, 0.12);
   color: #60a5fa;

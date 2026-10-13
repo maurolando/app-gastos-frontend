@@ -7,6 +7,8 @@ import { Observable, combineLatest, Subject } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { IngresoFormComponent } from '../ingreso-form/ingreso-form.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { NotificationService } from 'src/app/services/notification/notification.service';
 
 @Component({
   selector: 'app-ingreso-list',
@@ -29,11 +31,15 @@ export class IngresoListComponent implements OnInit, OnDestroy {
 
   hasActiveFilters$!: Observable<boolean>;
 
+  /** Mismo patron que categorias: se elige una fila y aparecen sus acciones. */
+  selectedIngreso: Ingreso | null = null;
+
   constructor(
     private service: IngresoService, 
     private personaService: PersonaService,
     private expenseService: ExpenseService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notify: NotificationService
   ) {}
 
   ngOnInit() {
@@ -101,6 +107,51 @@ export class IngresoListComponent implements OnInit, OnDestroy {
   openAddIngreso() {
     this.dialog.open(IngresoFormComponent, {
       width: '450px'
+    });
+  }
+
+  /** Volver a tocar la fila elegida la deselecciona, como en categorias. */
+  selectIngreso(ingreso: Ingreso) {
+    this.selectedIngreso = this.selectedIngreso?.id === ingreso.id ? null : ingreso;
+  }
+
+  editIngreso(ingreso: Ingreso, event: Event) {
+    event.stopPropagation();
+    const dialogRef = this.dialog.open(IngresoFormComponent, {
+      width: '450px',
+      data: ingreso
+    });
+    dialogRef.afterClosed().subscribe(guardado => {
+      if (guardado) {
+        this.selectedIngreso = null;
+      }
+    });
+  }
+
+  deleteIngreso(ingreso: Ingreso, event: Event) {
+    event.stopPropagation();
+    const detalle = [ingreso.categoria?.nombre, ingreso.persona?.nombre]
+      .filter(Boolean)
+      .join(' · ');
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: '¿Borrar este ingreso?',
+        message: `${detalle || 'Ingreso'}\n${ingreso.monto.toLocaleString('es-PY')} Gs.\n\n`
+          + 'Se va a descontar del balance. Esta acción no se puede deshacer.'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmado => {
+      if (!confirmado) return;
+      this.service.deleteIngreso(ingreso.id!).subscribe({
+        next: () => {
+          this.selectedIngreso = null;
+          this.notify.success('Ingreso eliminado');
+        },
+        error: () => this.notify.error('No se pudo eliminar el ingreso')
+      });
     });
   }
 

@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Registrar Ingreso</h2>
+<h2 mat-dialog-title>{{ editando ? 'Editar Ingreso' : 'Registrar Ingreso' }}</h2>
 <mat-dialog-content>
   <form [formGroup]="form" class="ingreso-form">
     <mat-form-field appearance="outline">

@@ -2,6 +2,17 @@
   <div class="list-header">
     <h2>Historial de Ingresos</h2>
     <span class="spacer"></span>
+    <!-- Las acciones solo aparecen con una fila elegida, igual que en categorias. -->
+    <ng-container *ngIf="selectedIngreso">
+      <button mat-mini-fab color="primary" class="action-btn"
+              (click)="editIngreso(selectedIngreso, $event)" matTooltip="Editar ingreso">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-mini-fab color="warn" class="action-btn"
+              (click)="deleteIngreso(selectedIngreso, $event)" matTooltip="Eliminar ingreso">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </ng-container>
     <button mat-flat-button color="accent" (click)="openAddIngreso()">
       <mat-icon>add</mat-icon> Nuevo Ingreso
     </button>
@@ -75,7 +86,10 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        class="fila-seleccionable"
+        [class.selected]="selectedIngreso?.id === row.id"
+        (click)="selectIngreso(row)"></tr>
   </table>
 
   <div *ngIf="(ingresos$ | async)?.length === 0" class="empty-state">

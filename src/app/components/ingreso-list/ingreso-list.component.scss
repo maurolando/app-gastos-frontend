@@ -118,3 +118,29 @@
     white-space: nowrap;
   }
 }
+
+// Seleccion de fila: el mismo gesto que en categorias, adaptado a una tabla.
+// La fila elegida se marca con la barra lateral del acento en vez de moverse,
+// porque en una tabla un translate desalinea las columnas con el encabezado.
+.fila-seleccionable {
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: rgba(148, 163, 184, 0.06);
+  }
+
+  &.selected {
+    background: rgba(99, 102, 241, 0.1);
+    box-shadow: inset 3px 0 0 0 var(--accent-color);
+  }
+}
+
+.action-btn {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
