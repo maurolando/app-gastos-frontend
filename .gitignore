@@ -40,3 +40,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Estado del plugin oh-my-claudecode: lo crea en cada carpeta donde trabaja el agente.
+.omc/
