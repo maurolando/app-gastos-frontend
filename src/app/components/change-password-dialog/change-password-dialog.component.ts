@@ -29,7 +29,7 @@ export class ChangePasswordDialogComponent {
     @Inject(MAT_DIALOG_DATA) public persona: Persona
   ) {
     this.form = this.fb.group({
-      nueva: ['', [Validators.required, Validators.minLength(3)]],
+      nueva: ['', [Validators.required, Validators.minLength(6)]],
       confirmar: ['', Validators.required]
     }, { validators: passwordsMatch });
   }

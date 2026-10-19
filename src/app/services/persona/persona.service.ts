@@ -64,6 +64,20 @@ const LOGIN_PERSONA = gql`
   }
 `;
 
+const REGISTRAR = gql`
+  mutation Registrar($nombre: String!, $clave: String!) {
+    registrar(nombre: $nombre, clave: $clave) {
+      token
+      persona {
+        id
+        nombre
+        activo
+        tieneClave
+      }
+    }
+  }
+`;
+
 const SET_CLAVE = gql`
   mutation SetClave($id: ID!, $clave: String!) {
     setClave(id: $id, clave: $clave) {
@@ -115,6 +129,16 @@ export class PersonaService {
       variables: { nombre, clave }
     }).pipe(
       map(result => result.data.login)
+    );
+  }
+
+  /** Crea una cuenta nueva (un hogar vacío) y devuelve la sesión ya iniciada. */
+  registrar(nombre: string, clave: string): Observable<LoginResult> {
+    return this.apollo.mutate<any>({
+      mutation: REGISTRAR,
+      variables: { nombre, clave }
+    }).pipe(
+      map(result => result.data.registrar)
     );
   }
 
