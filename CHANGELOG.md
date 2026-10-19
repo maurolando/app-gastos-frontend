@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.7.0...v1.8.0) (2026-10-19)
+
+
+### Features
+
+* crear cuenta desde el login ([0786b64](https://github.com/maurolando/app-gastos-frontend/commit/0786b64913d239104ac3fe93c1efb00525fd5cd6))
+
 ## [1.7.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.6.0...v1.7.0) (2026-09-21)
 
 
