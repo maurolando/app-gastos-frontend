@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Apollo } from 'apollo-angular';
 import { LayoutService } from './services/layout/layout.service';
 import { ExpenseService } from './services/expense/expense.service';
 import { AuthService } from './services/auth/auth.service';
@@ -39,7 +40,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialog: MatDialog,
     private layout: LayoutService,
-    private actualizacion: ActualizacionService
+    private actualizacion: ActualizacionService,
+    private apollo: Apollo
   ) {}
 
   /**
@@ -97,6 +99,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() {
     this.auth.cerrarSesion();
+    // Sin esto, la próxima cuenta que entre en este navegador ve por un momento los datos de esta.
+    this.apollo.client.clearStore();
     this.notify.success('Sesión cerrada');
     this.router.navigate(['/login']);
   }

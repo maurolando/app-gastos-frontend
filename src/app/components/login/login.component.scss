@@ -110,6 +110,15 @@
   margin-top: 8px;
 }
 
+.cambiar-modo {
+  margin-top: 4px;
+  color: var(--accent-light) !important;
+}
+
+.hint-error {
+  color: var(--danger-color);
+}
+
 .login-footer {
   display: flex;
   align-items: center;
