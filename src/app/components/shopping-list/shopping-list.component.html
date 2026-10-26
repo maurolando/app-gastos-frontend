@@ -20,7 +20,7 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="shopping-form">
         <mat-form-field appearance="outline">
           <mat-label>¿Qué vas a comprar?</mat-label>
-          <input matInput formControlName="nombre" placeholder="Ej: Leche, Zapatos, etc." style="text-transform: uppercase;">
+          <input matInput formControlName="nombre" placeholder="Ej: Leche, Zapatos, etc.">
           <mat-icon matPrefix>shopping_basket</mat-icon>
         </mat-form-field>
 
@@ -33,7 +33,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Lugar / Tienda (Opcional)</mat-label>
-          <input matInput formControlName="lugar" placeholder="Ej: Supermercado, Amazon, etc." style="text-transform: uppercase;">
+          <input matInput formControlName="lugar" placeholder="Ej: Supermercado, Amazon, etc.">
           <mat-icon matPrefix>store</mat-icon>
         </mat-form-field>
 

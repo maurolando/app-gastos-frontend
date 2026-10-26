@@ -1,4 +1,17 @@
 <div class="dashboard-container">
+  <!-- Issue #30: sin categorias de gasto el formulario de gasto solo muestra un
+       desplegable vacio, sin decir que falta. Esto lo dice y lleva al lugar. -->
+  <div class="aviso-sin-categorias" *ngIf="sinCategoriasDeGasto$ | async">
+    <mat-icon>info</mat-icon>
+    <div class="aviso-texto">
+      <strong>Todavía no tenés categorías de gasto.</strong>
+      <span>Creá al menos una antes de registrar un gasto.</span>
+    </div>
+    <a mat-flat-button color="primary" routerLink="/categorias">
+      <mat-icon>category</mat-icon> Crear categorías
+    </a>
+  </div>
+
   <div class="header">
     <div class="filters">
       <mat-form-field appearance="outline">
