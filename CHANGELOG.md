@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.8.0...v1.8.1) (2026-10-26)
+
+
+### Bug Fixes
+
+* aviso de categorias, mayusculas globales, seleccion de fila y miles en montos ([fa4c452](https://github.com/maurolando/app-gastos-frontend/commit/fa4c452736731b60824984b284b3704f991a766d))
+
 ## [1.8.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.7.0...v1.8.0) (2026-10-19)
 
 
