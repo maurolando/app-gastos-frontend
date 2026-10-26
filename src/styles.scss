@@ -191,3 +191,37 @@ h1, h2, h3, h4, h5, h6 {
     padding: 8px 16px 16px 16px;
   }
 }
+
+/* Issue #37: los textos que el usuario escribe van en mayusculas en toda la app.
+   Antes esto se repetia como style="text-transform" suelto en cada formulario.
+   Las claves quedan afuera: tienen boton de "ver" y type="password" no alcanza
+   para detectarlas, por eso se excluyen con .sin-mayusculas. */
+input[matInput]:not([type="number"]):not([type="date"]):not(.sin-mayusculas),
+textarea[matInput]:not(.sin-mayusculas) {
+  text-transform: uppercase;
+}
+
+/* Issues #31 y #36: los nombres de persona se muestran en mayusculas en todas
+   las listas. Las tres usan esta misma clase. */
+.username {
+  text-transform: uppercase;
+}
+
+/* Issue #36: seleccion de fila en las tablas (gastos e ingresos). */
+// Seleccion de fila: el mismo gesto que en categorias, adaptado a una tabla.
+// La fila elegida se marca con la barra lateral del acento en vez de moverse,
+// porque en una tabla un translate desalinea las columnas con el encabezado.
+.fila-seleccionable {
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: rgba(148, 163, 184, 0.06);
+  }
+
+  &.selected {
+    background: rgba(99, 102, 241, 0.1);
+    box-shadow: inset 3px 0 0 0 var(--accent-color);
+  }
+}
+

@@ -22,7 +22,10 @@ import { LayoutService } from 'src/app/services/layout/layout.service';
 export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  displayedColumns: string[] = ['date', 'persona', 'category', 'description', 'amount', 'acciones', 'gestion'];
+  displayedColumns: string[] = ['date', 'persona', 'category', 'description', 'amount', 'acciones'];
+
+  /** Mismo gesto que categorias e ingresos: se elige la fila y aparecen sus acciones. */
+  selectedGasto: Gasto | null = null;
   
   dataSource = new MatTableDataSource<Gasto>([]);
   personas$!: Observable<Persona[]>;
@@ -188,5 +191,9 @@ export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
     // La insignia vive dentro de la fila; sin esto el clic tambien la activa.
     event.stopPropagation();
     this.dialog.open(CuotasDialogComponent, { width: '480px', data: gasto });
+  }
+
+  selectGasto(gasto: Gasto) {
+    this.selectedGasto = this.selectedGasto?.id === gasto.id ? null : gasto;
   }
 }

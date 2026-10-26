@@ -13,14 +13,14 @@
     <form [formGroup]="form" (ngSubmit)="enviar()" class="login-form">
       <mat-form-field appearance="outline">
         <mat-label>Nombre de usuario</mat-label>
-        <input matInput formControlName="nombre" autocomplete="username" style="text-transform: uppercase;">
+        <input matInput formControlName="nombre" autocomplete="username">
         <mat-icon matPrefix>person</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Contraseña</mat-label>
         <input matInput [type]="showPassword ? 'text' : 'password'"
-               formControlName="clave" [attr.autocomplete]="registrando ? 'new-password' : 'current-password'">
+               formControlName="clave" class="sin-mayusculas" [attr.autocomplete]="registrando ? 'new-password' : 'current-password'">
         <mat-icon matPrefix>lock</mat-icon>
         <button mat-icon-button matSuffix type="button"
                 (click)="showPassword = !showPassword">

@@ -47,6 +47,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   pendingExpenses$!: Observable<Gasto[]>;
   lastDates$!: Observable<any>;
   alerts$!: Observable<DueAlert[]>;
+
+  /** Issue #30: sin categorias de gasto no se puede registrar nada, y el formulario
+      de gasto no lo explica: solo muestra un desplegable vacio. */
+  sinCategoriasDeGasto$!: Observable<boolean>;
   budgetProgress$!: Observable<{ catId: string, catName: string, catIcon: string, amountSpent: number, budgetAmount: number, percentage: number, color: string }[]>;
 
 
@@ -140,6 +144,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Gastos pendientes: recurrentes no pagados + compartidos no completamente pagados
     this.pendingExpenses$ = data$.pipe(
       map(([gastos]) => gastos.filter(g => !g.pagado))
+    );
+
+    this.sinCategoriasDeGasto$ = this.expenseService.getCategorias('GASTO').pipe(
+      map(categorias => categorias.length === 0)
     );
 
     this.alerts$ = this.pendingExpenses$.pipe(
