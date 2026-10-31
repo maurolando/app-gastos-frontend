@@ -1,7 +1,10 @@
-<div class="list-container mat-elevation-z3">
-  <div class="list-header">
-    <h2>Historial de Ingresos</h2>
-    <span class="spacer"></span>
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Ingresos</h1>
+      <p class="page-subtitle">Lo que entró al hogar y a quién se asignó</p>
+    </div>
+    <div class="page-actions">
     <!-- Las acciones solo aparecen con una fila elegida, igual que en categorias. -->
     <ng-container *ngIf="selectedIngreso">
       <button mat-mini-fab color="primary" class="action-btn"
@@ -14,9 +17,12 @@
       </button>
     </ng-container>
     <button mat-flat-button color="accent" (click)="openAddIngreso()">
-      <mat-icon>add</mat-icon> Nuevo Ingreso
+      <mat-icon>add</mat-icon> Nuevo ingreso
     </button>
+    </div>
   </div>
+
+  <div class="list-container mat-elevation-z3">
 
   <!-- Barra de Filtros -->
   <div class="filter-bar">
@@ -55,7 +61,7 @@
 
     <ng-container matColumnDef="fecha">
       <th mat-header-cell *matHeaderCellDef> Fecha </th>
-      <td mat-cell *matCellDef="let element"> {{element.fecha | date:'mediumDate'}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.fecha | date:'dd/MM/yyyy'}} </td>
     </ng-container>
 
     <ng-container matColumnDef="persona">
@@ -96,4 +102,5 @@
     <mat-icon>inbox</mat-icon>
     <p>No hay ingresos registrados aún</p>
   </div>
+</div>
 </div>

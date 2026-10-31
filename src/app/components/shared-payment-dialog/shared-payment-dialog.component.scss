@@ -1,7 +1,7 @@
 .expense-summary {
   background: rgba(99, 102, 241, 0.05);
   border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 16px;
   margin-bottom: 20px;
 
@@ -28,15 +28,15 @@
 
     .paid-amount {
       font-weight: 600;
-      color: #10b981;
+      color: var(--success-strong);
     }
 
     .remaining-amount {
       font-weight: 700;
-      color: #f59e0b;
+      color: var(--warning-color);
 
       &.zero {
-        color: #10b981;
+        color: var(--success-strong);
       }
     }
   }
@@ -72,7 +72,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 12px;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.06);
     margin-bottom: 8px;
@@ -85,7 +85,7 @@
       font-weight: 600;
       font-size: 0.85rem;
 
-      mat-icon { color: #6366f1; font-size: 20px; }
+      mat-icon { color: var(--accent-color); font-size: 20px; }
     }
 
     .pago-detalles {
@@ -95,7 +95,7 @@
 
       .pago-monto {
         font-weight: 700;
-        color: #10b981;
+        color: var(--success-strong);
       }
 
       .pago-forma, .pago-fecha {
@@ -123,9 +123,9 @@
   gap: 12px;
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 16px;
-  color: #10b981;
+  color: var(--success-strong);
   font-weight: 600;
 
   mat-icon { font-size: 28px; }

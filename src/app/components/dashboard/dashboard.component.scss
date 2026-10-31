@@ -1,10 +1,4 @@
 .dashboard-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
 
   /* Alertas de Vencimiento */
   .alerts-container {
@@ -17,9 +11,12 @@
     display: flex;
     align-items: center;
     padding: 12px 16px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     gap: 16px;
     font-size: 14px;
+    color: var(--text-primary);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     
     .mat-icon {
       font-size: 24px;
@@ -34,49 +31,27 @@
       gap: 8px;
     }
     
-    button {
-      font-weight: bold;
-      border: 1px solid currentColor;
+    // Antes era texto blanco sobre el amarillo pálido del aviso: no se veía.
+    .alert-pay {
+      font-weight: 600;
+      color: #111827;
+      border-radius: var(--radius-md);
     }
 
     &.overdue {
-      background-color: #fee2e2; /* light red */
-      color: #991b1b;
-      border-left: 4px solid #ef4444;
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.35);
+      border-left: 4px solid var(--danger-strong);
+      > .mat-icon { color: var(--danger-color); }
+      .alert-pay { background: var(--danger-color); }
     }
     
     &.due-soon {
-      background-color: #fef3c7; /* light amber/orange */
-      color: #92400e;
-      border-left: 4px solid #f59e0b;
-    }
-  }
-
-  .header {
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    h1 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
-
-    p {
-      color: var(--text-secondary);
-      font-size: 1.1rem;
-    }
-
-    .filters {
-      display: flex;
-      gap: 12px;
-      mat-form-field {
-        width: 150px;
-      }
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-left: 4px solid var(--warning-color);
+      > .mat-icon { color: var(--warning-color); }
+      .alert-pay { background: var(--warning-color); }
     }
   }
 
@@ -84,7 +59,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
-    margin-bottom: 24px;
   }
 
   .main-content-grid {
@@ -104,7 +78,7 @@
   }
 
   .stat-card {
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     padding: 16px;
     color: white;
     overflow: hidden;
@@ -113,7 +87,7 @@
     mat-icon {
       background: rgba(255, 255, 255, 0.2);
       padding: 8px;
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       margin-right: 16px;
       display: flex;
       align-items: center;
@@ -142,28 +116,18 @@
       font-style: italic;
     }
 
-    &.total {
-      background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
-    }
-
-    &.balance {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    }
-
-    &.limit {
-      background: linear-gradient(135deg, #f43f5e 0%, #fb923c 100%);
-    }
-
-    &.savings {
-      background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
-    }
+    // Un color por concepto, el mismo que en Ahorros (variables en styles.scss).
+    &.balance { background: var(--grad-balance); }
+    &.total { background: var(--grad-gasto); }
+    &.limit { background: var(--grad-ingreso); }
+    &.savings { background: var(--grad-ahorro); }
 
   }
 
-  .savings-card, .chart-card, .pending-card {
+  .savings-card, .chart-card, .pending-card, .budget-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
     padding: 12px;
 
     mat-card-title {
@@ -210,7 +174,7 @@
         font-size: 40px;
         width: 40px;
         height: 40px;
-        color: #10b981;
+        color: var(--success-strong);
         opacity: 0.5;
         margin-bottom: 8px;
       }
@@ -222,7 +186,7 @@
       align-items: center;
       padding: 12px 16px;
       background: rgba(255,255,255, 0.03);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       border: 1px solid rgba(255,255,255, 0.05);
       transition: all 0.3s ease;
 
@@ -250,7 +214,7 @@
             font-size: 20px;
             width: 20px;
             height: 20px;
-            color: #6366f1;
+            color: var(--accent-color);
           }
 
           .shared-badge {
@@ -260,9 +224,9 @@
             font-size: 0.72rem;
             font-weight: 700;
             background: rgba(245, 158, 11, 0.15);
-            color: #f59e0b;
+            color: var(--warning-color);
             border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 20px;
+            border-radius: var(--radius-lg);
             padding: 2px 8px;
 
             mat-icon {
@@ -278,9 +242,9 @@
             font-size: 0.72rem;
             font-weight: 700;
             background: rgba(99, 102, 241, 0.15);
-            color: #818cf8;
+            color: var(--accent-light);
             border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 20px;
+            border-radius: var(--radius-lg);
             padding: 2px 8px;
             margin-left: 5px;
           }
@@ -293,19 +257,19 @@
         }
         
         .item-amount {
-          color: #10b981;
+          color: var(--success-strong);
           font-weight: 700;
         }
 
         .item-due {
           font-size: 0.8rem;
-          color: #f43f5e;
+          color: var(--danger-strong);
           font-weight: 500;
         }
       }
 
       button {
-        border-radius: 10px;
+        border-radius: var(--radius-md);
       }
     }
   }
@@ -333,7 +297,11 @@
 
   .savings-success {
     font-weight: 600;
-    color: #10b981;
+    color: var(--success-strong);
+  }
+
+  .chart-row .chart-card {
+    max-width: 640px;
   }
 
   .chart-wrapper {
@@ -352,9 +320,6 @@
   display: flex;
   align-items: center;
 }
-.nuevo-gasto-btn {
-  margin-right: 8px;
-}
 
 // El pendiente vive pegado al Gasto Total: son el mismo dato partido en dos
 // estados, y separarlos en tarjetas distintas invitaba a leerlos como totales
@@ -365,8 +330,8 @@
   gap: 6px;
   margin: 4px 0 0 0;
   font-size: 0.8rem;
-  font-weight: 500;
-  color: #f59e0b;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
 
   mat-icon {
     font-size: 15px;
@@ -376,55 +341,25 @@
 }
 
 // --- Móvil ---
-@media (max-width: 900px) {
+@media (max-width: 599px) {
   .dashboard-container {
-    padding: 12px 4px;
-    gap: 16px;
-
-    // La botonera es un flex de una sola línea: en pantalla chica los selects
-    // de mes y año empujaban los cuatro botones fuera de la vista.
-    .header {
-      margin-bottom: 12px;
-
-      .filters {
-        flex-wrap: wrap;
-        gap: 8px;
-        width: 100%;
-
-        mat-form-field {
-          width: calc(50% - 4px);
-        }
-
-        button {
-          flex: 1 1 calc(50% - 4px);
-        }
-      }
+    // Antes eran dos columnas forzadas y los títulos se cortaban ("BALANC GLOBAL").
+    .cards-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
 
-    .cards-grid {
-      // minmax(280px, 1fr) no baja de 280px, así que en un teléfono de 390px
-      // las tarjetas se salían del contenedor.
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 12px;
-      margin-bottom: 12px;
+    .stat-card h2 {
+      font-size: 1.7rem;
+      margin-top: 8px;
     }
 
     .alert-banner {
       flex-wrap: wrap;
       gap: 8px;
       font-size: 13px;
-    }
-  }
-}
 
-@media (max-width: 599px) {
-  .dashboard-container {
-    .cards-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .stat-card h2 {
-      font-size: 1.15rem;
+      .alert-pay { width: 100%; }
     }
   }
 }
@@ -436,12 +371,12 @@
   gap: 14px;
   flex-wrap: wrap;
   padding: 14px 18px;
-  margin-bottom: 20px;
-  border-radius: 10px;
+
+  border-radius: var(--radius-md);
   background: rgba(245, 158, 11, 0.1);
   border: 1px solid rgba(245, 158, 11, 0.35);
 
-  > mat-icon { color: #f59e0b; }
+  > mat-icon { color: var(--warning-color); }
 
   .aviso-texto {
     display: flex;

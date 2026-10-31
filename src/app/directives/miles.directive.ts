@@ -31,7 +31,7 @@ export class MilesDirective implements ControlValueAccessor {
     @Inject(LOCALE_ID) private locale: string
   ) {}
 
-  writeValue(valor: number | null): void {
+  writeValue(valor: number | string | null): void {
     this.el.nativeElement.value = formatearMiles(valor, this.locale);
   }
 

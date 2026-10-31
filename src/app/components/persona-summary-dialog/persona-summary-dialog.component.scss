@@ -4,9 +4,9 @@
 }
 
 .main-stat {
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--info-color) 100%);
   padding: 24px;
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   color: white;
   text-align: center;
   margin: 10px 0 24px 0;
@@ -39,7 +39,7 @@
 }
 
 .stat-item {
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border-subtle);
   padding: 8px;
@@ -97,7 +97,7 @@
   align-items: center;
   padding: 10px 14px;
   background: rgba(255, 255, 255, 0.02);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   border: 1px solid transparent;
   transition: all 0.2s ease;
 
@@ -118,7 +118,7 @@
       color: var(--accent-color);
       background: rgba(99, 102, 241, 0.1);
       padding: 6px;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
     }
 
     span {

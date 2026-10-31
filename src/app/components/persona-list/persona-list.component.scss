@@ -1,20 +1,21 @@
 .list-container {
-  background: var(--bg-dark-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  // Issue #38: la misma tarjeta de vidrio en Gastos, Ingresos y Personas.
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-highlight), 0 8px 24px rgba(0, 0, 0, 0.25);
   padding: 24px;
+  overflow: hidden;
+
+  @media (max-width: 599px) { padding: 16px 12px; }
 }
 
-.list-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 24px;
-  h2 { margin: 0; font-weight: 500; color: var(--text-primary); }
-}
 .spacer { flex: 1 1 auto; }
 
 .password-btn {
-  color: #f59e0b;
+  color: var(--warning-color);
   transition: color 0.2s, transform 0.2s;
   &:hover {
     color: #fbbf24;
@@ -37,7 +38,7 @@
 
 .status-badge {
   padding: 4px 12px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-size: 0.85rem;
   font-weight: 500;
   background-color: rgba(248, 113, 113, 0.2);

@@ -1,4 +1,6 @@
-import { NgModule, isDevMode } from '@angular/core';
+import { NgModule, isDevMode, LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEsPy from '@angular/common/locales/es-PY';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,11 +24,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
+import { LOCALE_APP, FechaDmaAdapter, PaginadorEs } from './utils/locale-es';
+
+registerLocaleData(localeEsPy);
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { PersonaListComponent } from './components/persona-list/persona-list.component';
@@ -150,6 +155,10 @@ export function createApollo(httpLink: HttpLink, auth: AuthService) {
     })
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: LOCALE_APP },
+    { provide: MAT_DATE_LOCALE, useValue: LOCALE_APP },
+    { provide: DateAdapter, useClass: FechaDmaAdapter },
+    { provide: MatPaginatorIntl, useClass: PaginadorEs },
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,

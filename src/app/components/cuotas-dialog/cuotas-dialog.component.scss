@@ -1,7 +1,7 @@
 .titulo-icono {
   vertical-align: middle;
   margin-right: 8px;
-  color: #6366f1;
+  color: var(--accent-color);
 }
 
 .encabezado {
@@ -12,7 +12,7 @@
 
 .resumen {
   background: rgba(148, 163, 184, 0.06);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   padding: 12px 16px;
 
   .fila {
@@ -33,9 +33,9 @@
   }
 
   .total    { color: var(--text-primary); }
-  .pagado   { color: #10b981; }
-  .pendiente { color: #f59e0b; }
-  .pendiente.cero { color: #10b981; }
+  .pagado   { color: var(--success-strong); }
+  .pendiente { color: var(--warning-color); }
+  .pendiente.cero { color: var(--success-strong); }
 }
 
 .progreso {
@@ -86,9 +86,9 @@
     font-size: 20px;
     width: 20px;
     height: 20px;
-    color: #f59e0b;
+    color: var(--warning-color);
 
-    &.pagada { color: #10b981; }
+    &.pagada { color: var(--success-strong); }
   }
 
   .numero { font-size: 0.9rem; }

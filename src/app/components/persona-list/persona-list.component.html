@@ -1,11 +1,17 @@
-<div class="list-container mat-elevation-z3">
-  <div class="list-header">
-    <h2>Directorio de Personas</h2>
-    <span class="spacer"></span>
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Personas</h1>
+      <p class="page-subtitle">Quiénes forman parte del hogar</p>
+    </div>
+    <div class="page-actions">
     <button mat-flat-button color="accent" (click)="openAddPersona()">
-      <mat-icon>person_add</mat-icon> Nueva Persona
+      <mat-icon>person_add</mat-icon> Nueva persona
     </button>
+    </div>
   </div>
+
+  <div class="list-container mat-elevation-z3">
 
   <table mat-table [dataSource]="(personas$ | async) || []" class="personas-table">
     <ng-container matColumnDef="nombre">
@@ -20,7 +26,7 @@
 
     <ng-container matColumnDef="creadoEn">
       <th mat-header-cell *matHeaderCellDef> Fecha de Registro </th>
-      <td mat-cell *matCellDef="let element"> {{element.creadoEn | date:'medium'}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.creadoEn | date:'dd/MM/yyyy HH:mm'}} </td>
     </ng-container>
 
     <ng-container matColumnDef="activo">
@@ -52,4 +58,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+</div>
 </div>

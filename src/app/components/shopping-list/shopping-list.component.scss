@@ -1,38 +1,10 @@
 .shopping-container {
-  padding: 0 24px 24px 24px;
   animation: fadeIn 0.4s ease-out;
-
-  .header {
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-    }
-
-    .title-section {
-      h1 {
-        font-family: 'Outfit', sans-serif;
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 4px;
-      }
-      p {
-        color: var(--text-secondary);
-        font-size: 1.1rem;
-      }
-    }
-  }
 
   .form-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
     margin-bottom: 24px;
     animation: slideDown 0.3s ease-out;
 
@@ -53,7 +25,7 @@
 
       .submit-btn {
         height: 56px;
-        border-radius: 12px;
+        border-radius: var(--radius-md);
       }
     }
   }
@@ -62,7 +34,7 @@
     text-align: center;
     padding: 60px 20px;
     background: rgba(255, 255, 255, 0.02);
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
     border: 1px dashed rgba(255, 255, 255, 0.1);
 
     mat-icon {
@@ -114,7 +86,7 @@
     .item-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       padding: 16px;
       display: flex;
       justify-content: space-between;
@@ -151,9 +123,9 @@
 
           .item-price {
             background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+            color: var(--success-strong);
             padding: 2px 8px;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
             font-size: 0.8rem;
             font-weight: 700;
           }
@@ -187,7 +159,7 @@
 
         .delete-btn {
           opacity: 0.4;
-          color: #f43f5e;
+          color: var(--danger-strong);
           transition: all 0.2s ease;
 
           &:hover {
@@ -214,8 +186,8 @@
           }
 
           &.active {
-            background: #10b981;
-            border-color: #10b981;
+            background: var(--success-strong);
+            border-color: var(--success-strong);
           }
         }
       }

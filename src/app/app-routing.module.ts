@@ -13,7 +13,8 @@ import { AuthGuard } from './guards/auth.guard';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { vista: 'resumen' } },
+  { path: 'pagos', component: DashboardComponent, canActivate: [AuthGuard], data: { vista: 'pagos' } },
   { path: 'gastos', component: ExpenseListComponent, canActivate: [AuthGuard] },
   { path: 'personas', component: PersonaListComponent, canActivate: [AuthGuard] },
   { path: 'ingresos', component: IngresoListComponent, canActivate: [AuthGuard] },

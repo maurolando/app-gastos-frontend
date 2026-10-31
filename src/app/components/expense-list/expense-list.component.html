@@ -1,7 +1,10 @@
-<div class="list-container mat-elevation-z3">
-  <div class="list-header">
-    <h2>Historial de Gastos</h2>
-    <span class="spacer"></span>
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Gastos</h1>
+      <p class="page-subtitle">Todo lo que se gastó, con filtros por persona, categoría y fecha</p>
+    </div>
+    <div class="page-actions">
     <ng-container *ngIf="selectedGasto">
       <button mat-mini-fab color="primary" class="action-btn"
               (click)="editExpense(selectedGasto)" matTooltip="Editar gasto">
@@ -13,9 +16,12 @@
       </button>
     </ng-container>
     <button mat-flat-button color="accent" (click)="openAddExpense()">
-      <mat-icon>add</mat-icon> Nuevo Gasto
+      <mat-icon>add</mat-icon> Nuevo gasto
     </button>
+    </div>
   </div>
+
+  <div class="list-container mat-elevation-z3">
 
   <!-- Barra de Filtros -->
   <div class="filter-bar">
@@ -201,4 +207,5 @@
     <mat-icon style="font-size: 48px; width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.5;">inbox</mat-icon>
     <p>No se encontraron gastos que coincidan con la búsqueda.</p>
   </div>
+</div>
 </div>

@@ -1,4 +1,8 @@
+import { registerLocaleData } from '@angular/common';
+import localeEsPy from '@angular/common/locales/es-PY';
 import { formatearMiles, leerMiles } from './miles.util';
+
+registerLocaleData(localeEsPy);
 
 describe('miles.util', () => {
 
@@ -8,7 +12,12 @@ describe('miles.util', () => {
 
   it('no inventa un cero cuando el campo esta vacio', () => {
     expect(formatearMiles(null, 'en-US')).toBe('');
+    expect(formatearMiles('', 'en-US')).toBe('');
     expect(leerMiles('')).toBeNull();
+  });
+
+  it('usa punto de miles en es-PY, el locale de la app', () => {
+    expect(formatearMiles(1800000, 'es-PY')).toBe('1.800.000');
   });
 
   it('se queda solo con los digitos de lo tipeado', () => {
