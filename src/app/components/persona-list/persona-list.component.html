@@ -5,6 +5,9 @@
       <p class="page-subtitle">Quiénes forman parte del hogar</p>
     </div>
     <div class="page-actions">
+    <button mat-stroked-button (click)="invitar()" [disabled]="generando">
+      <mat-icon>qr_code_2</mat-icon> Invitar al hogar
+    </button>
     <button mat-flat-button color="accent" (click)="openAddPersona()">
       <mat-icon>person_add</mat-icon> Nueva persona
     </button>
@@ -60,3 +63,25 @@
   </table>
 </div>
 </div>
+
+<!-- Issue #35: quien escanea el QR crea su cuenta dentro de este hogar. -->
+<ng-template #invitacionDialog>
+  <h2 mat-dialog-title>Invitar al hogar</h2>
+  <mat-dialog-content class="invitacion">
+    <p class="invitacion-texto">
+      Que la otra persona escanee el código con la cámara del celular. Va a crear su
+      cuenta y ver y cargar los mismos gastos e ingresos que vos.
+    </p>
+    <img [src]="invitacion?.qr" alt="Código QR de invitación" class="invitacion-qr">
+    <div class="invitacion-codigo">{{ invitacion?.codigo }}</div>
+    <p class="invitacion-vence">
+      Sirve una sola vez. Vence el {{ invitacion?.expiraEn | date:'dd/MM/yyyy HH:mm' }}.
+    </p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cerrar</button>
+    <button mat-flat-button color="accent" (click)="compartirInvitacion()">
+      <mat-icon>share</mat-icon> Compartir
+    </button>
+  </mat-dialog-actions>
+</ng-template>

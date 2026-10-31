@@ -64,9 +64,23 @@ const LOGIN_PERSONA = gql`
   }
 `;
 
+const CREAR_INVITACION = gql`
+  mutation CrearInvitacion {
+    crearInvitacion {
+      codigo
+      expiraEn
+    }
+  }
+`;
+
+export interface Invitacion {
+  codigo: string;
+  expiraEn: string;
+}
+
 const REGISTRAR = gql`
-  mutation Registrar($nombre: String!, $clave: String!) {
-    registrar(nombre: $nombre, clave: $clave) {
+  mutation Registrar($nombre: String!, $clave: String!, $codigoInvitacion: String) {
+    registrar(nombre: $nombre, clave: $clave, codigoInvitacion: $codigoInvitacion) {
       token
       persona {
         id
@@ -132,13 +146,23 @@ export class PersonaService {
     );
   }
 
-  /** Crea una cuenta nueva (un hogar vacío) y devuelve la sesión ya iniciada. */
-  registrar(nombre: string, clave: string): Observable<LoginResult> {
+  /**
+   * Crea una cuenta nueva y devuelve la sesión ya iniciada. Sin código arma un hogar
+   * vacío; con un código de invitación se suma al hogar que lo generó (issue #35).
+   */
+  registrar(nombre: string, clave: string, codigoInvitacion?: string | null): Observable<LoginResult> {
     return this.apollo.mutate<any>({
       mutation: REGISTRAR,
-      variables: { nombre, clave }
+      variables: { nombre, clave, codigoInvitacion: codigoInvitacion || null }
     }).pipe(
       map(result => result.data.registrar)
+    );
+  }
+
+  /** Código de un solo uso (vence en 48 h) para sumar a alguien a este hogar. */
+  crearInvitacion(): Observable<Invitacion> {
+    return this.apollo.mutate<any>({ mutation: CREAR_INVITACION }).pipe(
+      map(result => result.data.crearInvitacion)
     );
   }
 
