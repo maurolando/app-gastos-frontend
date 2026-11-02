@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { Persona, PersonaService } from 'src/app/services/persona/persona.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -25,14 +25,23 @@ export class LoginComponent {
     private authService: AuthService,
     private notify: NotificationService,
     private router: Router,
-    private apollo: Apollo
+    private apollo: Apollo,
+    route: ActivatedRoute
   ) {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
       clave: ['', [Validators.required, Validators.minLength(3)]],
       confirmar: [''],
+      invitacion: [''],
       permanecer: [false]
     }, { validators: (g: AbstractControl) => this.clavesCoinciden(g) });
+
+    // El QR de invitación abre /login?invitacion=CODIGO: va directo a crear la cuenta.
+    const invitacion = route.snapshot.queryParamMap.get('invitacion');
+    if (invitacion) {
+      this.form.patchValue({ invitacion });
+      this.cambiarModo();
+    }
   }
 
   cambiarModo() {
@@ -75,9 +84,9 @@ export class LoginComponent {
 
   private registrar() {
     this.loading = true;
-    const { nombre, clave } = this.form.value;
+    const { nombre, clave, invitacion } = this.form.value;
 
-    this.personaService.registrar(nombre, clave).subscribe({
+    this.personaService.registrar(nombre, clave, invitacion).subscribe({
       next: (resultado) => {
         this.loading = false;
         this.entrar(resultado.persona, resultado.token, `¡Cuenta creada! Bienvenido, ${resultado.persona.nombre}`);
