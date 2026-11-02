@@ -1,44 +1,5 @@
 .ahorros-container {
-  padding: 0 24px 24px 24px;
   animation: fadeIn 0.4s ease-out;
-
-  .header {
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-    }
-
-    .title-section {
-      h1 {
-        font-family: 'Outfit', sans-serif;
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 4px;
-        background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      p {
-        color: var(--text-secondary);
-        font-size: 1.1rem;
-      }
-    }
-
-    .filters {
-      display: flex;
-      gap: 12px;
-      mat-form-field {
-        width: 150px;
-      }
-    }
-  }
 
   .main-content {
     display: grid;
@@ -53,7 +14,7 @@
   .goal-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
     padding: 24px;
     position: relative;
     overflow: hidden;
@@ -65,7 +26,7 @@
       left: 0;
       width: 100%;
       height: 6px;
-      background: linear-gradient(90deg, #10b981, #3b82f6);
+      background: linear-gradient(90deg, var(--success-strong), var(--info-color));
     }
 
     .goal-header {
@@ -83,7 +44,7 @@
       }
 
       .header-icon {
-        color: #f59e0b;
+        color: var(--warning-color);
         margin-right: 12px;
       }
 
@@ -97,7 +58,7 @@
 
     .goal-editor {
       background: rgba(255, 255, 255, 0.02);
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       padding: 24px;
       border: 1px dashed rgba(255, 255, 255, 0.1);
       
@@ -189,19 +150,19 @@
       .status-message {
         margin-top: 32px;
         padding: 16px;
-        border-radius: 12px;
+        border-radius: var(--radius-md);
         background: rgba(255, 255, 255, 0.03);
 
         .pending-msg {
           color: var(--text-secondary);
           margin: 0;
           strong {
-            color: #f43f5e;
+            color: var(--danger-strong);
           }
         }
 
         .success-msg {
-          color: #10b981;
+          color: var(--success-strong);
           margin: 0;
           font-weight: 600;
           display: flex;
@@ -219,7 +180,7 @@
     gap: 16px;
 
     .stat-card {
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       padding: 20px;
       display: flex;
       flex-direction: row;
@@ -240,7 +201,7 @@
         height: 32px;
         background: rgba(255, 255, 255, 0.2);
         padding: 12px;
-        border-radius: 12px;
+        border-radius: var(--radius-md);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -263,34 +224,20 @@
         }
       }
 
-      &.income {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-      }
-
-      &.expense {
-        background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-      }
-
-      &.current-savings {
-        background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-      }
+      // Mismo color por concepto que en Balance (variables en styles.scss).
+      &.income { background: var(--grad-ingreso); }
+      &.expense { background: var(--grad-gasto); }
+      &.current-savings { background: var(--grad-ahorro); }
     }
   }
 
-  .ahorros-action-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 24px;
+  .ahorros-list {
     margin-top: 24px;
 
-    @media (max-width: 1000px) {
-      grid-template-columns: 1fr;
-    }
-
-    .action-card, .list-card {
+    .list-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 20px;
+      border-radius: var(--radius-lg);
       padding: 20px;
       display: flex;
       flex-direction: column;
@@ -311,26 +258,6 @@
       }
     }
 
-    .saving-form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-
-      .form-row {
-        width: 100%;
-      }
-
-      .full-width {
-        width: 100%;
-      }
-
-      .submit-btn {
-        width: 100%;
-        padding: 12px;
-        border-radius: 12px;
-        font-weight: 600;
-      }
-    }
 
     .table-container {
       width: 100%;
@@ -373,7 +300,7 @@
 
         .monto-cell {
           font-weight: 700;
-          color: #8b5cf6;
+          color: var(--violet-color);
         }
 
         tr:hover {
@@ -403,5 +330,28 @@
     display: block;
     overflow-x: auto;
     white-space: nowrap;
+  }
+}
+
+// Vive en el diálogo de carga (fuera de .ahorros-container).
+.saving-form {
+  padding-top: 8px; // sin esto el borde del diálogo corta la etiqueta del primer campo
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .form-row {
+    width: 100%;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
   }
 }

@@ -1,29 +1,15 @@
 .list-container {
-  background: var(--bg-card, #1e293b);
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.05));
-  border-radius: 20px;
+  // Issue #38: la misma tarjeta de vidrio en Gastos, Ingresos y Personas.
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-highlight), 0 8px 24px rgba(0, 0, 0, 0.25);
   padding: 24px;
-  animation: fadeIn 0.4s ease-out;
-}
+  overflow: hidden;
 
-.list-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 24px;
-  
-  h2 {
-    margin: 0;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 700;
-    font-size: 1.6rem;
-    color: var(--text-primary);
-  }
-
-  button {
-    border-radius: 12px;
-    padding: 8px 16px;
-    font-weight: 600;
-  }
+  @media (max-width: 599px) { padding: 16px 12px; }
 }
 
 .spacer {
@@ -39,7 +25,7 @@
   padding: 16px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -62,7 +48,7 @@
 
   .clear-filters-btn {
     height: 56px; /* Match Material outline field height */
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -103,7 +89,7 @@
     font-size: 20px;
     width: 20px;
     height: 20px;
-    color: #3b82f6;
+    color: var(--info-color);
   }
 
   span {
@@ -115,7 +101,7 @@
 .amount {
   font-weight: 700;
   font-family: 'Outfit', sans-serif;
-  color: #f43f5e;
+  color: var(--danger-strong);
 }
 
 .user-avatar-row {
@@ -133,7 +119,7 @@
     font-size: 22px;
     width: 22px;
     height: 22px;
-    color: #10b981;
+    color: var(--success-strong);
   }
 }
 
@@ -149,14 +135,14 @@
   }
 
   .paid-icon {
-    color: #10b981;
+    color: var(--success-strong);
     font-size: 24px;
     width: 24px;
     height: 24px;
   }
 
   .pending-icon {
-    color: #f59e0b;
+    color: var(--warning-color);
     font-size: 24px;
     width: 24px;
     height: 24px;
@@ -262,7 +248,7 @@
 .gasto-card {
   background: var(--bg-dark-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 12px 14px;
 
   .card-fila-1 {

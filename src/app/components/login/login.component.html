@@ -6,7 +6,9 @@
         <mat-icon>account_balance_wallet</mat-icon>
       </div>
       <h1>App Gastos</h1>
-      <p>{{registrando ? 'Creá tu cuenta: tus gastos quedan separados de los de otros usuarios' : 'Ingresa tus credenciales para continuar'}}</p>
+      <p *ngIf="!registrando">Ingresa tus credenciales para continuar</p>
+      <p *ngIf="registrando && !form.value.invitacion">Creá tu cuenta: tus gastos quedan separados de los de otros usuarios</p>
+      <p *ngIf="registrando && form.value.invitacion">Te invitaron a un hogar: creá tu cuenta para ver y cargar sus gastos</p>
     </div>
 
     <!-- Formulario -->
@@ -37,6 +39,13 @@
         <mat-hint class="hint-error" *ngIf="form.errors?.['noCoinciden'] && form.get('confirmar')?.dirty">
           Las contraseñas no coinciden
         </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="registrando">
+        <mat-label>Código de invitación (opcional)</mat-label>
+        <input matInput formControlName="invitacion" autocomplete="off">
+        <mat-icon matPrefix>group_add</mat-icon>
+        <mat-hint>Para sumarte a otro hogar</mat-hint>
       </mat-form-field>
 
       <!-- Permanecer activo -->

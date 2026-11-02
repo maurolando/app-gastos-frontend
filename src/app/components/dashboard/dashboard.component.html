@@ -1,4 +1,4 @@
-<div class="dashboard-container">
+<div class="page dashboard-container">
   <!-- Issue #30: sin categorias de gasto el formulario de gasto solo muestra un
        desplegable vacio, sin decir que falta. Esto lo dice y lleva al lugar. -->
   <div class="aviso-sin-categorias" *ngIf="sinCategoriasDeGasto$ | async">
@@ -12,8 +12,14 @@
     </a>
   </div>
 
-  <div class="header">
-    <div class="filters">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ vista === 'pagos' ? 'Pagos y presupuestos' : 'Balance' }}</h1>
+      <p class="page-subtitle">
+        {{ vista === 'pagos' ? 'Lo que falta pagar este mes y cómo vas con cada presupuesto' : 'Resumen del mes elegido' }}
+      </p>
+    </div>
+    <div class="page-actions">
       <mat-form-field appearance="outline">
         <mat-label>Mes</mat-label>
         <mat-select [formControl]="monthControl">
@@ -26,21 +32,24 @@
           <mat-option *ngFor="let y of years" [value]="y">{{y}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-flat-button color="primary" (click)="openAddExpense()" class="nuevo-gasto-btn">
-        <mat-icon>add</mat-icon> Nuevo Gasto
-      </button>
-      <button mat-flat-button color="accent" (click)="finalizeMonth()">
-        <mat-icon>task_alt</mat-icon> Finalizar Mes
-      </button>
-      <button mat-flat-button color="primary" (click)="descargarReporte()" style="margin-left: 8px;">
-        <mat-icon>picture_as_pdf</mat-icon> Reporte PDF
-      </button>
-      <button mat-flat-button color="accent" (click)="openBudgetDialog()" style="margin-left: 8px;">
+      <ng-container *ngIf="vista === 'resumen'">
+        <button mat-stroked-button (click)="finalizeMonth()">
+          <mat-icon>task_alt</mat-icon> Finalizar mes
+        </button>
+        <button mat-stroked-button (click)="descargarReporte()">
+          <mat-icon>picture_as_pdf</mat-icon> Reporte PDF
+        </button>
+      </ng-container>
+      <button *ngIf="vista === 'pagos'" mat-stroked-button (click)="openBudgetDialog()">
         <mat-icon>account_balance</mat-icon> Presupuestos
+      </button>
+      <button mat-flat-button color="accent" (click)="openAddExpense()">
+        <mat-icon>add</mat-icon> Nuevo gasto
       </button>
     </div>
   </div>
 
+  <ng-container *ngIf="vista === 'resumen'">
   <!-- BANNERS DE ALERTA -->
   <div class="alerts-container" *ngIf="(alerts$ | async) as alerts">
     <div *ngFor="let alert of alerts" 
@@ -62,8 +71,8 @@
         </span>
       </div>
       
-      <button mat-button (click)="alert.gasto.esCompartido ? openSharedPayment(alert.gasto) : payGasto(alert.gasto)">
-        PAGAR AHORA
+      <button mat-flat-button class="alert-pay" (click)="alert.gasto.esCompartido ? openSharedPayment(alert.gasto) : payGasto(alert.gasto)">
+        Pagar ahora
       </button>
     </div>
   </div>
@@ -127,6 +136,26 @@
   </div>
 
 
+  <div class="chart-row">
+      <mat-card class="chart-card mat-elevation-z3">
+        <mat-card-header>
+          <mat-card-title>Gastos por Método de Pago</mat-card-title>
+          <mat-card-subtitle>Solo gastos pagados</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper">
+            <canvas baseChart 
+                    [data]="(pieChartData$ | async)!" 
+                    [options]="pieChartOptions" 
+                    [type]="pieChartType">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+  </div>
+  </ng-container>
+
+  <ng-container *ngIf="vista === 'pagos'">
   <div class="main-content-grid">
     <div class="left-column">
       <mat-card class="pending-card mat-elevation-z3">
@@ -180,21 +209,7 @@
     <div class="right-column">
       <app-regla-presupuesto-card [mes]="monthControl.value" [anio]="yearControl.value"></app-regla-presupuesto-card>
 
-      <mat-card class="chart-card mat-elevation-z3" style="margin-bottom: 24px;">
-        <mat-card-header>
-          <mat-card-title>Gastos por Método de Pago</mat-card-title>
-          <mat-card-subtitle>Solo gastos pagados</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="chart-wrapper">
-            <canvas baseChart 
-                    [data]="(pieChartData$ | async)!" 
-                    [options]="pieChartOptions" 
-                    [type]="pieChartType">
-            </canvas>
-          </div>
-        </mat-card-content>
-      </mat-card>
+
 
       <!-- SECCIÓN DE PRESUPUESTOS -->
       <mat-card class="budget-card mat-elevation-z3" *ngIf="(budgetProgress$ | async) as budgets">
@@ -202,7 +217,7 @@
           <mat-card-title>Progreso de Presupuestos</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div *ngIf="budgets.length === 0" style="text-align: center; color: #94a3b8; padding: 16px;">
+          <div *ngIf="budgets.length === 0" style="text-align: center; color: var(--text-secondary); padding: 16px;">
             <p>No tienes presupuestos configurados para este mes.</p>
             <button mat-button color="primary" (click)="openBudgetDialog()">Configurar</button>
           </div>
@@ -217,7 +232,7 @@
                 <span>{{ b.amountSpent | number:'1.0-0' }} / {{ b.budgetAmount | number:'1.0-0' }} Gs.</span>
               </div>
               <mat-progress-bar mode="determinate" [value]="b.percentage" [color]="b.color"></mat-progress-bar>
-              <div style="text-align: right; font-size: 12px; margin-top: 4px;" [ngStyle]="{'color': b.color === 'warn' ? '#f44336' : '#64748b'}">
+              <div style="text-align: right; font-size: 12px; margin-top: 4px;" [ngStyle]="{'color': b.color === 'warn' ? 'var(--danger-color)' : 'var(--text-secondary)'}">
                 {{ b.percentage | number:'1.0-0' }}% utilizado
               </div>
             </div>
@@ -227,4 +242,5 @@
 
     </div>
   </div>
+  </ng-container>
 </div>

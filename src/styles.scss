@@ -32,10 +32,42 @@ $dark-theme: mat.define-dark-theme((
   --accent-light: #818cf8;       // Indigo 400
   --accent-glow: rgba(99, 102, 241, 0.15);
   
-  --success-color: #34d399;      // Emerald 400
-  --danger-color: #f87171;       // Red 400
-  
+  --success-color: #34d399;      // Emerald 400 (texto sobre fondo oscuro)
+  --danger-color: #f87171;       // Red 400 (texto sobre fondo oscuro)
+
   --border-subtle: #334155;      // Slate 700
+
+  // Issue #38: los colores que antes se repetían escritos a mano en cada componente.
+  // "-strong" es el tono para rellenos y botones; el de arriba, para texto.
+  --success-strong: #10b981;     // Emerald 500
+  --success-deep: #059669;       // Emerald 600
+  --danger-strong: #f43f5e;      // Rose 500
+  --warning-color: #f59e0b;      // Amber 500
+  --info-color: #3b82f6;         // Blue 500
+  --violet-color: #8b5cf6;       // Violet 500
+  --violet-light: #a78bfa;       // Violet 400
+
+  // Cada concepto tiene un solo color en todas las ventanas.
+  --grad-ingreso: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --grad-gasto: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  --grad-ahorro: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  --grad-balance: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+
+  --radius-sm: 8px;              // chips, iconos, campos
+  --radius-md: 12px;             // filas, botones, avisos
+  --radius-lg: 20px;             // tarjetas y diálogos
+
+  // Liquid glass: superficie translúcida con desenfoque. Solo se nota porque el
+  // fondo de la app tiene manchas de color (ver body).
+  --glass-bg: rgba(30, 41, 59, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glass-blur: blur(18px) saturate(140%);
+
+  // Se usaban en varios componentes sin estar definidas, y esas tarjetas
+  // quedaban sin fondo ni borde.
+  --bg-card: var(--glass-bg);
+  --border-color: var(--glass-border);
 }
 
 // --- Global Resets ---
@@ -45,6 +77,17 @@ html, body {
   font-family: 'Inter', "Helvetica Neue", sans-serif;
   background-color: var(--bg-dark-base);
   color: var(--text-primary);
+}
+
+// Manchas de color fijas detrás del contenido: sin ellas el vidrio de las
+// tarjetas no tiene nada que desenfocar y se ve como un gris plano.
+body {
+  background:
+    radial-gradient(40rem 30rem at 85% -10%, rgba(99, 102, 241, 0.22), transparent 70%),
+    radial-gradient(35rem 28rem at -10% 60%, rgba(16, 185, 129, 0.14), transparent 70%),
+    radial-gradient(30rem 25rem at 70% 110%, rgba(139, 92, 246, 0.16), transparent 70%),
+    var(--bg-dark-base);
+  background-attachment: fixed;
 }
 
 // Typography overrides
@@ -225,3 +268,87 @@ textarea[matInput]:not(.sin-mayusculas) {
   }
 }
 
+
+
+/* ===== Issue #38: patrón común de ventanas ===== */
+
+// Liquid glass en tarjetas y diálogos. Las tarjetas de resumen (.stat-card)
+// pisan el fondo con su degradé de color y quedan sólidas, para que los montos
+// se lean bien.
+.mat-mdc-card:not(.stat-card) {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--glass-highlight), 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background: rgba(30, 41, 59, 0.88) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--glass-highlight), 0 20px 50px rgba(0, 0, 0, 0.45) !important;
+}
+
+// Contenedor de cada ventana: mismo ancho máximo y mismos márgenes en todas.
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// Encabezado de cada ventana: título y subtítulo a la izquierda, acciones a la
+// derecha. En pantalla chica las acciones bajan debajo del título.
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .page-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  .page-subtitle {
+    margin: 4px 0 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .page-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    mat-form-field { width: 140px; }
+
+    // Sin esto los selects de mes/año dejan un hueco de 22px debajo y los
+    // botones quedan desalineados.
+    .mat-mdc-form-field-subscript-wrapper { display: none; }
+  }
+}
+
+@media (max-width: 599px) {
+  .page { gap: 16px; }
+
+  .page-header {
+    .page-title { font-size: 1.5rem; }
+
+    .page-actions {
+      width: 100%;
+
+      mat-form-field { flex: 1 1 calc(50% - 4px); width: auto; }
+      button, a { flex: 1 1 calc(50% - 4px); }
+    }
+  }
+}

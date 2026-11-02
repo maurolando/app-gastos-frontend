@@ -6,6 +6,7 @@ import { Observable, combineLatest, map, startWith, switchMap, Subject, takeUnti
 import { FormControl } from '@angular/forms';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { PaymentDialogComponent } from '../payment-dialog/payment-dialog.component';
 import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-payment-dialog.component';
 import { NotificationService } from 'src/app/services/notification/notification.service';
@@ -29,6 +30,10 @@ const STORAGE_YEAR_KEY = 'dashboard_selectedYear';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
+
+  /** Issue #38: el mismo componente sirve dos ventanas (ver app-routing). 'resumen'
+      muestra totales y gráfico; 'pagos', pendientes y presupuestos. */
+  vista: 'resumen' | 'pagos';
 
   // Restore last selected month/year from localStorage, or default to current
   monthControl = new FormControl(
@@ -78,8 +83,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private ingresoService: IngresoService,
     private ahorroService: AhorroService,
     private dialog: MatDialog,
-    private notify: NotificationService
-  ) {}
+    private notify: NotificationService,
+    private route: ActivatedRoute
+  ) {
+    this.vista = this.route.snapshot.data['vista'] ?? 'resumen';
+  }
 
   ngOnInit(): void {
     // Persist selection in localStorage whenever user changes it

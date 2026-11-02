@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, combineLatest, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
@@ -43,13 +44,17 @@ export class AhorrosComponent implements OnInit, OnDestroy {
 
   savingForm: FormGroup;
 
+  @ViewChild('cargaAhorro') cargaAhorroTpl!: TemplateRef<unknown>;
+  private cargaRef?: MatDialogRef<unknown>;
+
   constructor(
     private fb: FormBuilder,
     private expenseService: ExpenseService,
     private ingresoService: IngresoService,
     private ahorroService: AhorroService,
     private personaService: PersonaService,
-    private notify: NotificationService
+    private notify: NotificationService,
+    private dialog: MatDialog
   ) {
     this.savingForm = this.fb.group({
       monto: ['', [Validators.required, Validators.min(0.01)]],
@@ -108,6 +113,10 @@ export class AhorrosComponent implements OnInit, OnDestroy {
     );
   }
 
+  abrirCargaAhorro() {
+    this.cargaRef = this.dialog.open(this.cargaAhorroTpl, { width: '440px' });
+  }
+
   cargarAhorro() {
     if (this.savingForm.valid) {
       const v = this.savingForm.value;
@@ -125,6 +134,7 @@ export class AhorrosComponent implements OnInit, OnDestroy {
             });
             this.savingForm.markAsPristine();
             this.savingForm.markAsUntouched();
+            this.cargaRef?.close();
           },
           error: (err) => {
             console.error('Error al cargar ahorro:', err);

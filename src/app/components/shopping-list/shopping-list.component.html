@@ -1,13 +1,13 @@
-<div class="shopping-container">
-  <div class="header">
-    <div class="title-section">
-      <h1>Lista de Compras</h1>
-      <p>Apunta lo que necesitas comprar, sin afectar tu balance</p>
+<div class="page shopping-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Lista de compras</h1>
+      <p class="page-subtitle">Lo que hay que comprar, sin afectar el balance</p>
     </div>
-    <div class="actions">
+    <div class="page-actions">
       <button mat-flat-button color="accent" (click)="toggleAdd()">
         <mat-icon>{{ isAdding ? 'close' : 'add' }}</mat-icon>
-        {{ isAdding ? 'Cancelar' : 'Nuevo Artículo' }}
+        {{ isAdding ? 'Cancelar' : 'Nuevo artículo' }}
       </button>
     </div>
   </div>

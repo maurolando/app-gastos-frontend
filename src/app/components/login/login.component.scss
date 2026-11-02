@@ -13,7 +13,7 @@
 .login-card {
   background: var(--bg-dark-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: 24px;
+  border-radius: var(--radius-lg);
   padding: 48px 40px;
   width: 100%;
   max-width: 420px;
@@ -36,8 +36,8 @@
     justify-content: center;
     width: 72px;
     height: 72px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--accent-color), var(--violet-color));
     margin-bottom: 20px;
     box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
 
@@ -132,6 +132,6 @@
     font-size: 16px;
     width: 16px;
     height: 16px;
-    color: #10b981;
+    color: var(--success-strong);
   }
 }

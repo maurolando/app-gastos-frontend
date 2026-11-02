@@ -64,7 +64,7 @@ export class SharedPaymentDialogComponent implements OnInit {
           if (nuevoTotal >= this.data.amount) {
             this.notify.success('¡Gasto completamente pagado! 🎉');
           } else {
-            this.notify.success(`Aporte registrado. Falta: Gs ${(this.data.amount - nuevoTotal).toLocaleString()}`);
+            this.notify.success(`Aporte registrado. Falta: Gs ${(this.data.amount - nuevoTotal).toLocaleString('es-PY')}`);
           }
           this.dialogRef.close(true);
         },

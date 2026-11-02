@@ -1,11 +1,20 @@
-<div class="list-container mat-elevation-z3">
-  <div class="list-header">
-    <h2>Directorio de Personas</h2>
-    <span class="spacer"></span>
-    <button mat-flat-button color="accent" (click)="openAddPersona()">
-      <mat-icon>person_add</mat-icon> Nueva Persona
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Personas</h1>
+      <p class="page-subtitle">Quiénes forman parte del hogar</p>
+    </div>
+    <div class="page-actions">
+    <button mat-stroked-button (click)="invitar()" [disabled]="generando">
+      <mat-icon>qr_code_2</mat-icon> Invitar al hogar
     </button>
+    <button mat-flat-button color="accent" (click)="openAddPersona()">
+      <mat-icon>person_add</mat-icon> Nueva persona
+    </button>
+    </div>
   </div>
+
+  <div class="list-container mat-elevation-z3">
 
   <table mat-table [dataSource]="(personas$ | async) || []" class="personas-table">
     <ng-container matColumnDef="nombre">
@@ -20,7 +29,7 @@
 
     <ng-container matColumnDef="creadoEn">
       <th mat-header-cell *matHeaderCellDef> Fecha de Registro </th>
-      <td mat-cell *matCellDef="let element"> {{element.creadoEn | date:'medium'}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.creadoEn | date:'dd/MM/yyyy HH:mm'}} </td>
     </ng-container>
 
     <ng-container matColumnDef="activo">
@@ -53,3 +62,26 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </div>
+</div>
+
+<!-- Issue #35: quien escanea el QR crea su cuenta dentro de este hogar. -->
+<ng-template #invitacionDialog>
+  <h2 mat-dialog-title>Invitar al hogar</h2>
+  <mat-dialog-content class="invitacion">
+    <p class="invitacion-texto">
+      Que la otra persona escanee el código con la cámara del celular. Va a crear su
+      cuenta y ver y cargar los mismos gastos e ingresos que vos.
+    </p>
+    <img [src]="invitacion?.qr" alt="Código QR de invitación" class="invitacion-qr">
+    <div class="invitacion-codigo">{{ invitacion?.codigo }}</div>
+    <p class="invitacion-vence">
+      Sirve una sola vez. Vence el {{ invitacion?.expiraEn | date:'dd/MM/yyyy HH:mm' }}.
+    </p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cerrar</button>
+    <button mat-flat-button color="accent" (click)="compartirInvitacion()">
+      <mat-icon>share</mat-icon> Compartir
+    </button>
+  </mat-dialog-actions>
+</ng-template>

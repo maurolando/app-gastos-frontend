@@ -1,7 +1,10 @@
-<div class="list-container">
-  <div class="list-header">
-    <h1>Gestión de Categorías</h1>
-    <div class="header-actions">
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Categorías</h1>
+      <p class="page-subtitle">Cómo se agrupan los gastos y los ingresos</p>
+    </div>
+    <div class="page-actions">
       <!-- Botones de Acción (Solo se ven si hay selección) -->
       <ng-container *ngIf="selectedCategoria">
         <button mat-mini-fab color="primary" (click)="editCat(selectedCategoria, $event)" matTooltip="Editar categoría" class="action-btn">
@@ -13,8 +16,8 @@
         <div class="divider"></div>
       </ng-container>
 
-      <button mat-fab color="primary" (click)="openForm()" matTooltip="Nueva Categoría">
-        <mat-icon>add</mat-icon>
+      <button mat-flat-button color="accent" (click)="openForm()">
+        <mat-icon>add</mat-icon> Nueva categoría
       </button>
     </div>
   </div>

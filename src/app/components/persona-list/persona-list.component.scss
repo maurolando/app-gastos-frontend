@@ -1,20 +1,21 @@
 .list-container {
-  background: var(--bg-dark-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  // Issue #38: la misma tarjeta de vidrio en Gastos, Ingresos y Personas.
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-highlight), 0 8px 24px rgba(0, 0, 0, 0.25);
   padding: 24px;
+  overflow: hidden;
+
+  @media (max-width: 599px) { padding: 16px 12px; }
 }
 
-.list-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 24px;
-  h2 { margin: 0; font-weight: 500; color: var(--text-primary); }
-}
 .spacer { flex: 1 1 auto; }
 
 .password-btn {
-  color: #f59e0b;
+  color: var(--warning-color);
   transition: color 0.2s, transform 0.2s;
   &:hover {
     color: #fbbf24;
@@ -37,7 +38,7 @@
 
 .status-badge {
   padding: 4px 12px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-size: 0.85rem;
   font-weight: 500;
   background-color: rgba(248, 113, 113, 0.2);
@@ -63,4 +64,36 @@
     overflow-x: auto;
     white-space: nowrap;
   }
+}
+
+// Diálogo de invitación (issue #35)
+.invitacion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.invitacion-texto, .invitacion-vence {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+// Fondo blanco propio: la cámara necesita contraste, el vidrio del diálogo no sirve.
+.invitacion-qr {
+  width: 220px;
+  height: 220px;
+  image-rendering: pixelated;
+  background: #fff;
+  border-radius: var(--radius-md);
+}
+
+.invitacion-codigo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--text-primary);
 }
