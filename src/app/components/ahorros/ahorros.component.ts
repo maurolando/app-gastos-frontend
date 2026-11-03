@@ -8,7 +8,8 @@ import { IngresoService } from 'src/app/services/ingreso/ingreso.service';
 import { AhorroService, Ahorro } from 'src/app/services/ahorro/ahorro.service';
 import { PersonaService, Persona } from 'src/app/services/persona/persona.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
-import { toLocalISODate } from 'src/app/utils/date.util';
+import { periodoDe, toLocalISODate } from 'src/app/utils/date.util';
+import { HogarService } from 'src/app/services/hogar/hogar.service';
 
 const SAVINGS_GOAL_KEY = 'app_gastos_savings_goal';
 
@@ -54,7 +55,8 @@ export class AhorrosComponent implements OnInit, OnDestroy {
     private ahorroService: AhorroService,
     private personaService: PersonaService,
     private notify: NotificationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private hogarService: HogarService
   ) {
     this.savingForm = this.fb.group({
       monto: ['', [Validators.required, Validators.min(0.01)]],
@@ -66,6 +68,13 @@ export class AhorrosComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.personas$ = this.personaService.getPersonas();
+
+    // El mes del hogar puede no ser el del calendario (si cobran el 4, el 3 sigue siendo el mes anterior).
+    this.hogarService.getConfig().pipe(takeUntil(this.destroy$)).subscribe(config => {
+      const { mes, anio } = periodoDe(new Date(), config.diaInicioMes);
+      this.yearControl.setValue(anio);
+      this.monthControl.setValue(mes);
+    });
 
     const data$ = combineLatest([
       this.monthControl.valueChanges.pipe(startWith(this.monthControl.value)),

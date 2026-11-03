@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CierreResult, ExpenseService, Gasto } from 'src/app/services/expense/expense.service';
 import { IngresoService } from 'src/app/services/ingreso/ingreso.service';
 import { AhorroService } from 'src/app/services/ahorro/ahorro.service';
-import { Observable, combineLatest, map, startWith, switchMap, Subject, takeUntil, shareReplay } from 'rxjs';
+import { Observable, combineLatest, map, startWith, switchMap, Subject, takeUntil, shareReplay, catchError, of } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,8 @@ import { NotificationService } from 'src/app/services/notification/notification.
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { BudgetDialogComponent } from '../budget-dialog/budget-dialog.component';
 import { ExpenseFormComponent } from '../expense-form/expense-form.component';
+import { HogarService } from 'src/app/services/hogar/hogar.service';
+import { periodoDe } from 'src/app/utils/date.util';
 
 export interface DueAlert {
   type: 'OVERDUE' | 'DUE_SOON';
@@ -84,12 +86,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private ahorroService: AhorroService,
     private dialog: MatDialog,
     private notify: NotificationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private hogarService: HogarService
   ) {
     this.vista = this.route.snapshot.data['vista'] ?? 'resumen';
   }
 
   ngOnInit(): void {
+    // Los datos se piden después del cierre automático: si van en paralelo, Apollo
+    // junta la recarga con la consulta en vuelo y se ve el mes sin lo recién copiado.
+    const listo$ = this.irAlPeriodoActual().pipe(shareReplay(1));
+
     // Persist selection in localStorage whenever user changes it
     this.monthControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(v => {
       if (v != null) localStorage.setItem(STORAGE_MONTH_KEY, String(v));
@@ -98,10 +105,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if (v != null) localStorage.setItem(STORAGE_YEAR_KEY, String(v));
     });
 
-    const filter$ = combineLatest([
+    const filter$ = listo$.pipe(switchMap(() => combineLatest([
       this.monthControl.valueChanges.pipe(startWith(this.monthControl.value)),
       this.yearControl.valueChanges.pipe(startWith(this.yearControl.value))
-    ]);
+    ])));
 
     const data$ = filter$.pipe(
       switchMap(([month, year]) => {
@@ -147,7 +154,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.balance$ = data$.pipe(map(([_, __, balance]) => balance));
     this.count$ = data$.pipe(map(([gastos]) => gastos.length));
     
-    this.lastDates$ = this.expenseService.getLastDates();
+    this.lastDates$ = listo$.pipe(switchMap(() => this.expenseService.getLastDates()));
     
     // Gastos pendientes: recurrentes no pagados + compartidos no completamente pagados
     this.pendingExpenses$ = data$.pipe(
@@ -254,6 +261,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * Cierra los meses ya terminados (si el hogar tiene el cierre automático) y, si no
+   * había un mes elegido o se cerró alguno, se para en el mes del hogar en curso.
+   */
+  private irAlPeriodoActual(): Observable<void> {
+    return this.hogarService.cerrarPendientes().pipe(
+      switchMap(cerrados => this.hogarService.getConfig().pipe(map(config => ({ cerrados, config })))),
+      map(({ cerrados, config }) => {
+        if (cerrados === 0 && localStorage.getItem(STORAGE_MONTH_KEY)) return;
+        const { mes, anio } = periodoDe(new Date(), config.diaInicioMes);
+        this.yearControl.setValue(anio);
+        this.monthControl.setValue(mes);
+        if (cerrados > 0) {
+          const label = this.months.find(x => x.value === mes)?.label;
+          this.notify.success(`Arrancó ${label}: se copiaron los gastos e ingresos fijos.`);
+        }
+      }),
+      // Si falla, el dashboard igual tiene que cargar el mes elegido.
+      catchError(err => {
+        console.error('Error al cerrar meses pendientes:', err);
+        return of(undefined);
+      })
+    );
   }
 
   finalizeMonth() {

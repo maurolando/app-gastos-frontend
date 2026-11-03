@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaSummaryDialogComponent } from '../persona-summary-dialog/persona-summary-dialog.component';
 import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
+import { HogarService } from 'src/app/services/hogar/hogar.service';
 
 @Component({
   selector: 'app-persona-list',
@@ -22,7 +23,40 @@ export class PersonaListComponent implements OnInit {
   invitacion?: { codigo: string; expiraEn: string; enlace: string; qr: string };
   generando = false;
 
-  constructor(private service: PersonaService, private dialog: MatDialog, private notify: NotificationService) {}
+  @ViewChild('mesDialog') mesTpl!: TemplateRef<unknown>;
+  /** Del 29 en adelante febrero no tendría día de inicio. */
+  dias = Array.from({ length: 28 }, (_, i) => i + 1);
+  config = { diaInicioMes: 1, cierreAutomatico: false };
+  guardando = false;
+
+  constructor(private service: PersonaService, private dialog: MatDialog, private notify: NotificationService,
+              private hogarService: HogarService) {}
+
+  /** Día en que arranca el mes del hogar (p. ej. el de cobro). Es uno solo para todas las personas. */
+  configurarMes() {
+    this.hogarService.getConfig().subscribe({
+      next: config => {
+        this.config = { ...config };
+        this.dialog.open(this.mesTpl, { width: '400px' });
+      },
+      error: err => this.notify.error(mensajeDeError(err, 'No se pudo leer la configuración.'))
+    });
+  }
+
+  guardarMes() {
+    this.guardando = true;
+    this.hogarService.setConfig(this.config.diaInicioMes, this.config.cierreAutomatico).subscribe({
+      next: () => {
+        this.guardando = false;
+        this.dialog.closeAll();
+        this.notify.success('Listo: el mes del hogar arranca el día ' + this.config.diaInicioMes);
+      },
+      error: err => {
+        this.guardando = false;
+        this.notify.error(mensajeDeError(err, 'No se pudo guardar.'));
+      }
+    });
+  }
 
   /** Issue #35: código + QR para que otra persona cree su cuenta dentro de este hogar. */
   invitar() {
