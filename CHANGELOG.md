@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.8.1...v1.9.0) (2026-11-02)
+
+
+### Features
+
+* invitar al hogar con QR y código ([#35](https://github.com/maurolando/app-gastos-frontend/issues/35)) ([ba9a766](https://github.com/maurolando/app-gastos-frontend/commit/ba9a766730d5021a9a33bb1ecfbf7182c59931f5))
+
+
+### Bug Fixes
+
+* patrón común de ventanas, español de Paraguay y liquid glass ([#38](https://github.com/maurolando/app-gastos-frontend/issues/38)) ([99128c2](https://github.com/maurolando/app-gastos-frontend/commit/99128c29aa02e4ac11145000fe956be7e011e9ab))
+
 ## [1.8.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.8.0...v1.8.1) (2026-10-26)
 
 
