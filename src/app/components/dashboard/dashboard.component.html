@@ -82,6 +82,10 @@
       <mat-card-header>
         <mat-icon mat-card-avatar>payments</mat-icon>
         <mat-card-title>Balance Global</mat-card-title>
+        <button mat-icon-button class="ajustar-balance" (click)="abrirAjusteBalance()"
+                matTooltip="Ajustar balance" aria-label="Ajustar balance">
+          <mat-icon>tune</mat-icon>
+        </button>
       </mat-card-header>
       <mat-card-content>
         <h2>{{ balance$ | async | number:'1.0-0' }} Gs.</h2>

@@ -115,6 +115,32 @@ const GET_GLOBAL_BALANCE = gql`
   }
 `;
 
+/** Corrección manual del balance del mes (#50): positivo suma, negativo resta. */
+export interface AjusteBalance {
+  id: string;
+  monto: number;
+  fecha: string;
+  descripcion?: string;
+}
+
+const GET_AJUSTES_BALANCE = gql`
+  query GetAjustesBalance($mes: Int, $anio: Int) {
+    getAjustesBalance(mes: $mes, anio: $anio) { id monto fecha descripcion }
+  }
+`;
+
+const CREATE_AJUSTE_BALANCE = gql`
+  mutation CreateAjusteBalance($monto: Float!, $fecha: String, $descripcion: String) {
+    createAjusteBalance(monto: $monto, fecha: $fecha, descripcion: $descripcion) { id }
+  }
+`;
+
+const DELETE_AJUSTE_BALANCE = gql`
+  mutation DeleteAjusteBalance($id: ID!) {
+    deleteAjusteBalance(id: $id)
+  }
+`;
+
 const CREATE_GASTO = gql`
   mutation CreateGasto($amount: Float!, $categoriaId: ID!, $date: String!, $description: String, $personaId: ID!, $formaPago: String, $recurrent: Boolean, $pagado: Boolean, $fechaVencimiento: String, $esCompartido: Boolean, $cuotaActual: Int, $cuotasTotales: Int) {
     createGasto(amount: $amount, categoriaId: $categoriaId, date: $date, description: $description, personaId: $personaId, formaPago: $formaPago, recurrent: $recurrent, pagado: $pagado, fechaVencimiento: $fechaVencimiento, esCompartido: $esCompartido, cuotaActual: $cuotaActual, cuotasTotales: $cuotasTotales) {
@@ -362,6 +388,32 @@ export class ExpenseService {
     }).valueChanges.pipe(
       map(result => result.data.getGlobalBalance)
     );
+  }
+
+  getAjustesBalance(mes: number, anio: number): Observable<AjusteBalance[]> {
+    return this.apollo.watchQuery<any>({
+      query: GET_AJUSTES_BALANCE,
+      variables: { mes, anio },
+      fetchPolicy: 'network-only'
+    }).valueChanges.pipe(
+      map(result => result.data.getAjustesBalance)
+    );
+  }
+
+  createAjusteBalance(monto: number, fecha: string, descripcion: string | null): Observable<unknown> {
+    return this.apollo.mutate({
+      mutation: CREATE_AJUSTE_BALANCE,
+      variables: { monto, fecha, descripcion },
+      refetchQueries: ['GetGlobalBalance', 'GetAjustesBalance']
+    });
+  }
+
+  deleteAjusteBalance(id: string): Observable<unknown> {
+    return this.apollo.mutate({
+      mutation: DELETE_AJUSTE_BALANCE,
+      variables: { id },
+      refetchQueries: ['GetGlobalBalance', 'GetAjustesBalance']
+    });
   }
 
   createGasto(gasto: any): Observable<Gasto> {

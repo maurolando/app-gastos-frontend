@@ -116,6 +116,16 @@
       font-style: italic;
     }
 
+    // Botón de ajustar balance (#50): sin el recuadro que llevan los íconos de la tarjeta.
+    .ajustar-balance {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      color: white;
+
+      mat-icon { background: none; padding: 0; margin: 0; }
+    }
+
     // Un color por concepto, el mismo que en Ahorros (variables en styles.scss).
     &.balance { background: var(--grad-balance); }
     &.total { background: var(--grad-gasto); }

@@ -111,7 +111,7 @@ export class AppComponent implements OnInit, OnDestroy {
       data: {
         title: '⚠️ ¿ESTÁS SEGURO?',
         // El mensaje no mencionaba los ahorros, que reiniciarDatos también borra.
-        message: 'Esta acción borrará TODOS los gastos, ingresos y ahorros de la '
+        message: 'Esta acción borrará TODOS los gastos, ingresos, ahorros y ajustes de balance de la '
           + 'aplicación, de todos los meses. No se puede deshacer.\n\n'
           + 'Si querés corregir un gasto puntual, editalo o borralo desde la lista de Gastos.'
       }

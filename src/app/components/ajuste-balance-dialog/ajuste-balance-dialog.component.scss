@@ -1,0 +1,32 @@
+.full-width { width: 100%; }
+
+.ayuda {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+h3 {
+  font-size: 0.9rem;
+  margin: 8px 0;
+  color: var(--text-secondary);
+}
+
+.ajuste {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--border-subtle);
+
+  .monto { font-weight: 700; white-space: nowrap; }
+  .monto.negativo { color: var(--danger-color); }
+  .detalle {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+}
