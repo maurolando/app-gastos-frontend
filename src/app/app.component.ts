@@ -30,6 +30,14 @@ export class AppComponent implements OnInit, OnDestroy {
    */
   esMovil$ = this.layout.esMovil$;
 
+  /**
+   * Safari en iPhone/iPad no ofrece instalar la app como Chrome: hay que hacerlo
+   * a mano desde Compartir, así que lo explicamos (#49). iPadOS se presenta como Mac.
+   */
+  instalableEnIos = (/iPhone|iPad|iPod/.test(navigator.userAgent)
+      || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1))
+    && !matchMedia('(display-mode: standalone)').matches;
+
   isOnline = false;
   private connectionIntervalId: any;
 
@@ -52,6 +60,13 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.layout.esMovil) {
       sidenav.close();
     }
+  }
+
+  explicarInstalacionIos() {
+    this.notify.action(
+      'Para instalarla, abrí el menú Compartir de Safari y elegí "Agregar a inicio".',
+      'Entendido'
+    );
   }
 
   ngOnInit() {
