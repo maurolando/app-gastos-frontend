@@ -13,7 +13,6 @@ import { nombreGrupo } from 'src/app/utils/distribucion.util';
 })
 export class CategoriaListComponent implements OnInit {
   categorias$!: Observable<Categoria[]>;
-  selectedCategoria: Categoria | null = null;
   nombreGrupo = nombreGrupo;
 
   constructor(
@@ -26,10 +25,6 @@ export class CategoriaListComponent implements OnInit {
     this.categorias$ = this.expenseService.getCategorias();
   }
 
-  selectCategoria(cat: Categoria) {
-    this.selectedCategoria = (this.selectedCategoria?.id === cat.id) ? null : cat;
-  }
-
   refresh() {
     this.categorias$ = this.expenseService.getCategorias();
   }
@@ -39,7 +34,6 @@ export class CategoriaListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.expenseService.createCategoria(result).subscribe(() => {
-          this.selectedCategoria = null;
           this.refresh();
           this.notify.success('Categoría creada con éxito');
         });
@@ -47,8 +41,7 @@ export class CategoriaListComponent implements OnInit {
     });
   }
 
-  editCat(cat: Categoria, event: Event) {
-    event.stopPropagation();
+  editCat(cat: Categoria) {
     const dialogRef = this.dialog.open(CategoriaFormComponent, {
       width: '400px',
       data: cat
@@ -56,7 +49,6 @@ export class CategoriaListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.expenseService.updateCategoria(cat.id, result).subscribe(() => {
-          this.selectedCategoria = null;
           this.refresh();
           this.notify.success('Categoría actualizada');
         });
@@ -64,13 +56,11 @@ export class CategoriaListComponent implements OnInit {
     });
   }
 
-  deleteCat(id: string, event: Event) {
-    event.stopPropagation();
+  deleteCat(id: string) {
     if (confirm('¿Estás seguro de que deseas eliminar esta categoría?')) {
       this.expenseService.deleteCategoria(id).subscribe({
         next: (success) => {
           if (success) {
-            this.selectedCategoria = null;
             this.refresh();
             this.notify.success('Categoría eliminada');
           } else {
