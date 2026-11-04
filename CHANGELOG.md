@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.9.0...v1.10.0) (2026-11-04)
+
+
+### Features
+
+* configurar el día de inicio del mes y cerrarlo automáticamente ([38be8f7](https://github.com/maurolando/app-gastos-frontend/commit/38be8f7260ad7047931214c7c592f4dad135ee1d))
+
 ## [1.9.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.8.1...v1.9.0) (2026-11-02)
 
 
