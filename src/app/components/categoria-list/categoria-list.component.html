@@ -5,17 +5,6 @@
       <p class="page-subtitle">Cómo se agrupan los gastos y los ingresos</p>
     </div>
     <div class="page-actions">
-      <!-- Botones de Acción (Solo se ven si hay selección) -->
-      <ng-container *ngIf="selectedCategoria">
-        <button mat-mini-fab color="primary" (click)="editCat(selectedCategoria, $event)" matTooltip="Editar categoría" class="action-btn">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-mini-fab color="warn" (click)="deleteCat(selectedCategoria.id, $event)" matTooltip="Eliminar categoría" class="action-btn">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <div class="divider"></div>
-      </ng-container>
-
       <button mat-flat-button color="accent" (click)="openForm()">
         <mat-icon>add</mat-icon> Nueva categoría
       </button>
@@ -23,10 +12,7 @@
   </div>
 
   <div class="categories-grid">
-    <mat-card *ngFor="let cat of (categorias$ | async)" 
-              class="cat-card mat-elevation-z3" 
-              [class.selected]="selectedCategoria?.id === cat.id"
-              (click)="selectCategoria(cat)">
+    <mat-card *ngFor="let cat of (categorias$ | async)" class="cat-card mat-elevation-z3">
       <mat-card-header>
         <div class="cat-icon-container">
             <mat-icon mat-card-avatar class="cat-icon">{{cat.icono || 'category'}}</mat-icon>
@@ -36,6 +22,14 @@
             <mat-card-subtitle>
               {{cat.tipo | uppercase}}<ng-container *ngIf="cat.tipo === 'GASTO'"> · {{ nombreGrupo(cat.grupo) }}</ng-container>
             </mat-card-subtitle>
+        </div>
+        <div class="cat-acciones">
+          <button mat-icon-button (click)="editCat(cat)" matTooltip="Editar categoría" aria-label="Editar categoría">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteCat(cat.id)" matTooltip="Eliminar categoría" aria-label="Eliminar categoría">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
         </div>
       </mat-card-header>
     </mat-card>

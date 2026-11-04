@@ -11,38 +11,10 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 
-  &.selected {
-    border-color: var(--accent-color);
-    background: rgba(99, 102, 241, 0.05);
-    box-shadow: 0 0 0 2px var(--accent-color);
-  }
-
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 15px -5px rgba(0, 0, 0, 0.3);
   }
-}
-
-.page-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  .action-btn {
-    animation: fadeIn 0.3s ease;
-  }
-
-  .divider {
-    width: 1px;
-    height: 32px;
-    background: var(--border-subtle);
-    margin: 0 4px;
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
 }
 
 mat-card-header {
@@ -71,6 +43,7 @@ mat-card-header {
 }
 
 .cat-header-text {
+  min-width: 0; // nombres largos se cortan en vez de empujar los botones
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -94,4 +67,12 @@ mat-card-header {
 // Sobrescribir estilos de Material para que no colapsen los textos
 ::ng-deep .mat-mdc-card-header-text {
   display: none !important; // Lo ocultamos porque usamos nuestro propio .cat-header-text para total control
+}
+
+// Acciones en cada tarjeta (#47): antes estaban arriba de la página y en el
+// móvil quedaban estiradas y lejos de la categoría.
+.cat-acciones {
+  margin-left: auto;
+  display: flex;
+  flex-shrink: 0;
 }
