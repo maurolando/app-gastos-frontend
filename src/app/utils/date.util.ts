@@ -34,3 +34,9 @@ export function toLocalISODate(value: Date | string | null | undefined): string 
   const dia = `${date.getDate()}`.padStart(2, '0');
   return `${date.getFullYear()}-${mes}-${dia}`;
 }
+
+/** Mes del hogar al que pertenece una fecha: antes del día de inicio cuenta en el mes anterior. */
+export function periodoDe(fecha: Date, diaInicio: number): { mes: number; anio: number } {
+  const ref = fecha.getDate() >= diaInicio ? fecha : new Date(fecha.getFullYear(), fecha.getMonth() - 1, 1);
+  return { mes: ref.getMonth() + 1, anio: ref.getFullYear() };
+}
