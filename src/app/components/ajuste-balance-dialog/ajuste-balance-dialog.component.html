@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Ajustar balance</h2>
+
+<mat-dialog-content>
+  <p class="ayuda">Corrige el balance de este mes sin cargar un ingreso ni un gasto: no cuenta en reportes ni en la guía.</p>
+
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Monto</mat-label>
+      <input matInput appMiles inputmode="numeric" formControlName="monto" placeholder="Ej: 50.000" required>
+      <span matTextSuffix>Gs.</span>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Motivo (opcional)</mat-label>
+      <input matInput formControlName="descripcion" placeholder="Ej: efectivo que no estaba cargado">
+    </mat-form-field>
+  </form>
+
+  <ng-container *ngIf="ajustes$ | async as ajustes">
+    <h3 *ngIf="ajustes.length">Ajustes de este mes</h3>
+    <div class="ajuste" *ngFor="let a of ajustes">
+      <span class="monto" [class.negativo]="a.monto < 0">{{ a.monto > 0 ? '+' : '' }}{{ a.monto | number:'1.0-0' }} Gs.</span>
+      <span class="detalle">{{ a.fecha | date:'dd/MM' }}<ng-container *ngIf="a.descripcion"> · {{ a.descripcion | uppercase }}</ng-container></span>
+      <button mat-icon-button color="warn" (click)="borrar(a)" matTooltip="Borrar ajuste" aria-label="Borrar ajuste">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+  <button mat-stroked-button color="warn" [disabled]="form.invalid || guardando" (click)="guardar(-1)">
+    <mat-icon>remove</mat-icon> Restar
+  </button>
+  <button mat-flat-button color="primary" [disabled]="form.invalid || guardando" (click)="guardar(1)">
+    <mat-icon>add</mat-icon> Sumar
+  </button>
+</mat-dialog-actions>

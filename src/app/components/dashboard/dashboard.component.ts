@@ -15,6 +15,7 @@ import { BudgetDialogComponent } from '../budget-dialog/budget-dialog.component'
 import { ExpenseFormComponent } from '../expense-form/expense-form.component';
 import { HogarService } from 'src/app/services/hogar/hogar.service';
 import { periodoDe } from 'src/app/utils/date.util';
+import { AjusteBalanceDialogComponent } from '../ajuste-balance-dialog/ajuste-balance-dialog.component';
 
 export interface DueAlert {
   type: 'OVERDUE' | 'DUE_SOON';
@@ -439,6 +440,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
         });
       }
+    });
+  }
+
+  abrirAjusteBalance() {
+    this.dialog.open(AjusteBalanceDialogComponent, {
+      width: '440px',
+      data: { mes: this.monthControl.value, anio: this.yearControl.value }
     });
   }
 

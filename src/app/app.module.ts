@@ -62,6 +62,7 @@ import { ShoppingListComponent } from './components/shopping-list/shopping-list.
 import { CuotasDialogComponent } from './components/cuotas-dialog/cuotas-dialog.component';
 import { MilesDirective } from './directives/miles.directive';
 import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.component';
+import { AjusteBalanceDialogComponent } from './components/ajuste-balance-dialog/ajuste-balance-dialog.component';
 import { ReglaPresupuestoCardComponent } from './components/regla-presupuesto-card/regla-presupuesto-card.component';
 import { ReglaPresupuestoDialogComponent } from './components/regla-presupuesto-dialog/regla-presupuesto-dialog.component';
 import { PresupuestosSugeridosDialogComponent } from './components/presupuestos-sugeridos-dialog/presupuestos-sugeridos-dialog.component';
@@ -108,6 +109,7 @@ export function createApollo(httpLink: HttpLink, auth: AuthService) {
     CuotasDialogComponent,
     MilesDirective,
     BudgetDialogComponent,
+    AjusteBalanceDialogComponent,
     ReglaPresupuestoCardComponent,
     ReglaPresupuestoDialogComponent,
     PresupuestosSugeridosDialogComponent
