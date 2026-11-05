@@ -26,6 +26,10 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #adminMenu="matMenu">
+        <button mat-menu-item *ngIf="instalableEnIos" (click)="explicarInstalacionIos()">
+          <mat-icon>install_mobile</mat-icon>
+          <span>Instalar app</span>
+        </button>
         <button mat-menu-item (click)="resetData()" class="reset-menu-item">
           <mat-icon color="warn">delete_forever</mat-icon>
           <span>Reiniciar Datos</span>
