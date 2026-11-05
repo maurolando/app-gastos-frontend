@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.11.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.10.0...v1.11.0) (2026-11-05)
+
+
+### Features
+
+* ajustar el balance del mes desde el dashboard ([3a7a20b](https://github.com/maurolando/app-gastos-frontend/commit/3a7a20b4e54aee2eff5026f96858e851641eaaf7)), closes [#50](https://github.com/maurolando/app-gastos-frontend/issues/50)
+
+
+### Bug Fixes
+
+* botones de editar y eliminar en cada tarjeta de categoría ([ab94184](https://github.com/maurolando/app-gastos-frontend/commit/ab9418454ba0fcd7bf685869d3807974104806f4)), closes [#47](https://github.com/maurolando/app-gastos-frontend/issues/47)
+* explicar cómo instalar la app en iPhone y iPad ([503d7dc](https://github.com/maurolando/app-gastos-frontend/commit/503d7dcc03d701e1befcc6a80d730e8730f9df0c)), closes [#49](https://github.com/maurolando/app-gastos-frontend/issues/49)
+* guardar la clasificación de categorías desde la guía ([64e0413](https://github.com/maurolando/app-gastos-frontend/commit/64e04130bda66a87fe3eb9283cc2187e45fbde9b)), closes [#48](https://github.com/maurolando/app-gastos-frontend/issues/48)
+
 ## [1.10.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.9.0...v1.10.0) (2026-11-04)
 
 
