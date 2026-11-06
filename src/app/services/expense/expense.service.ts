@@ -338,6 +338,47 @@ const GET_RESUMEN_CUOTAS = gql`
   }
 `;
 
+/** #59: saldo del mes de una persona (ingresos - gastos pagados - ahorros). */
+export interface SaldoPersona {
+  persona: { id: string; nombre: string };
+  ingresos: number;
+  gastos: number;
+  ahorros: number;
+  saldo: number;
+}
+
+const GET_SALDOS_POR_PERSONA = gql`
+  query GetSaldosPorPersona($mes: Int!, $anio: Int!) {
+    getSaldosPorPersona(mes: $mes, anio: $anio) {
+      persona { id nombre }
+      ingresos
+      gastos
+      ahorros
+      saldo
+    }
+  }
+`;
+
+/** #58: compras en cuotas a las que les falta pagar algo. */
+const GET_CUOTAS_PENDIENTES = gql`
+  query GetCuotasPendientes {
+    getCuotasPendientes {
+      cuotaActual
+      cuotasTotales
+      montoCuota
+      totalAPagar
+      totalPagado
+      saldoPendiente
+      cuotas {
+        id
+        description
+        pagado
+        categoria { id nombre }
+      }
+    }
+  }
+`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -590,6 +631,25 @@ export class ExpenseService {
    * Resumen de la compra en cuotas a la que pertenece este gasto. El backend
    * junta las cuotas hermanas: aca alcanza con el gasto que el usuario toco.
    */
+  getCuotasPendientes(): Observable<ResumenCuotas[]> {
+    return this.apollo.watchQuery<any>({
+      query: GET_CUOTAS_PENDIENTES,
+      fetchPolicy: 'network-only'
+    }).valueChanges.pipe(
+      map(result => result.data.getCuotasPendientes)
+    );
+  }
+
+  getSaldosPorPersona(mes: number, anio: number): Observable<SaldoPersona[]> {
+    return this.apollo.watchQuery<any>({
+      query: GET_SALDOS_POR_PERSONA,
+      variables: { mes, anio },
+      fetchPolicy: 'network-only'
+    }).valueChanges.pipe(
+      map(result => result.data.getSaldosPorPersona)
+    );
+  }
+
   getResumenCuotas(gastoId: string): Observable<ResumenCuotas> {
     return this.apollo.watchQuery<any>({
       query: GET_RESUMEN_CUOTAS,

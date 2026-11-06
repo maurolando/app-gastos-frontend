@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CierreResult, ExpenseService, Gasto } from 'src/app/services/expense/expense.service';
+import { Component, OnInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { CierreResult, ExpenseService, Gasto, ResumenCuotas, SaldoPersona } from 'src/app/services/expense/expense.service';
 import { IngresoService } from 'src/app/services/ingreso/ingreso.service';
 import { AhorroService } from 'src/app/services/ahorro/ahorro.service';
 import { Observable, combineLatest, map, startWith, switchMap, Subject, takeUntil, shareReplay, catchError, of } from 'rxjs';
@@ -441,6 +441,44 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  @ViewChild('cuotasDialog') cuotasTpl!: TemplateRef<unknown>;
+  @ViewChild('saldosDialog') saldosTpl!: TemplateRef<unknown>;
+  cuotasPendientes$?: Observable<{ compras: ResumenCuotas[]; total: number; pagado: number; falta: number }>;
+  saldos$?: Observable<{ personas: SaldoPersona[]; resto: number }>;
+
+  /** #58: lo que queda por pagar de cada compra en cuotas. */
+  abrirCuotasPendientes() {
+    this.cuotasPendientes$ = this.expenseService.getCuotasPendientes().pipe(map(compras => ({
+      compras,
+      total: compras.reduce((a, c) => a + c.totalAPagar, 0),
+      pagado: compras.reduce((a, c) => a + c.totalPagado, 0),
+      falta: compras.reduce((a, c) => a + c.saldoPendiente, 0)
+    })));
+    this.dialog.open(this.cuotasTpl, { width: '640px' });
+  }
+
+  nombreCompra(r: ResumenCuotas): string {
+    const ultima = r.cuotas[r.cuotas.length - 1];
+    return ultima?.description || ultima?.categoria?.nombre || 'Compra en cuotas';
+  }
+
+  cuotasQueQuedan(r: ResumenCuotas): number {
+    return r.cuotasTotales - r.cuotas.filter(c => c.pagado).length;
+  }
+
+  /** #59: cuánto le queda a cada persona; ajustes y lo cargado sin persona van aparte para que cierre con el global. */
+  abrirSaldosPorPersona() {
+    const m = this.monthControl.value!, y = this.yearControl.value!;
+    this.saldos$ = combineLatest([
+      this.expenseService.getSaldosPorPersona(m, y),
+      this.expenseService.getGlobalBalance(m, y)
+    ]).pipe(map(([personas, global]) => ({
+      personas,
+      resto: global - personas.reduce((a, p) => a + p.saldo, 0)
+    })));
+    this.dialog.open(this.saldosTpl, { width: '480px' });
   }
 
   abrirAjusteBalance() {

@@ -43,6 +43,9 @@
       <button *ngIf="vista === 'pagos'" mat-stroked-button (click)="openBudgetDialog()">
         <mat-icon>account_balance</mat-icon> Presupuestos
       </button>
+      <button *ngIf="vista === 'pagos'" mat-stroked-button (click)="abrirCuotasPendientes()">
+        <mat-icon>credit_card</mat-icon> Cuotas
+      </button>
       <button mat-flat-button color="accent" (click)="openAddExpense()">
         <mat-icon>add</mat-icon> Nuevo gasto
       </button>
@@ -89,6 +92,9 @@
       </mat-card-header>
       <mat-card-content>
         <h2>{{ balance$ | async | number:'1.0-0' }} Gs.</h2>
+        <button mat-button class="ver-por-persona" (click)="abrirSaldosPorPersona()">
+          <mat-icon>groups</mat-icon> Por persona
+        </button>
         <p class="last-record" *ngIf="(lastDates$ | async) as dates">
           Último registro: {{ dates.lastBalance !== 'N/A' ? (dates.lastBalance | date:'dd/MM/yyyy') : 'N/A' }}
         </p>
@@ -248,3 +254,76 @@
   </div>
   </ng-container>
 </div>
+
+<!-- #58: cuánto falta pagar de cada compra en cuotas. -->
+<ng-template #cuotasDialog>
+  <h2 mat-dialog-title>Cuotas pendientes</h2>
+  <mat-dialog-content>
+    <ng-container *ngIf="cuotasPendientes$ | async as c; else cargandoDialogo">
+      <p *ngIf="!c.compras.length">No hay compras en cuotas con saldo pendiente.</p>
+      <div class="tabla-scroll" *ngIf="c.compras.length">
+      <table class="tabla-dialogo">
+        <thead>
+          <tr><th>Compra</th><th>Quedan</th><th>Pagado</th><th>Falta</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of c.compras">
+            <td>{{ nombreCompra(r) }}</td>
+            <td>{{ cuotasQueQuedan(r) }} de {{ r.cuotasTotales }}</td>
+            <td>{{ r.totalPagado | number:'1.0-0' }}</td>
+            <td class="negativo">{{ r.saldoPendiente | number:'1.0-0' }}</td>
+            <td>{{ r.totalAPagar | number:'1.0-0' }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Total</th><th></th>
+            <th>{{ c.pagado | number:'1.0-0' }}</th>
+            <th class="negativo">{{ c.falta | number:'1.0-0' }}</th>
+            <th>{{ c.total | number:'1.0-0' }}</th>
+          </tr>
+        </tfoot>
+      </table>
+      </div>
+    </ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cerrar</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<!-- #59: saldo del mes de cada persona. -->
+<ng-template #saldosDialog>
+  <h2 mat-dialog-title>Saldo por persona</h2>
+  <mat-dialog-content>
+    <ng-container *ngIf="saldos$ | async as s; else cargandoDialogo">
+      <div class="tabla-scroll">
+      <table class="tabla-dialogo">
+        <thead>
+          <tr><th>Persona</th><th>Ingresos</th><th>Gastos</th><th>Ahorros</th><th>Saldo</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of s.personas">
+            <td>{{ p.persona.nombre }}</td>
+            <td>{{ p.ingresos | number:'1.0-0' }}</td>
+            <td>{{ p.gastos | number:'1.0-0' }}</td>
+            <td>{{ p.ahorros | number:'1.0-0' }}</td>
+            <td [class.negativo]="p.saldo < 0"><strong>{{ p.saldo | number:'1.0-0' }}</strong></td>
+          </tr>
+          <tr *ngIf="s.resto !== 0">
+            <td colspan="4">Ajustes y movimientos sin persona</td>
+            <td [class.negativo]="s.resto < 0">{{ s.resto | number:'1.0-0' }}</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cerrar</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #cargandoDialogo>
+  <div class="cargando-dialogo"><mat-spinner diameter="32"></mat-spinner></div>
+</ng-template>
