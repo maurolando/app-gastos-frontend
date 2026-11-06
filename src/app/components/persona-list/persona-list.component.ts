@@ -4,7 +4,7 @@ import { PersonaService, Persona, Invitacion } from 'src/app/services/persona/pe
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { mensajeDeError } from 'src/app/utils/distribucion.util';
 import { Observable } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaSummaryDialogComponent } from '../persona-summary-dialog/persona-summary-dialog.component';
 import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
@@ -74,13 +74,31 @@ export class PersonaListComponent implements OnInit {
           enlace,
           qr: qr.createDataURL(6, 4)
         };
-        this.dialog.open(this.invitacionTpl, { width: '380px' });
+        const ref = this.dialog.open(this.invitacionTpl, { width: '380px' });
+        this.cerrarAlUsarse(ref);
       },
       error: (err) => {
         this.generando = false;
         this.notify.error(mensajeDeError(err, 'No se pudo generar la invitación.'));
       }
     });
+  }
+
+  /**
+   * #57: quien invita no se entera de que el código ya se usó (escaneado o tipeado),
+   * así que mientras el QR está abierto miramos si apareció alguien nuevo en el hogar.
+   */
+  private cerrarAlUsarse(ref: MatDialogRef<unknown>) {
+    let antes: Set<string | undefined> | undefined;
+    const sub = this.service.getPersonas(3000).subscribe(personas => {
+      if (!antes) { antes = new Set(personas.map(p => p.id)); return; }
+      const nueva = personas.find(p => !antes!.has(p.id));
+      if (nueva) {
+        ref.close();
+        this.notify.success(`${nueva.nombre} se sumó al hogar`);
+      }
+    });
+    ref.afterClosed().subscribe(() => sub.unsubscribe());
   }
 
   async compartirInvitacion() {
