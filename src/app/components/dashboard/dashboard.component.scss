@@ -397,3 +397,27 @@
     span { color: var(--text-secondary); font-size: 0.9rem; }
   }
 }
+
+/* #58 y #59: tablas de los diálogos de cuotas y saldo por persona. */
+.tabla-dialogo {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  th, td {
+    padding: 8px 6px;
+    text-align: right;
+    border-bottom: 1px solid var(--border-subtle);
+    white-space: nowrap;
+  }
+  th:first-child, td:first-child { text-align: left; white-space: normal; }
+  thead th { color: var(--text-secondary); font-weight: 500; }
+  tfoot th { border-bottom: none; }
+  .negativo { color: var(--danger-color); }
+}
+
+.tabla-scroll { overflow-x: auto; }
+
+.cargando-dialogo { display: flex; justify-content: center; padding: 24px; }
+
+.ver-por-persona { margin-top: 4px; }
