@@ -109,9 +109,10 @@ export class PersonaService {
 
   constructor(private apollo: Apollo) { }
 
-  getPersonas(): Observable<Persona[]> {
+  getPersonas(pollInterval?: number): Observable<Persona[]> {
     return this.apollo.watchQuery<any>({
-      query: GET_PERSONAS
+      query: GET_PERSONAS,
+      pollInterval
     }).valueChanges.pipe(
       map(result => result.data.getAllPersonas)
     );

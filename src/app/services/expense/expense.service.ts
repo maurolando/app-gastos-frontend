@@ -255,12 +255,6 @@ const PAGAR_GASTO = gql`
   }
 `;
 
-const REINICIAR_DATOS = gql`
-  mutation ReiniciarDatos {
-    reiniciarDatos
-  }
-`;
-
 const FINALIZE_MONTH = gql`
   mutation FinalizeMonth($mesActual: Int!, $anioActual: Int!) {
     finalizarMes(mesActual: $mesActual, anioActual: $anioActual) {
@@ -549,15 +543,6 @@ export class ExpenseService {
       refetchQueries: ['GetAllGastos', 'GetGlobalBalance', 'GetLastDates']
     }).pipe(
       map(result => result.data.pagarGasto)
-    );
-  }
-
-  resetData(): Observable<boolean> {
-    return this.apollo.mutate<any>({
-      mutation: REINICIAR_DATOS,
-      refetchQueries: ['GetAllGastos', 'GetAllIngresos', 'GetGlobalBalance', 'GetLastDates', 'GetDistribucionRegla']
-    }).pipe(
-      map(result => result.data.reiniciarDatos)
     );
   }
 

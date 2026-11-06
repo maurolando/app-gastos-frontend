@@ -4,11 +4,8 @@ import { filter, map } from 'rxjs/operators';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Apollo } from 'apollo-angular';
 import { LayoutService } from './services/layout/layout.service';
-import { ExpenseService } from './services/expense/expense.service';
 import { AuthService } from './services/auth/auth.service';
 import { NotificationService } from './services/notification/notification.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { environment } from 'src/environments/environment';
 import { ActualizacionService } from './services/pwa/actualizacion.service';
 
@@ -42,11 +39,9 @@ export class AppComponent implements OnInit, OnDestroy {
   private connectionIntervalId: any;
 
   constructor(
-    private expenseService: ExpenseService,
     private auth: AuthService,
     private notify: NotificationService,
     private router: Router,
-    private dialog: MatDialog,
     private layout: LayoutService,
     private actualizacion: ActualizacionService,
     private apollo: Apollo
@@ -118,37 +113,5 @@ export class AppComponent implements OnInit, OnDestroy {
     this.apollo.client.clearStore();
     this.notify.success('Sesión cerrada');
     this.router.navigate(['/login']);
-  }
-
-  resetData() {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
-      data: {
-        title: '⚠️ ¿ESTÁS SEGURO?',
-        // El mensaje no mencionaba los ahorros, que reiniciarDatos también borra.
-        message: 'Esta acción borrará TODOS los gastos, ingresos, ahorros y ajustes de balance de la '
-          + 'aplicación, de todos los meses. No se puede deshacer.\n\n'
-          + 'Si querés corregir un gasto puntual, editalo o borralo desde la lista de Gastos.'
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.expenseService.resetData().subscribe({
-          next: (success) => {
-            if (success) {
-              this.notify.success('Datos reiniciados con éxito');
-              window.location.reload();
-            } else {
-              this.notify.error('Error al reiniciar los datos. Revisa el backend.');
-            }
-          },
-          error: (err) => {
-            console.error('Error en resetData:', err);
-            this.notify.error('Ocurrió un error de red o de GraphQL. Mira la consola.');
-          }
-        });
-      }
-    });
   }
 }
