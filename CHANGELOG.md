@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.11.0...v1.11.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* quitar Reiniciar Datos y cerrar el QR de invitación cuando se usa ([9eeda6b](https://github.com/maurolando/app-gastos-frontend/commit/9eeda6bbf2b1bd6432a8e5c29f0ca36dde3a8c3f)), closes [#56](https://github.com/maurolando/app-gastos-frontend/issues/56) [#57](https://github.com/maurolando/app-gastos-frontend/issues/57)
+
 ## [1.11.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.10.0...v1.11.0) (2026-11-05)
 
 
