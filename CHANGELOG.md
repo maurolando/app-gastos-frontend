@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.11.1...v1.12.0) (2026-11-06)
+
+
+### Features
+
+* cuotas pendientes en Pagos y saldo por persona en Balance ([d8a7781](https://github.com/maurolando/app-gastos-frontend/commit/d8a7781ea020615fa2c02c54c96882bf0040de47)), closes [#58](https://github.com/maurolando/app-gastos-frontend/issues/58) [#59](https://github.com/maurolando/app-gastos-frontend/issues/59)
+
 ## [1.11.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.11.0...v1.11.1) (2026-11-06)
 
 
