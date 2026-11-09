@@ -1,11 +1,11 @@
 .list-container {
   // Issue #38: la misma tarjeta de vidrio en Gastos, Ingresos y Personas.
-  background: var(--glass-bg);
+  background: var(--glass-sheen), var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--glass-highlight), 0 8px 24px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
   padding: 24px;
   overflow: hidden;
 

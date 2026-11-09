@@ -3,21 +3,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-dark-base);
-  background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+  // Sin fondo propio: se ve el de la app (body::before) a través del vidrio.
   padding: 24px;
 }
 
 .login-card {
-  background: var(--bg-dark-surface);
-  border: 1px solid var(--border-subtle);
+  background: var(--glass-sheen), var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: 48px 40px;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--glass-highlight), 0 30px 60px -12px rgba(8, 0, 16, 0.6);
   animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -37,9 +36,9 @@
     width: 72px;
     height: 72px;
     border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, var(--accent-color), var(--violet-color));
+    background: var(--grad-accent);
     margin-bottom: 20px;
-    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+    box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.35);
 
     mat-icon {
       font-size: 36px;
@@ -54,7 +53,7 @@
     font-weight: 800;
     color: var(--text-primary);
     margin: 0 0 8px;
-    background: linear-gradient(135deg, #ffffff, #a5b4fc);
+    background: linear-gradient(135deg, #ffffff, var(--accent-light));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }

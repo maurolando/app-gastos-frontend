@@ -37,7 +37,7 @@
     }
 
     &.selected {
-      background: rgba(99, 102, 241, 0.2);
+      background: rgba(var(--accent-rgb), 0.2);
       border: 1px solid var(--accent-color);
       color: var(--accent-light);
     }
@@ -52,7 +52,7 @@
   font-weight: 500;
   color: var(--text-primary);
   padding: 8px 12px;
-  background: rgba(99, 102, 241, 0.05);
+  background: rgba(var(--accent-rgb), 0.05);
   border-radius: var(--radius-sm);
   border: 1px dashed var(--border-subtle);
 

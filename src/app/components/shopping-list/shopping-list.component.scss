@@ -84,7 +84,8 @@
     }
 
     .item-card {
-      background: var(--bg-card);
+      background: var(--glass-sheen), var(--bg-card);
+      box-shadow: var(--glass-highlight);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
       padding: 16px;
@@ -96,8 +97,8 @@
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        border-color: rgba(255,255,255, 0.1);
+        box-shadow: var(--glass-highlight), 0 10px 24px -8px rgba(8, 0, 16, 0.5);
+        border-color: rgba(255, 255, 255, 0.24);
 
         .delete-btn {
           opacity: 1;
