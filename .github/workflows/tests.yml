@@ -1,0 +1,31 @@
+name: tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Angular 15 soporta oficialmente hasta Node 18.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npx ng build
+
+      # El runner trae Chrome instalado.
+      - name: Tests unitarios
+        run: npx ng test --watch=false --no-progress --browsers=ChromeHeadless
