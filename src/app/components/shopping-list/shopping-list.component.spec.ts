@@ -1,3 +1,4 @@
+import { moduloDePrueba } from 'src/testing/modulo-de-prueba';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShoppingListComponent } from './shopping-list.component';
@@ -7,9 +8,7 @@ describe('ShoppingListComponent', () => {
   let fixture: ComponentFixture<ShoppingListComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ ShoppingListComponent ]
-    })
+    await TestBed.configureTestingModule(moduloDePrueba([ShoppingListComponent]))
     .compileComponents();
 
     fixture = TestBed.createComponent(ShoppingListComponent);

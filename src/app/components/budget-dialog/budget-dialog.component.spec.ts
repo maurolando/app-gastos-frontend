@@ -1,3 +1,4 @@
+import { moduloDePrueba } from 'src/testing/modulo-de-prueba';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BudgetDialogComponent } from './budget-dialog.component';
@@ -7,9 +8,7 @@ describe('BudgetDialogComponent', () => {
   let fixture: ComponentFixture<BudgetDialogComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ BudgetDialogComponent ]
-    })
+    await TestBed.configureTestingModule(moduloDePrueba([BudgetDialogComponent]))
     .compileComponents();
 
     fixture = TestBed.createComponent(BudgetDialogComponent);

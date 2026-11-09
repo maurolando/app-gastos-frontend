@@ -1,3 +1,4 @@
+import { moduloDePrueba } from 'src/testing/modulo-de-prueba';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExpenseFormComponent } from './expense-form.component';
@@ -7,9 +8,7 @@ describe('ExpenseFormComponent', () => {
   let fixture: ComponentFixture<ExpenseFormComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ ExpenseFormComponent ]
-    })
+    await TestBed.configureTestingModule(moduloDePrueba([ExpenseFormComponent]))
     .compileComponents();
 
     fixture = TestBed.createComponent(ExpenseFormComponent);
