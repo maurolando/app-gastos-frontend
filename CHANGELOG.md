@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.12.1...v1.13.0) (2026-11-09)
+
+
+### Features
+
+* paleta Atardecer y liquid glass al estilo iOS ([6e75c7b](https://github.com/maurolando/app-gastos-frontend/commit/6e75c7bd79fe0f87d578137425fea44974bb1d3f))
+* personas en tarjetas en el celular ([b81be68](https://github.com/maurolando/app-gastos-frontend/commit/b81be68d2fc895bdada340b7349bb2fff61a834f))
+
 ## [1.12.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.12.0...v1.12.1) (2026-11-09)
 
 
