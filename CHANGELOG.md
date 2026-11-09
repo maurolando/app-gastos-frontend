@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.12.0...v1.12.1) (2026-11-09)
+
+
+### Bug Fixes
+
+* contar como pagadas las cuotas anteriores a la primera cargada ([7c11f69](https://github.com/maurolando/app-gastos-frontend/commit/7c11f695180ba7a78b30d40b43cdaaa61df19179)), closes [#64](https://github.com/maurolando/app-gastos-frontend/issues/64)
+
 ## [1.12.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.11.1...v1.12.0) (2026-11-06)
 
 
