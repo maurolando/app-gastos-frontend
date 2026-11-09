@@ -1,3 +1,4 @@
+import { moduloDePrueba } from 'src/testing/modulo-de-prueba';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExpenseListComponent } from './expense-list.component';
@@ -7,9 +8,7 @@ describe('ExpenseListComponent', () => {
   let fixture: ComponentFixture<ExpenseListComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ ExpenseListComponent ]
-    })
+    await TestBed.configureTestingModule(moduloDePrueba([ExpenseListComponent]))
     .compileComponents();
 
     fixture = TestBed.createComponent(ExpenseListComponent);

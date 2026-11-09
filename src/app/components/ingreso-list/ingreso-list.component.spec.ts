@@ -1,3 +1,4 @@
+import { moduloDePrueba } from 'src/testing/modulo-de-prueba';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { IngresoListComponent } from './ingreso-list.component';
@@ -7,9 +8,7 @@ describe('IngresoListComponent', () => {
   let fixture: ComponentFixture<IngresoListComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ IngresoListComponent ]
-    })
+    await TestBed.configureTestingModule(moduloDePrueba([IngresoListComponent]))
     .compileComponents();
 
     fixture = TestBed.createComponent(IngresoListComponent);
