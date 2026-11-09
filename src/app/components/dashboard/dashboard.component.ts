@@ -465,7 +465,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   cuotasQueQuedan(r: ResumenCuotas): number {
-    return r.cuotasTotales - r.cuotas.filter(c => c.pagado).length;
+    // #64: las cuotas anteriores a la primera cargada se pagaron antes de usar la app.
+    const previas = (r.cuotas[0]?.cuotaActual ?? 1) - 1;
+    return r.cuotasTotales - previas - r.cuotas.filter(c => c.pagado).length;
   }
 
   /** #59: cuánto le queda a cada persona; ajustes y lo cargado sin persona van aparte para que cierre con el global. */
