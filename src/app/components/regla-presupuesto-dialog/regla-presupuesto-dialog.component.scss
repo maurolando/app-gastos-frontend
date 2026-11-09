@@ -56,9 +56,9 @@
     border: 1px solid rgba(52, 211, 153, 0.3);
 
     &.actual {
-      background: rgba(99, 102, 241, 0.15);
+      background: rgba(var(--accent-rgb), 0.15);
       color: var(--accent-light);
-      border-color: rgba(99, 102, 241, 0.3);
+      border-color: rgba(var(--accent-rgb), 0.3);
     }
   }
 

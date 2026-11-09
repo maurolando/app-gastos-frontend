@@ -2,70 +2,72 @@
 
 @include mat.core();
 
-// Definición de paletas oscuras basadas en Navy/Slate
-$slate-primary: mat.define-palette(mat.$indigo-palette, 400, 300, 700);
-$slate-accent: mat.define-palette(mat.$teal-palette, A200, A100, A400);
-$slate-warn: mat.define-palette(mat.$red-palette, 500);
+// Paleta "Atardecer": magenta y coral sobre ciruela.
+$atardecer-primary: mat.define-palette(mat.$pink-palette, 300, 100, 500);
+$atardecer-accent: mat.define-palette(mat.$deep-orange-palette, 300, 100, 400);
+$atardecer-warn: mat.define-palette(mat.$red-palette, 400);
 
-// Creamos un tema oscuro personalizado
 $dark-theme: mat.define-dark-theme((
   color: (
-    primary: $slate-primary,
-    accent: $slate-accent,
-    warn: $slate-warn,
+    primary: $atardecer-primary,
+    accent: $atardecer-accent,
+    warn: $atardecer-warn,
   )
 ));
 
-// Aplicar el tema globalmente
 @include mat.all-component-themes($dark-theme);
 
 // --- CSS Variables para nuestro propio uso ---
 :root {
-  --bg-dark-base: #0f172a;       // Slate 900
-  --bg-dark-surface: #1e293b;    // Slate 800
-  --bg-dark-card: rgba(30, 41, 59, 0.7);
-  
-  --text-primary: #f8fafc;       // Slate 50
-  --text-secondary: #94a3b8;     // Slate 400
-  
-  --accent-color: #6366f1;       // Indigo 500
-  --accent-light: #818cf8;       // Indigo 400
-  --accent-glow: rgba(99, 102, 241, 0.15);
-  
-  --success-color: #34d399;      // Emerald 400 (texto sobre fondo oscuro)
-  --danger-color: #f87171;       // Red 400 (texto sobre fondo oscuro)
+  --bg-dark-base: #1a0b26;       // ciruela
+  --bg-dark-surface: rgba(255, 255, 255, 0.06);   // superficies internas (filas, recuadros): vidrio sin desenfoque
 
-  --border-subtle: #334155;      // Slate 700
+  --text-primary: #fff5fa;
+  --text-secondary: #cdb6c9;
 
-  // Issue #38: los colores que antes se repetían escritos a mano en cada componente.
-  // "-strong" es el tono para rellenos y botones; el de arriba, para texto.
-  --success-strong: #10b981;     // Emerald 500
-  --success-deep: #059669;       // Emerald 600
-  --danger-strong: #f43f5e;      // Rose 500
-  --warning-color: #f59e0b;      // Amber 500
-  --info-color: #3b82f6;         // Blue 500
-  --violet-color: #8b5cf6;       // Violet 500
-  --violet-light: #a78bfa;       // Violet 400
+  --accent-rgb: 255, 79, 163;    // para rgba(var(--accent-rgb), x)
+  --accent-color: #ff4fa3;       // magenta
+  --accent-light: #ff8cc6;
+  --accent-glow: rgba(255, 79, 163, 0.16);
+  --coral-color: #ff7a59;
+  --grad-accent: linear-gradient(135deg, #ff4fa3 0%, #ff7a59 100%);
 
-  // Cada concepto tiene un solo color en todas las ventanas.
-  --grad-ingreso: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  --grad-gasto: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-  --grad-ahorro: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-  --grad-balance: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  --success-color: #4ee6a8;      // texto sobre fondo oscuro
+  --danger-color: #ff7088;
 
-  --radius-sm: 8px;              // chips, iconos, campos
-  --radius-md: 12px;             // filas, botones, avisos
-  --radius-lg: 20px;             // tarjetas y diálogos
+  --border-subtle: rgba(255, 255, 255, 0.12);
 
-  // Liquid glass: superficie translúcida con desenfoque. Solo se nota porque el
-  // fondo de la app tiene manchas de color (ver body).
-  --glass-bg: rgba(30, 41, 59, 0.55);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  --glass-blur: blur(18px) saturate(140%);
+  // Issue #38: "-strong" es el tono para rellenos y botones; el de arriba, para texto.
+  --success-strong: #12c98c;
+  --success-deep: #0a9a6b;
+  --danger-strong: #ff4d6d;
+  --warning-color: #ffb547;      // ámbar
+  --info-color: #5aa9ff;
+  --violet-color: #9d6bff;
+  --violet-light: #c4a8ff;
 
-  // Se usaban en varios componentes sin estar definidas, y esas tarjetas
-  // quedaban sin fondo ni borde.
+  // Cada concepto tiene un solo color en todas las ventanas. Tonos hondos para
+  // que el texto blanco de las tarjetas se lea.
+  --grad-ingreso: linear-gradient(135deg, #12b886 0%, #067a5a 100%);
+  --grad-gasto: linear-gradient(135deg, #ff4d6d 0%, #b5174a 100%);
+  --grad-ahorro: linear-gradient(135deg, #9d6bff 0%, #5b21b6 100%);
+  --grad-balance: linear-gradient(135deg, #e6378f 0%, #e8573a 100%);
+
+  --radius-sm: 10px;             // chips, iconos, campos
+  --radius-md: 16px;             // filas, botones, avisos
+  --radius-lg: 26px;             // tarjetas y diálogos
+
+  // Liquid glass: superficie clara y translúcida, mucho desenfoque con la
+  // saturación subida y un brillo en el borde de arriba, como en iOS. Solo se
+  // nota porque detrás están las manchas de color del fondo (ver body::before).
+  --glass-bg: rgba(255, 255, 255, 0.075);
+  --glass-bg-strong: rgba(48, 20, 58, 0.62);   // menús y diálogos, donde se lee mucho texto
+  --glass-sheen: linear-gradient(160deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 38%);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 18px 40px -12px rgba(8, 0, 16, 0.55);
+  --glass-blur: blur(26px) saturate(180%);
+
   --bg-card: var(--glass-bg);
   --border-color: var(--glass-border);
 }
@@ -75,19 +77,26 @@ html, body {
   height: 100%;
   margin: 0;
   font-family: 'Inter', "Helvetica Neue", sans-serif;
-  background-color: var(--bg-dark-base);
   color: var(--text-primary);
 }
 
-// Manchas de color fijas detrás del contenido: sin ellas el vidrio de las
-// tarjetas no tiene nada que desenfocar y se ve como un gris plano.
-body {
+// Solo en html: un fondo en body se pinta encima de body::before y tapa las manchas.
+html { background-color: var(--bg-dark-base); }
+
+// El "fondo de pantalla" que desenfoca el vidrio. Va en una capa fija y no con
+// background-attachment: fixed, que Safari de iOS ignora.
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background:
-    radial-gradient(40rem 30rem at 85% -10%, rgba(99, 102, 241, 0.22), transparent 70%),
-    radial-gradient(35rem 28rem at -10% 60%, rgba(16, 185, 129, 0.14), transparent 70%),
-    radial-gradient(30rem 25rem at 70% 110%, rgba(139, 92, 246, 0.16), transparent 70%),
+    radial-gradient(40rem 34rem at 85% 0%, rgba(255, 79, 163, 0.55), transparent 65%),
+    radial-gradient(36rem 30rem at 0% 40%, rgba(255, 122, 89, 0.42), transparent 65%),
+    radial-gradient(34rem 28rem at 60% 65%, rgba(157, 107, 255, 0.34), transparent 65%),
+    radial-gradient(32rem 26rem at 15% 100%, rgba(255, 181, 71, 0.32), transparent 65%),
     var(--bg-dark-base);
-  background-attachment: fixed;
 }
 
 // Typography overrides
@@ -112,12 +121,6 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--text-secondary); 
 }
 
-// Arreglos de Angular Material en Modo Oscuro Personalizado
-.mat-mdc-dialog-container .mdc-dialog__surface {
-  background-color: var(--bg-dark-surface) !important;
-  border: 1px solid var(--border-subtle);
-}
-
 // Transparencia total para los Inputs y Form Fields
 .mdc-text-field--outlined {
   --mdc-outlined-text-field-container-color: transparent;
@@ -130,17 +133,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 // Tematizar el menú desplegable (Select Panel)
-.mat-mdc-select-panel {
-  background-color: var(--bg-dark-surface) !important;
-  border: 1px solid var(--border-subtle) !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
+.mat-mdc-select-panel,
+.mat-mdc-menu-panel,
+.mat-mdc-autocomplete-panel,
+.mat-datepicker-content {
+  background: var(--glass-sheen), var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--glass-highlight), var(--glass-shadow) !important;
 }
 .mat-mdc-option {
   color: var(--text-secondary) !important;
 }
 .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
   color: var(--accent-light) !important;
-  background-color: rgba(99, 102, 241, 0.1) !important;
+  background-color: var(--accent-glow) !important;
 }
 .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
   background-color: rgba(255, 255, 255, 0.05) !important;
@@ -175,8 +184,8 @@ h1, h2, h3, h4, h5, h6 {
   gap: 10px;
 
   .cat-icon {
-    background: rgba(99, 102, 241, 0.15);
-    color: #6366f1;
+    background: var(--accent-glow);
+    color: var(--accent-light);
     padding: 6px;
     border-radius: 8px;
     font-size: 18px;
@@ -259,11 +268,11 @@ textarea[matInput]:not(.sin-mayusculas) {
   transition: background 0.15s ease;
 
   &:hover {
-    background: rgba(148, 163, 184, 0.06);
+    background: rgba(255, 255, 255, 0.05);
   }
 
   &.selected {
-    background: rgba(99, 102, 241, 0.1);
+    background: var(--accent-glow);
     box-shadow: inset 3px 0 0 0 var(--accent-color);
   }
 }
@@ -276,21 +285,52 @@ textarea[matInput]:not(.sin-mayusculas) {
 // pisan el fondo con su degradé de color y quedan sólidas, para que los montos
 // se lean bien.
 .mat-mdc-card:not(.stat-card) {
-  background: var(--glass-bg) !important;
+  background: var(--glass-sheen), var(--glass-bg) !important;
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg) !important;
-  box-shadow: var(--glass-highlight), 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: var(--glass-highlight), var(--glass-shadow) !important;
+}
+
+// Las tarjetas de resumen siguen sólidas, pero con el mismo brillo de vidrio en
+// el borde para que parezcan de la misma familia.
+.mat-mdc-card.stat-card {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), var(--glass-shadow) !important;
+  background-image: var(--glass-sheen);
 }
 
 .mat-mdc-dialog-container .mdc-dialog__surface {
-  background: rgba(30, 41, 59, 0.88) !important;
+  background: var(--glass-sheen), var(--glass-bg-strong) !important;
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg) !important;
-  box-shadow: var(--glass-highlight), 0 20px 50px rgba(0, 0, 0, 0.45) !important;
+  box-shadow: var(--glass-highlight), 0 30px 60px -12px rgba(8, 0, 16, 0.7) !important;
+}
+
+// Velo detrás del menú lateral y de los diálogos. El tema oscuro de Material
+// trae un gris claro semitransparente que en el móvil lavaba toda la app.
+.mat-drawer-backdrop.mat-drawer-shown,
+.cdk-overlay-dark-backdrop.cdk-overlay-backdrop-showing {
+  background-color: rgba(18, 4, 26, 0.45) !important;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+}
+
+// Botón principal de cada ventana ("Nuevo …"): cápsula magenta-coral.
+// Texto oscuro: blanco sobre estos tonos no llega al contraste mínimo.
+.mat-mdc-unelevated-button.mat-accent:not(:disabled) {
+  background: var(--grad-accent) !important;
+  color: #2a0a1c !important;
+  font-weight: 600;
+  border-radius: 999px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 8px 20px -6px rgba(var(--accent-rgb), 0.6);
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border-radius: var(--radius-md) !important;
 }
 
 // Contenedor de cada ventana: mismo ancho máximo y mismos márgenes en todas.

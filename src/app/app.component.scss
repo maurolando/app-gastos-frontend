@@ -2,10 +2,11 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-subtle);
+  background: var(--glass-sheen), rgba(26, 11, 38, 0.35);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.04);
   color: var(--text-primary);
 }
 
@@ -14,7 +15,7 @@
   font-weight: 600;
   letter-spacing: 0.5px;
   font-size: 1.4rem;
-  background: linear-gradient(to right, var(--accent-light), var(--success-color));
+  background: linear-gradient(to right, var(--accent-light), var(--warning-color));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -41,7 +42,7 @@
     font-size: 20px;
     width: 20px;
     height: 20px;
-    color: #a5b4fc;
+    color: var(--accent-light);
   }
 }
 
@@ -57,11 +58,12 @@
 }
 
 .sidenav-content {
-  width: 250px;
-  background: rgba(15, 23, 42, 0.6);
+  width: 260px;
+  background: var(--glass-sheen), rgba(255, 255, 255, 0.06);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
-  border-right: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--glass-border);
+  box-shadow: var(--glass-highlight) !important;
 }
 
 .main-content {
@@ -70,33 +72,29 @@
   box-sizing: border-box;
 }
 
-.active-link {
-  background: var(--accent-glow) !important;
-  color: var(--accent-light) !important;
-  border-right: 4px solid var(--accent-color);
-  font-weight: 500;
-  
-  mat-icon {
-    color: var(--accent-light);
+// Cada opción es una cápsula; la activa queda en vidrio teñido de magenta.
+.sidenav-content .mat-mdc-list-item {
+  border-radius: 14px;
+  margin: 2px 10px;
+  width: auto;
+  color: var(--text-secondary);
+  transition: background 0.2s ease, color 0.2s ease;
+
+  mat-icon { color: var(--text-secondary); transition: color 0.2s ease; }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--text-primary);
+    mat-icon { color: var(--text-primary); }
   }
 }
 
-a.mat-list-item {
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
-    mat-icon {
-      color: var(--text-primary);
-    }
-  }
+.sidenav-content .mat-mdc-list-item.active-link {
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.32), rgba(255, 122, 89, 0.18)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 0 0 1px rgba(var(--accent-rgb), 0.35);
+  font-weight: 600;
 
-  mat-icon {
-    transition: all 0.2s ease;
-    color: var(--text-secondary);
-  }
+  &, .mdc-list-item__primary-text, mat-icon { color: var(--text-primary) !important; }
 }
 
 .status-indicator {
@@ -163,6 +161,20 @@ a.mat-list-item {
 @media (max-width: 900px) {
   .main-content {
     padding: 16px 12px;
+  }
+}
+
+// En el móvil el menú flota sobre la app como un panel de iOS, despegado de
+// los bordes, en vez de pegarse al costado de pantalla a pantalla.
+@media (max-width: 900px) { // mismo corte que CORTE_MOVIL
+  .sidenav-content {
+    width: min(280px, 80vw);
+    margin: 10px;
+    height: calc(100% - 20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    background: var(--glass-sheen), rgba(48, 20, 58, 0.45);
+    box-shadow: var(--glass-highlight), 0 30px 60px -10px rgba(8, 0, 16, 0.7) !important;
   }
 }
 

@@ -67,7 +67,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public pieChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     plugins: {
-      legend: { display: true, position: 'bottom', labels: { color: '#e2e8f0' } }
+      legend: { display: true, position: 'bottom', labels: { color: '#fff5fa' } }
     }
   };
   public pieChartData$!: Observable<ChartData<'pie', number[], string | string[]>>;
@@ -249,9 +249,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
           labels: Object.keys(groups),
           datasets: [{
             data: Object.values(groups),
-            backgroundColor: ['#6366f1', '#10b981', '#f43f5e', '#f59e0b', '#8b5cf6'],
-            hoverBackgroundColor: ['#818cf8', '#34d399', '#fb7185', '#fbbf24', '#a78bfa'],
-            borderColor: '#1e293b'
+            backgroundColor: ['#ff4fa3', '#12c98c', '#ff7a59', '#ffb547', '#9d6bff'],
+            hoverBackgroundColor: ['#ff8cc6', '#4ee6a8', '#ffa184', '#ffcd7d', '#c4a8ff'],
+            borderColor: '#2a1438'
           }]
         };
       })
