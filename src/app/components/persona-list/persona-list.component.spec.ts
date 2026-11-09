@@ -10,7 +10,7 @@ describe('PersonaListComponent', () => {
     const service = jasmine.createSpyObj('PersonaService', { getPersonas: personas });
     const notify = jasmine.createSpyObj('NotificationService', ['success']);
     const ref = jasmine.createSpyObj('MatDialogRef', { close: undefined, afterClosed: cerrado });
-    const component = new PersonaListComponent(service, {} as any, notify, {} as any);
+    const component = new PersonaListComponent(service, {} as any, notify, {} as any, {} as any);
 
     (component as any).cerrarAlUsarse(ref);
     personas.next([{ id: '1', nombre: 'Ana' }]);

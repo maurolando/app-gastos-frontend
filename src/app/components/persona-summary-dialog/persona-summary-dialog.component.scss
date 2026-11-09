@@ -1,10 +1,10 @@
 .summary-container {
-  min-width: 480px;
-  background: var(--bg-dark-surface);
+  // En el celular el diálogo mide menos de 480px y con un mínimo fijo se cortaba.
+  min-width: min(480px, 100%);
 }
 
 .main-stat {
-  background: linear-gradient(135deg, var(--accent-color) 0%, var(--info-color) 100%);
+  background: var(--grad-balance);
   padding: 24px;
   border-radius: var(--radius-lg);
   color: white;
@@ -33,7 +33,7 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   margin-bottom: 24px;
 }

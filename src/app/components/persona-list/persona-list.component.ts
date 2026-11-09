@@ -9,6 +9,7 @@ import { PersonaFormComponent } from '../persona-form/persona-form.component';
 import { PersonaSummaryDialogComponent } from '../persona-summary-dialog/persona-summary-dialog.component';
 import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
 import { HogarService } from 'src/app/services/hogar/hogar.service';
+import { LayoutService } from 'src/app/services/layout/layout.service';
 
 @Component({
   selector: 'app-persona-list',
@@ -30,7 +31,9 @@ export class PersonaListComponent implements OnInit {
   guardando = false;
 
   constructor(private service: PersonaService, private dialog: MatDialog, private notify: NotificationService,
-              private hogarService: HogarService) {}
+              private hogarService: HogarService, private layout: LayoutService) {}
+
+  esMovil$ = this.layout.esMovil$;
 
   /** Día en que arranca el mes del hogar (p. ej. el de cobro). Es uno solo para todas las personas. */
   configurarMes() {

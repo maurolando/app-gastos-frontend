@@ -57,14 +57,41 @@
   gap: 8px;
 }
 
-// --- Móvil ---
-// Esta tabla tiene pocas columnas y se lee bien tal cual; solo hace falta que
-// pueda desplazarse en lugar de desbordar el contenedor en pantalla angosta.
-@media (max-width: 900px) {
-  table.mat-mdc-table {
-    display: block;
-    overflow-x: auto;
+// --- Móvil: tarjetas en vez de tabla (mismo formato que la lista de gastos) ---
+.personas-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.persona-card {
+  background: var(--bg-dark-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--glass-highlight);
+  padding: 12px 8px 4px 14px;
+
+  .card-fila-1,
+  .card-fila-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .card-fila-1 { padding-right: 6px; }
+
+  .username {
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .user-avatar-row { min-width: 0; }
+
+  .card-fecha {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
   }
 }
 
