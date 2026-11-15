@@ -10,6 +10,12 @@
   color: var(--text-primary);
 }
 
+.app-logo {
+  flex: none;
+  margin-right: 10px;
+  border-radius: 24%;
+}
+
 .app-title {
   font-family: 'Outfit', sans-serif;
   font-weight: 600;

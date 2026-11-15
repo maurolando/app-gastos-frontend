@@ -30,7 +30,7 @@ describe('AppComponent', () => {
 
   it('muestra el nombre de la app en la barra superior', async () => {
     const pagina = await renderEn('/gastos');
-    expect(pagina.querySelector('.app-title')?.textContent).toContain('Gastos Hogar');
+    expect(pagina.querySelector('.app-title')?.textContent).toContain('Expns');
   });
 
   it('no muestra la barra superior en el login', async () => {

@@ -2,10 +2,8 @@
   <div class="login-card">
     <!-- Logo / Header -->
     <div class="login-header">
-      <div class="logo-icon">
-        <mat-icon>account_balance_wallet</mat-icon>
-      </div>
-      <h1>App Gastos</h1>
+      <img class="logo-icon" src="assets/icons/logo.svg" alt="" width="72" height="72">
+      <h1>Expns</h1>
       <p *ngIf="!registrando">Ingresa tus credenciales para continuar</p>
       <p *ngIf="registrando && !form.value.invitacion">Creá tu cuenta: tus gastos quedan separados de los de otros usuarios</p>
       <p *ngIf="registrando && form.value.invitacion">Te invitaron a un hogar: creá tu cuenta para ver y cargar sus gastos</p>
