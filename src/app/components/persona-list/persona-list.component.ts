@@ -106,10 +106,10 @@ export class PersonaListComponent implements OnInit {
 
   async compartirInvitacion() {
     const inv = this.invitacion!;
-    const texto = `Sumate a nuestro hogar en Gastos Hogar. Código: ${inv.codigo}`;
+    const texto = `Sumate a nuestro hogar en Expns. Código: ${inv.codigo}`;
     // En el celular abre el menú de compartir (WhatsApp, etc.); en la compu copia el enlace.
     if (navigator.share) {
-      try { await navigator.share({ title: 'Gastos Hogar', text: texto, url: inv.enlace }); } catch { /* lo canceló */ }
+      try { await navigator.share({ title: 'Expns', text: texto, url: inv.enlace }); } catch { /* lo canceló */ }
       return;
     }
     try {

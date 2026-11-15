@@ -3,7 +3,8 @@
     <button mat-icon-button (click)="sidenav.toggle()" *ngIf="currentUser$ | async" aria-label="Abrir menú">
       <mat-icon>menu</mat-icon>
     </button>
-    <span class="app-title">Gastos Hogar</span>
+    <img class="app-logo" src="assets/icons/logo.svg" alt="" width="32" height="32">
+    <span class="app-title">Expns</span>
     <div class="status-indicator" [class.online]="isOnline" [class.offline]="!isOnline" [matTooltip]="isOnline ? 'Conexión con el servidor: En Línea' : 'Conexión con el servidor: Sin Conexión'">
       <mat-icon>{{ isOnline ? 'wifi' : 'wifi_off' }}</mat-icon>
       <span>{{ isOnline ? 'ONLINE' : 'OFFLINE' }}</span>

@@ -30,22 +30,12 @@
   margin-bottom: 36px;
 
   .logo-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-block;
     width: 72px;
     height: 72px;
-    border-radius: var(--radius-lg);
-    background: var(--grad-accent);
+    border-radius: 24%; // mismas esquinas que logo.svg (rx 24 de 100)
     margin-bottom: 20px;
     box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.35);
-
-    mat-icon {
-      font-size: 36px;
-      width: 36px;
-      height: 36px;
-      color: white;
-    }
   }
 
   h1 {
