@@ -59,7 +59,9 @@
 }
 
 .sidenav-container {
+  // En el móvil 100vh no descuenta la barra del navegador y la app scrolleaba un poco; dvh sí.
   height: calc(100vh - 64px);
+  height: calc(100dvh - 64px);
   background: transparent;
 }
 
