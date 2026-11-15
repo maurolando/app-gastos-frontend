@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.14.0...v1.14.1) (2026-11-15)
+
+
+### Bug Fixes
+
+* cuotas que quedan y scroll del login ([c5a5859](https://github.com/maurolando/app-gastos-frontend/commit/c5a58594ba873b4eb85ca3617f6273336052a9c2)), closes [#70](https://github.com/maurolando/app-gastos-frontend/issues/70) [#71](https://github.com/maurolando/app-gastos-frontend/issues/71)
+
 ## [1.14.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.13.0...v1.14.0) (2026-11-15)
 
 
