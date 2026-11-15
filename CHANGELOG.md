@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.13.0...v1.14.0) (2026-11-15)
+
+
+### Features
+
+* nombre Expns y logo nuevo ([01b522f](https://github.com/maurolando/app-gastos-frontend/commit/01b522feca97f1fa489a8ebf16505d2d30370574)), closes [#72](https://github.com/maurolando/app-gastos-frontend/issues/72)
+
 ## [1.13.0](https://github.com/maurolando/app-gastos-frontend/compare/v1.12.1...v1.13.0) (2026-11-09)
 
 
