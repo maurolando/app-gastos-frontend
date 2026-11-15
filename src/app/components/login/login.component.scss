@@ -127,3 +127,15 @@
     color: var(--success-strong);
   }
 }
+
+// Ventanas bajas (notebook con las barras del navegador, ~650px): la tarjeta
+// medía 672px + 48px de margen y el login scrolleaba. Versión compacta.
+@media (max-height: 760px) {
+  .login-page { padding-block: 12px; }
+  .login-card { padding-block: 24px; }
+  .login-header {
+    margin-bottom: 16px;
+    .logo-icon { width: 56px; height: 56px; margin-bottom: 12px; }
+  }
+  .permanecer-row { padding: 6px 0; }
+}

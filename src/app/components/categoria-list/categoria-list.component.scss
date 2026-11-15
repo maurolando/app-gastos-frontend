@@ -1,6 +1,7 @@
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  // Ícono + dos botones + padding ya ocupan ~194px: con 240px el texto quedaba en ~50px y se metía bajo los botones.
+  grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
   gap: 20px;
 }
 
@@ -43,7 +44,9 @@ mat-card-header {
 }
 
 .cat-header-text {
+  flex: 1;
   min-width: 0; // nombres largos se cortan en vez de empujar los botones
+  overflow-wrap: anywhere; // una palabra que no entra se parte en su columna, no pisa los botones
   display: flex;
   flex-direction: column;
   justify-content: center;
