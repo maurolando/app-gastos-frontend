@@ -1,5 +1,8 @@
 .login-page {
+  // #70: border-box para que el padding no sume 48px a la altura; dvh descuenta la barra del navegador en el móvil.
+  box-sizing: border-box;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;

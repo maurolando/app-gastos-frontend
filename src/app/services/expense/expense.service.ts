@@ -373,6 +373,7 @@ const GET_CUOTAS_PENDIENTES = gql`
         id
         description
         pagado
+        cuotaActual
         categoria { id nombre }
       }
     }
