@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.15.0](https://github.com/maurolando/expns-frontend/compare/v1.14.1...v1.15.0) (2026-11-16)
+
+
+### Features
+
+* botón de nuevo gasto al alcance del pulgar (Fitts) ([822b859](https://github.com/maurolando/expns-frontend/commit/822b859d005c8bfd28f90ec8fac4de5c60cd1d70))
+* diálogo de gasto con Guardar ancho abajo y cerrar arriba ([044d1b4](https://github.com/maurolando/expns-frontend/commit/044d1b419e8b20fa1a1173bd0fb3f683226c0f79))
+
+
+### Bug Fixes
+
+* el diálogo de gasto vuelve a arrancar con el foco en el monto ([af70275](https://github.com/maurolando/expns-frontend/commit/af7027522252f5755ecfe22a60b957680427bd38))
+* ocultar el FAB de gasto con el menú abierto ([e731375](https://github.com/maurolando/expns-frontend/commit/e7313750482f964d129da18e8f97d8f20953dd37))
+
 ## [1.14.1](https://github.com/maurolando/app-gastos-frontend/compare/v1.14.0...v1.14.1) (2026-11-15)
 
 
