@@ -89,7 +89,7 @@
 
   <!-- Fitts: en el celular, al alcance del pulgar desde cualquier pantalla. -->
   <button mat-fab color="accent" class="fab-gasto" aria-label="Nuevo gasto"
-          *ngIf="(currentUser$ | async) && (esMovil$ | async)" (click)="nuevoGasto()">
+          *ngIf="(currentUser$ | async) && (esMovil$ | async) && !sidenav.opened" (click)="nuevoGasto()">
     <mat-icon>add</mat-icon>
   </button>
 </ng-container>

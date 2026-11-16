@@ -232,7 +232,7 @@
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   width: 60px;
   height: 60px;
-  z-index: 10; // sobre el contenido, debajo del overlay de diálogos y del sidenav
+  z-index: 10; // sobre el contenido y debajo de los diálogos; con el menú abierto el template lo oculta
 }
 
 // Va al final para ganarle al padding de los cortes de arriba: el último
