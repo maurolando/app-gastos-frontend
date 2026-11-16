@@ -2,7 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { moduloDePrueba } from 'src/testing/modulo-de-prueba';
+import { MatDialog } from '@angular/material/dialog';
 import { AppComponent } from './app.component';
+import { ExpenseFormComponent } from './components/expense-form/expense-form.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -36,5 +38,13 @@ describe('AppComponent', () => {
   it('no muestra la barra superior en el login', async () => {
     const pagina = await renderEn('/login');
     expect(pagina.querySelector('.main-toolbar')).toBeNull();
+  });
+
+  it('nuevoGasto abre el formulario de gasto', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const dialog = TestBed.inject(MatDialog);
+    spyOn(dialog, 'open');
+    fixture.componentInstance.nuevoGasto();
+    expect(dialog.open).toHaveBeenCalledWith(ExpenseFormComponent, { width: '450px' });
   });
 });

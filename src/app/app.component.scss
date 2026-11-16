@@ -217,3 +217,28 @@
     }
   }
 }
+
+// --- Botón de nuevo gasto (ley de Fitts) ---
+.nuevo-gasto-lateral {
+  width: calc(100% - 20px);
+  min-height: 52px;
+  margin: 0 10px 12px;
+  border-radius: 14px;
+}
+
+.fab-gasto {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: 60px;
+  height: 60px;
+  z-index: 10; // sobre el contenido, debajo del overlay de diálogos y del sidenav
+}
+
+// Va al final para ganarle al padding de los cortes de arriba: el último
+// ítem de cada lista tiene que poder quedar por encima del FAB.
+@media (max-width: 900px) {
+  .main-content {
+    padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+  }
+}
