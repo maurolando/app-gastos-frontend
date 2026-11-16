@@ -26,4 +26,9 @@ describe('ExpenseFormComponent', () => {
     expect(el.querySelector('mat-dialog-actions button.guardar-ancho')).not.toBeNull();
     expect(el.querySelectorAll('mat-dialog-actions button').length).toBe(1);
   });
+
+  // La X quedó primera en el DOM: sin esto el diálogo enfocaría la X y no el monto.
+  it('arranca con el foco en el monto', () => {
+    expect(fixture.nativeElement.querySelector('input[formcontrolname="amount"][cdkfocusinitial]')).not.toBeNull();
+  });
 });
