@@ -19,4 +19,11 @@ describe('ExpenseFormComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('cierra con una X arriba y guarda con un botón ancho abajo', () => {
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector('button[aria-label="Cancelar"][mat-dialog-close]')).not.toBeNull();
+    expect(el.querySelector('mat-dialog-actions button.guardar-ancho')).not.toBeNull();
+    expect(el.querySelectorAll('mat-dialog-actions button').length).toBe(1);
+  });
 });

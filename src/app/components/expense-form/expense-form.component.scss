@@ -58,3 +58,22 @@
     }
   }
 }
+
+// --- Ley de Fitts: cerrar arriba, guardar ancho abajo ---
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .cerrar {
+    width: 48px;
+    height: 48px;
+    margin-right: 8px;
+  }
+}
+
+.guardar-ancho {
+  width: 100%;
+  min-height: 52px;
+  font-size: 1.05rem;
+}
