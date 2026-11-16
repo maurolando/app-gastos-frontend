@@ -132,10 +132,6 @@ export class ExpenseListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fechaFinFilter.setValue(null);
   }
 
-  openAddExpense() {
-    this.dialog.open(ExpenseFormComponent, { width: '450px' });
-  }
-
   editExpense(gasto: Gasto) {
     this.dialog.open(ExpenseFormComponent, { width: '450px', data: gasto });
   }

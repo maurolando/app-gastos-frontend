@@ -1,10 +1,16 @@
-<h2 mat-dialog-title>{{ esEdicion ? 'Editar Gasto' : 'Registrar Gasto' }}</h2>
+<!-- Fitts: cerrar arriba, lejos del pulgar; guardar abajo, ancho y a mano. -->
+<div class="dialog-header">
+  <h2 mat-dialog-title>{{ esEdicion ? 'Editar Gasto' : 'Registrar Gasto' }}</h2>
+  <button mat-icon-button mat-dialog-close aria-label="Cancelar" class="cerrar">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 <mat-dialog-content>
   <form [formGroup]="form" class="expense-form">
     <mat-form-field appearance="outline">
       <mat-label>Monto</mat-label>
       <span matPrefix>Gs &nbsp;</span>
-      <input matInput appMiles inputmode="numeric" formControlName="amount">
+      <input matInput appMiles inputmode="numeric" formControlName="amount" cdkFocusInitial>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -111,7 +117,6 @@
       </div>
   </form>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">Guardar</button>
+<mat-dialog-actions>
+  <button mat-raised-button color="primary" class="guardar-ancho" [disabled]="form.invalid" (click)="save()">Guardar</button>
 </mat-dialog-actions>

@@ -12,7 +12,6 @@ import { SharedPaymentDialogComponent } from '../shared-payment-dialog/shared-pa
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { BudgetDialogComponent } from '../budget-dialog/budget-dialog.component';
-import { ExpenseFormComponent } from '../expense-form/expense-form.component';
 import { HogarService } from 'src/app/services/hogar/hogar.service';
 import { periodoDe } from 'src/app/utils/date.util';
 import { AjusteBalanceDialogComponent } from '../ajuste-balance-dialog/ajuste-balance-dialog.component';
@@ -360,10 +359,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     const base = `✅ ${monthLabel} finalizado. Se copiaron ${partes.join(' y ')} al mes siguiente`;
     return omitidos > 0 ? `${base} (${omitidos} ya existían).` : `${base}.`;
-  }
-
-  openAddExpense() {
-    this.dialog.open(ExpenseFormComponent, { width: '450px' });
   }
 
   descargarReporte() {

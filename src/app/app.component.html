@@ -42,6 +42,11 @@
                  [opened]="(esMovil$ | async) === false"
                  class="mat-elevation-z4 sidenav-content">
       <mat-nav-list style="padding-top: 16px;" (click)="cerrarSiEsMovil(sidenav)">
+        <!-- Fitts: en escritorio, la acción más usada arriba de todo y de ancho completo. -->
+        <button mat-flat-button color="accent" class="nuevo-gasto-lateral"
+                *ngIf="(currentUser$ | async) && (esMovil$ | async) === false" (click)="nuevoGasto()">
+          <mat-icon>add</mat-icon> Nuevo gasto
+        </button>
         <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
           <mat-icon style="margin-right: 8px;">savings</mat-icon>
           <span>Balance</span>
@@ -81,6 +86,12 @@
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
+
+  <!-- Fitts: en el celular, al alcance del pulgar desde cualquier pantalla. -->
+  <button mat-fab color="accent" class="fab-gasto" aria-label="Nuevo gasto"
+          *ngIf="(currentUser$ | async) && (esMovil$ | async) && !sidenav.opened" (click)="nuevoGasto()">
+    <mat-icon>add</mat-icon>
+  </button>
 </ng-container>
 
 <!-- Login: sin toolbar ni sidenav -->

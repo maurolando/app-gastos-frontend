@@ -3,6 +3,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Apollo } from 'apollo-angular';
+import { MatDialog } from '@angular/material/dialog';
+import { ExpenseFormComponent } from './components/expense-form/expense-form.component';
 import { LayoutService } from './services/layout/layout.service';
 import { AuthService } from './services/auth/auth.service';
 import { NotificationService } from './services/notification/notification.service';
@@ -44,8 +46,13 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private layout: LayoutService,
     private actualizacion: ActualizacionService,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private dialog: MatDialog
   ) {}
+
+  nuevoGasto() {
+    this.dialog.open(ExpenseFormComponent, { width: '450px' });
+  }
 
   /**
    * En móvil el sidenav se superpone al contenido, así que hay que cerrarlo
